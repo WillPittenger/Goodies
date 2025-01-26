@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Sounds": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+      "commandLineArgs": "-NoExit -NoLogo -ExecutionPolicy RemoteSigned -command \"& {'$(BinDir)'; . ..\\..\\..\\Start-Debug.ps1;}\"",
+      "workingDirectory": "$(BinDir)"
+    }
+  }
+}

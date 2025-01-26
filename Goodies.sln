@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.Sounds", "WillPittenger.Goodies.Sounds\WillPittenger.Goodies.Sounds.csproj", "{AC32E166-58E0-4D1E-827A-9D5C3A69BC71}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", "{4E6EEBAD-8EA5-4328-834A-6102BBDB4944}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.PowerShell.Sounds", "PowerShell\WillPittenger.Goodies.PowerShell.Sounds\WillPittenger.Goodies.PowerShell.Sounds.csproj", "{6F068BE6-02A6-4875-9493-D948B00741A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.JSON", "WillPittenger.Goodies.JSON\WillPittenger.Goodies.JSON.csproj", "{DC29A48F-A2A4-4633-ABCA-BFAFFE45DFD6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EA8E3805-1838-4AFC-9513-91FCC9C9DAB5} = {EA8E3805-1838-4AFC-9513-91FCC9C9DAB5}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.Tools", "WillPittenger.Goodies.Tools\WillPittenger.Goodies.Tools.csproj", "{EA8E3805-1838-4AFC-9513-91FCC9C9DAB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.PowerShell.JSON", "PowerShell\WillPittenger.Goodies.PowerShell.JSON\WillPittenger.Goodies.PowerShell.JSON.csproj", "{07B6FAA6-8234-41B6-972A-2C193CEEBB39}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC32E166-58E0-4D1E-827A-9D5C3A69BC71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC32E166-58E0-4D1E-827A-9D5C3A69BC71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC32E166-58E0-4D1E-827A-9D5C3A69BC71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC32E166-58E0-4D1E-827A-9D5C3A69BC71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F068BE6-02A6-4875-9493-D948B00741A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F068BE6-02A6-4875-9493-D948B00741A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F068BE6-02A6-4875-9493-D948B00741A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F068BE6-02A6-4875-9493-D948B00741A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC29A48F-A2A4-4633-ABCA-BFAFFE45DFD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC29A48F-A2A4-4633-ABCA-BFAFFE45DFD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC29A48F-A2A4-4633-ABCA-BFAFFE45DFD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC29A48F-A2A4-4633-ABCA-BFAFFE45DFD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA8E3805-1838-4AFC-9513-91FCC9C9DAB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA8E3805-1838-4AFC-9513-91FCC9C9DAB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA8E3805-1838-4AFC-9513-91FCC9C9DAB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA8E3805-1838-4AFC-9513-91FCC9C9DAB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07B6FAA6-8234-41B6-972A-2C193CEEBB39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B6FAA6-8234-41B6-972A-2C193CEEBB39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B6FAA6-8234-41B6-972A-2C193CEEBB39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B6FAA6-8234-41B6-972A-2C193CEEBB39}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6F068BE6-02A6-4875-9493-D948B00741A1} = {4E6EEBAD-8EA5-4328-834A-6102BBDB4944}
+		{07B6FAA6-8234-41B6-972A-2C193CEEBB39} = {4E6EEBAD-8EA5-4328-834A-6102BBDB4944}
+	EndGlobalSection
+EndGlobal

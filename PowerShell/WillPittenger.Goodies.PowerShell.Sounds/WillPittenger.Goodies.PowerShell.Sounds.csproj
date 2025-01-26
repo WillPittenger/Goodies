@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Version>0.0.1</Version>
+		<Authors>Will Pittenger</Authors>
+		<Copyright>©2024 Will Pittenger</Copyright>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<IncludeSymbols>True</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<WarningLevel>9999</WarningLevel>
+		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<WarningLevel>9999</WarningLevel>
+		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Management.Automation"
+											Version="7.4.6"
+											PrivateAssets="all" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\WillPittenger.Goodies.Sounds\WillPittenger.Goodies.Sounds.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Org.WillPittenger.PowerShell.Tools.Sounds\Org.WillPittenger.PowerShell.Tools.Sounds.psd1">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Org.WillPittenger.PowerShell.Tools.Sounds\Org.WillPittenger.PowerShell.Tools.Sounds.psm1">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Properties\Icons\Icon 64x64.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<Target Name="PostBuild"
+					AfterTargets="PostBuildEvent">
+		<Exec Command="pwsh -NoLogo -ExecutionPolicy RemoteSigned -command &quot;&amp; {exit (. ./Post-Build.ps1 -TargetDir $(OutDir))}&quot;" />
+	</Target>
+
+</Project>
