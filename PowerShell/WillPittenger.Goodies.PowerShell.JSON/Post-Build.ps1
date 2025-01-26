@@ -1,4 +1,5 @@
-﻿param(
+﻿param
+(
 	[Parameter()] $ProjectName,
 	[Parameter()] $ConfigurationName,
 	[Parameter()] $TargetDir
@@ -13,6 +14,6 @@ trap
 
 $ErrorActionPreference = "Stop";
 
-Copy "$TargetDir/*.dll" "$TargetDir/Org.WillPittenger.PowerShell.Tools.JSON" -Force -Verbose;
+Copy "$TargetDir/*.dll" "$TargetDir/$ProjectName" -Force -Verbose;
 
 exit 0;

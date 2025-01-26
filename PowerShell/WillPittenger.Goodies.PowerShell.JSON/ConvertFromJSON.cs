@@ -5,13 +5,6 @@ namespace WillPittenger.Goodies.PowerShell.JSON;
 [System.Management.Automation.Cmdlet(System.Management.Automation.VerbsData.ConvertFrom, "JSON")]
 public class ConvertFromJSON : System.Management.Automation.Cmdlet
 {
-	public int MaxDepth
-	{
-		get;
-
-		set;
-	} = int.MaxValue;
-
 	[System.Management.Automation.Parameter(Position=0, Mandatory = true)]
 	[System.Management.Automation.ValidateNotNullOrWhiteSpace]
 	public string Input
@@ -21,6 +14,15 @@ public class ConvertFromJSON : System.Management.Automation.Cmdlet
 		set;
 	}
 
+	[System.Management.Automation.Parameter]
+	public int MaxDepth
+	{
+		get;
+
+		set;
+	} = int.MaxValue;
+
+	[System.Management.Automation.Parameter]
 	public System.Management.Automation.SwitchParameter AsPowerShellObj
 	{
 		get;
@@ -28,6 +30,7 @@ public class ConvertFromJSON : System.Management.Automation.Cmdlet
 		set;
 	} = false;
 
+	[System.Management.Automation.Parameter]
 	public System.Management.Automation.ScriptBlock? AdditionalFieldsMaker
 	{
 		get;
