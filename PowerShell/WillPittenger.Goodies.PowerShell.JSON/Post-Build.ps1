@@ -14,6 +14,9 @@ trap
 
 $ErrorActionPreference = "Stop";
 
-Copy "$TargetDir/*.dll" "$TargetDir/$ProjectName" -Force -Verbose;
+$dest = [IO.Path]::Combine($TargetDir, $ProjectName);
+
+Write-host "Copying DLLs from $TargetDir to $dest.";
+Copy "$TargetDir\*.dll" $dest -Force -Verbose;
 
 exit 0;

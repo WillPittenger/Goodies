@@ -14,7 +14,7 @@ Write-Host
 
 # Load the module.
 $env:PSModulePath = (Resolve-Path .).Path + ";" + $env:PSModulePath
-Import-Module 'Org.WillPittenger.PowerShell.Tools.Sounds' -Verbose -Force
+Import-Module 'WillPittenger.Goodies.PowerShell.JSON' -Verbose -Force
 
 # Happy debugging :-)
 

@@ -1,0 +1,1 @@
+﻿Consists of a series of PowerShell CmdLets designed to handle JSON better than the stock functions.

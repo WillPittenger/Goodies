@@ -1,8 +1,8 @@
 ﻿namespace WillPittenger.Goodies.PowerShell.Sounds;
 
 /// <summary>
-/// Looks up a sound.  This can be either from a file name by passing <c>-Path</c> or one of the predefined sounds from Windows whose ID values are declared
-/// in the <see cref="Goodies.Sounds.PredefinedSounds.SoundIDs"/> <c><b>enum</b></c> type.  For the later, pass <c>-Predefined</c>.
+/// Looks up a sound.  This can be either from a file name by passing <c>-Path</c> or one of the predefined sounds from Windows whose ID values are declared in
+/// the <see cref="Goodies.Sounds.PredefinedSounds.SoundIDs"/> <c><b>enum</b></c> type.  For the later, pass <c>-Predefined</c>.
 /// </summary>
 /// <remarks>
 /// All the functionality of this cmdlet is also provided in <see cref="StartSoundPlayback"/>.  Use <see cref="GetSound"/> if you want to store the sound
@@ -54,8 +54,8 @@ public class GetSound : System.Management.Automation.PSCmdlet
 	/// <summary>
 	/// Specifies a predefined sound from Windows.  Use a value from the <see cref="Goodies.Sounds.PredefinedSounds.SoundIDs"/> <c><b>enum</b></c> type.
 	/// </summary>
-	[System.Management.Automation.Parameter(Position = 1, Mandatory = true, ParameterSetName = strPredefinedParamSetName, HelpMessage = "Specifies a predefined sound from " +
-		"Windows.  Use a value from the [WillPittenger.PowerShell.Goodies.Sounds.PredefinedSounds.SoundIDs] enum type.")]
+	[System.Management.Automation.Parameter(Position = 0, Mandatory = true, ParameterSetName = strPredefinedParamSetName, HelpMessage = "Specifies a predefined " +
+		"sound from Windows.  Use a value from the WillPittenger.PowerShell.Goodies.Sounds.PredefinedSounds.SoundIDs enum type.")]
 	public Goodies.Sounds.PredefinedSounds.SoundIDs Predefined
 	{
 		get;

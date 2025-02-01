@@ -14,6 +14,13 @@ public abstract class ObjBase
 	{
 	}
 
+	/// <summary>
+	/// Builds a <see cref="ObjBase"/> based on what's in <paramref name="jsoneVal"/>.
+	/// </summary>
+	/// <param name="jsoneVal">The JSON value to convert.</param>
+	/// <returns>The new value</returns>
+	/// <exception cref="Tools.Exceptions.UnknownOrInvalidEnumException{System.Text.Json.JsonValueKind}">The code couldn't figure out what to do with the value in
+	/// <paramref name="jsoneVal"/>.  It could be the JSON undefined value.</exception>
 	public static ObjBase Make(System.Text.Json.JsonElement jsoneVal)
 	{
 		return jsoneVal.ValueKind switch

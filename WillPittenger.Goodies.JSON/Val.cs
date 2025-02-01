@@ -3,8 +3,10 @@
 namespace WillPittenger.Goodies.JSON;
 
 /// <summary>
-/// Represents any single value in a JSON object.  This can include arrays, doubles, booleans, and <c>null</c>.
+/// Represents any single value in a JSON object.  This can include arrays, doubles, booleans, and <c>null</c>.  Instances of <see cref="Val"/> don't have names
+/// and are effectively just wrappers around a .NET type or the <see langword="null"/>.  For a value that has a name, use <see cref="NamedVal"/> instead.
 /// </summary>
+/// <seealso cref="NamedVal"/>
 public class Val : ObjBase
 {
 	/// <summary>
@@ -54,7 +56,18 @@ public class Val : ObjBase
 	}
 
 	/// <summary>
+	/// Constructs a new <see cref="Val"/> containing the value in <paramref name="objVal"/>.
+	/// </summary>
+	/// <param name="objVal"></param>
+	public Val(object? objVal)
+		=> this.objVal = objVal;
+
+	/// <summary>
 	/// The value found.
 	/// </summary>
 	public readonly object? objVal;
+
+	/// <inheritdoc/>
+	public override string ToString()
+		=> objVal?.ToString() ?? "";
 }

@@ -7,7 +7,7 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Authors>Will Pittenger</Authors>
-		<Version>0.0.1</Version>
+		<Version>0.5.0</Version>
 		<Copyright>©Will Pittenger 2025</Copyright>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
@@ -17,7 +17,10 @@
 		<PackageProjectUrl>https://github.com/WillPittenger/Goodies/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/WillPittenger/Goodies/tree/master/PowerShell/WillPittenger.Goodies.PowerShell.JSON</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-		<PackageTags>Windows,JSON,Converter,Conversion,.NET</PackageTags>
+		<PackageTags>Windows;JSON;Converter;Conversion;.NET</PackageTags>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<Title>JSON goodies for PowerShell</Title>
+		<Description>Set of CmdLets for PowerShell related to JSON.</Description>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -39,7 +42,11 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<None Update="Org.WillPittenger.PowerShell.Tools.JSON\Org.WillPittenger.PowerShell.Tools.JSON.psd1">
+		<None Update="Readme.md">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
+		<None Update="WillPittenger.Goodies.PowerShell.JSON\WillPittenger.Goodies.PowerShell.JSON.psd1">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Properties\Icons\Icon 64x64.png">
@@ -49,7 +56,7 @@
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="pwsh -NoLogo -ExecutionPolicy RemoteSigned -command &quot;&amp; {exit (. ./Post-Build.ps1 -TargetDir $(OutDir))}&quot;" />
+		<Exec Command="pwsh -NoLogo -ExecutionPolicy RemoteSigned -command &quot;&amp; {exit (. ./Post-Build.ps1 -TargetDir $(OutDir) -ProjectName $(ProjectName))}&quot;" />
 	</Target>
 
 </Project>

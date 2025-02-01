@@ -1,8 +1,8 @@
 ﻿namespace WillPittenger.Goodies.PowerShell.Sounds;
 
 /// <summary>
-/// Starts playback of a sound.  This can be either one you obtained from <see cref="GetSound"/> or you can pass the same information <see cref="GetSound"/> takes directly to
-/// <see cref="StartSoundPlayback"/>.
+/// Starts playback of a sound.  This can be either one you obtained from <see cref="GetSound"/> or you can pass the same information <see cref="GetSound"/>
+/// takes directly to <see cref="StartSoundPlayback"/>.
 /// </summary>
 /// <see cref="GetSound"/>
 /// <see cref="Goodies.Sounds.ISound"/>
@@ -64,7 +64,7 @@ public class StartSoundPlayback : System.Management.Automation.PSCmdlet
 	/// Specifies a predefined sound from Windows.  Use a value from the <see cref="Goodies.Sounds.PredefinedSounds.SoundIDs"/> <c><b>enum</b></c> type.
 	/// </summary>
 	[System.Management.Automation.Parameter(Position = 0, Mandatory = true, ParameterSetName = strPredefinedParamSetName, HelpMessage = "Specifies a predefined"
-		+ " sound from Windows.  Use a value from the [Goodies.Sounds.PredefinedSounds.SoundIDs] enum type.")]
+		+ " sound from Windows.  Use a value from the Goodies.Sounds.PredefinedSounds.SoundIDs enum type.")]
 	public Goodies.Sounds.PredefinedSounds.SoundIDs Predefined
 	{
 		get;

@@ -5,7 +5,7 @@
 /// mechanism supports it.  Call <see cref="StopSoundPlayback"/> with the same <see cref="Goodies.Sounds.ISound"/> instance to end playback or call <see
 /// cref="Goodies.Sounds.ISound.Stop"/>.
 /// </summary>
-[System.Management.Automation.Cmdlet(System.Management.Automation.VerbsLifecycle.Stop, "Sound")]
+[System.Management.Automation.Cmdlet(System.Management.Automation.VerbsLifecycle.Stop, "SoundPlayback")]
 public class StopSoundPlayback : System.Management.Automation.PSCmdlet
 {
 	/// <summary>
