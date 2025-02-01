@@ -16,6 +16,10 @@
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+		<Title>Sound playback API</Title>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<PackageProjectUrl>https://github.com/WillPittenger/Goodies/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/WillPittenger/Goodies/tree/master/WillPittenger.Goodies.Sounds</RepositoryUrl>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -30,6 +34,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="System.Windows.Extensions" Version="9.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="readme.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>

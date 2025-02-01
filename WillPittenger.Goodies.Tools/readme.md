@@ -1,0 +1,1 @@
+﻿This contains a list of classes that have no other home in my system.  WillPittenger.Goodies.Tools.Exception contains some exception classes I use a lot.  WillPittenger.Goodies.Tools.Ext contains some extension methods I commonly use.

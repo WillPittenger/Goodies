@@ -15,6 +15,11 @@
     <IncludeSymbols>True</IncludeSymbols>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/WillPittenger/Goodies/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WillPittenger/Goodies/tree/master/WillPittenger.Goodies.Tools</RepositoryUrl>
+    <Description>Various tools that I use a lot but have no general home.</Description>
+    <PackageTags>Exceptions;Extension methods;</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -26,5 +31,12 @@
     <WarningLevel>9999</WarningLevel>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

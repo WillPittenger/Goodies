@@ -16,6 +16,10 @@
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/WillPittenger/Goodies/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WillPittenger/Goodies/tree/master/WillPittenger.Goodies.JSON</RepositoryUrl>
+    <PackageTags>JSON;JSON Conversion</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -30,6 +34,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WillPittenger.Goodies.Tools\WillPittenger.Goodies.Tools.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
