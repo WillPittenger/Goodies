@@ -1,4 +1,4 @@
-Consists of various stuff you normally get seperately from NuGet.  Those packages are:
+Consists of various stuff you normally get seperately from NuGet.  The links below got to NuGet.  Those packages are:
 
 # 1. [WillPittenger.Goodies.PowerShell.JSON](https://www.nuget.org/packages/WillPittenger.Goodies.PowerShell.JSON/)
 Provides improved versions of standard JSON CmdLets.  Currently limited to a version of ConvertFrom-JSON that returns objects with sorted properties no matter how deep.
