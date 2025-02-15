@@ -18,6 +18,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.Tools
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.PowerShell.JSON", "PowerShell\WillPittenger.Goodies.PowerShell.JSON\WillPittenger.Goodies.PowerShell.JSON.csproj", "{07B6FAA6-8234-41B6-972A-2C193CEEBB39}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2E6B6B81-23C1-4574-802A-633E6B434CAE}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
