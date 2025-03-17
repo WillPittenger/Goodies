@@ -87,8 +87,7 @@ public class StartSoundPlayback : System.Management.Automation.PSCmdlet
 	/// Prevents <see cref="StartSoundPlayback"/> from returning until the sound has played if the playback mechanism supports it.  Has no effect if <see
 	/// cref="Loop"/> is on.
 	/// </summary>
-	[System.Management.Automation.Parameter(HelpMessage = "Prevents Start-SoundPlayback from returning until the sound has played if the playback mechanism " +
-		"supports it.  Has no effect if -Loop was specified.")]
+	[System.Obsolete]
 	public System.Management.Automation.SwitchParameter Sync
 	{
 		get;
@@ -117,9 +116,9 @@ public class StartSoundPlayback : System.Management.Automation.PSCmdlet
 
 		if(Loop.IsPresent)
 			SoundToPlay.PlayLooping();
-		else if(Sync.IsPresent)
-			SoundToPlay.PlaySync();
 		else
 			SoundToPlay.Play();
+
+		WriteObject(SoundToPlay);
 	}
 }

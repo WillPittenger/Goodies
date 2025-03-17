@@ -137,12 +137,15 @@ Accept wildcard characters: False
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-
 ### WillPittenger.Goodies.Sounds.ISound
+A sound retrieved with Get-Sound.
+### Either a file or a predefined system sound ID.
+The sound to locate.
 
 ## OUTPUTS
+### An WillPittenger.Goodies.Sounds.ISound instance.
+The requested sound being played.  Save it if Stop-SoundPlayback is needed.
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

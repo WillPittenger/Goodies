@@ -449,102 +449,105 @@ public static class PredefinedSounds
 			windowsUAC,
 		}
 
-		/// <summary>
-		/// Implementation of <see cref="ISound"/> that handles sounds that Windows .NET declares as <see cref="System.Media.SystemSound"/>.  You will never need to declare an
-		/// instance of this class.
-		/// </summary>
-		public class SysSound : ISound
-		{
-			#region Constructors
-				/// <summary>
-				/// Creates a <see cref="SysSound"/> for the specified <see cref="System.Media.SystemSound"/> instance.
-				/// </summary>
-				/// <param name="sysSound">The .NET sound to wrap</param>
-				private SysSound(System.Media.SystemSound sysSound)
-					=> this.sysSound = sysSound;
-			#endregion
+		#if WINDOWS
+			/// <summary>
+			/// Implementation of <see cref="ISound"/> that handles sounds that Windows .NET declares as <see cref="System.Media.SystemSound"/>.  You will never need
+			/// to declare an instance of this class.
+			/// </summary>
+			public class SysSound : ISound
+			{
+				#region Constructors
+					/// <summary>
+					/// Creates a <see cref="SysSound"/> for the specified <see cref="System.Media.SystemSound"/> instance.
+					/// </summary>
+					/// <param name="sysSound">The .NET sound to wrap</param>
+					private SysSound(System.Media.SystemSound sysSound)
+						=> this.sysSound = sysSound;
+				#endregion
 
-			#region Delegates
-			#endregion
+				#region Delegates
+				#endregion
 
-			#region Events
-			#endregion
+				#region Events
+				#endregion
 
-			#region Constants
-			#endregion
+				#region Constants
+				#endregion
 
-			#region Helper Types
-			#endregion
+				#region Helper Types
+				#endregion
 
-			#region Data Members
-				/// <summary>
-				/// This is the wrapped sound.
-				/// </summary>
-				public readonly System.Media.SystemSound sysSound;
+				#region Data Members
+					/// <summary>
+					/// This is the wrapped sound.
+					/// </summary>
+					public readonly System.Media.SystemSound sysSound;
 
-				/// <summary>
-				/// This is the asterisk sound and corresponds to both <see cref="SoundIDs.asterisk"/> and <see cref="System.Media.SystemSounds.Asterisk"/>.
-				/// </summary>
-				public static readonly SysSound asterisk = new(System.Media.SystemSounds.Asterisk);
+					/// <summary>
+					/// This is the asterisk sound and corresponds to both <see cref="SoundIDs.asterisk"/> and <see cref="System.Media.SystemSounds.Asterisk"/>.
+					/// </summary>
+					public static readonly SysSound asterisk = new(System.Media.SystemSounds.Asterisk);
 
-				/// <summary>
-				/// This is the standard beep sound.  It corresponds to both <see cref="SoundIDs.beep"/> and <see cref="Media.SystemSounds.Beep"/>.
-				/// </summary>
-				public static readonly SysSound beep = new(System.Media.SystemSounds.Beep);
+					/// <summary>
+					/// This is the standard beep sound.  It corresponds to both <see cref="SoundIDs.beep"/> and <see cref="System.Media.SystemSounds.Beep"/>.
+					/// </summary>
+					public static readonly SysSound beep = new(System.Media.SystemSounds.Beep);
 
-				/// <summary>
-				/// This is the standard "exclamation" warning sound.  It corresponds to both <see cref="SoundIDs.exclamation"/> and <see cref="System.Media.SystemSounds
-				/// .Exclamation"/>.  Note, while <see cref="SoundIDs.windowsExclamation"/> has a similar name, that's a local file represented by <see cref="SoundFile"/>.
-				/// </summary>
-				public static readonly SysSound exclamation = new(System.Media.SystemSounds.Exclamation);
+					/// <summary>
+					/// This is the standard "exclamation" warning sound.  It corresponds to both <see cref="SoundIDs.exclamation"/> and <see cref="System.Media
+					/// .SystemSounds.Exclamation"/>.  Note, while <see cref="SoundIDs.windowsExclamation"/> has a similar name, that's a local file represented by <see
+					/// cref="SoundFile"/>.
+					/// </summary>
+					public static readonly SysSound exclamation = new(System.Media.SystemSounds.Exclamation);
 
-				/// <summary>
-				/// This is the standard "error" hand sound.  It corresponds to both <see cref="SoundIDs.hand"/> and <see cref="Media.SystemSounds.Hand"/>.
-				/// </summary>
-				public static readonly SysSound hand = new(System.Media.SystemSounds.Hand);
+					/// <summary>
+					/// This is the standard "error" hand sound.  It corresponds to both <see cref="SoundIDs.hand"/> and <see cref="System.Media.SystemSounds.Hand"/>.
+					/// </summary>
+					public static readonly SysSound hand = new(System.Media.SystemSounds.Hand);
 
-				/// <summary>
-				/// This is the standard question sound.  It corresponds to both <see cref="SoundIDs.question"/> and <see cref="Media.SystemSounds.Question"/>.
-				/// </summary>
-				public static readonly SysSound question = new(System.Media.SystemSounds.Question);
-			#endregion
+					/// <summary>
+					/// This is the standard question sound.  It corresponds to both <see cref="SoundIDs.question"/> and <see cref="System.Media.SystemSounds.Question"/>.
+					/// </summary>
+					public static readonly SysSound question = new(System.Media.SystemSounds.Question);
+				#endregion
 
-			#region Properties
-			#endregion
+				#region Properties
+				#endregion
 
-			#region Methods
-				/// <summary>
-				/// Starts playback of the specified sound.  The sound is preloaded by Windows and always plays asynchronously.
-				/// </summary>
-				public void Play()
-					=> sysSound.Play();
+				#region Methods
+					/// <summary>
+					/// Starts playback of the specified sound.  The sound is preloaded by Windows and always plays asynchronously.
+					/// </summary>
+					public void Play()
+						=> sysSound.Play();
 
-				/// <summary>
-				/// The underlying class doesn't support looping, so <see cref="ISound.PlayLooping"/> is mapped to <see cref="Play"/>.
-				/// </summary>
-				public void PlayLooping()
-					=> sysSound.Play();
+					/// <summary>
+					/// The underlying class doesn't support looping, so <see cref="ISound.PlayLooping"/> is mapped to <see cref="Play"/>.
+					/// </summary>
+					public void PlayLooping()
+						=> sysSound.Play();
 
-				/// <summary>
-				/// The underlying class doesn't distinguish between synchronous and asynchronous playback.  So <see cref="ISound.PlaySync"/> is mapped to <see
-				/// cref="Play"/>
-				/// </summary>
-				public void PlaySync()
-					=> sysSound.Play();
+					/// <summary>
+					/// The underlying class doesn't distinguish between synchronous and asynchronous playback.  So <see cref="ISound.PlaySync"/> is mapped to <see
+					/// cref="Play"/>
+					/// </summary>
+					public void PlaySync()
+						=> sysSound.Play();
 
 
-				/// <summary>
-				/// While <see cref="ISound.Stop"/> is defined as stopping playback, the underlying class, <see cref="System.Media.SystemSound"/> doesn't support
-				/// this.  So this implementation does nothing.
-				/// </summary>
-				public void Stop()
-				{
-				}
-			#endregion
+					/// <summary>
+					/// While <see cref="ISound.Stop"/> is defined as stopping playback, the underlying class, <see cref="System.Media.SystemSound"/> doesn't support
+					/// this.  So this implementation does nothing.
+					/// </summary>
+					public void Stop()
+					{
+					}
+				#endregion
 
-			#region Event Handlers
-			#endregion
-		}
+				#region Event Handlers
+				#endregion
+			}
+		#endif
 	#endregion
 
 	#region Data Members
@@ -553,11 +556,13 @@ public static class PredefinedSounds
 		/// </summary>
 		private static readonly System.Collections.Generic.Dictionary<SoundIDs, ISound> mapIdToSoundObj = new()
 		{
-			[SoundIDs.asterisk] = SysSound.asterisk,
-			[SoundIDs.beep] = SysSound.beep,
-			[SoundIDs.exclamation] = SysSound.exclamation,
-			[SoundIDs.hand] = SysSound.hand,
-			[SoundIDs.question] = SysSound.question,
+			#if WINDOWS
+				[SoundIDs.asterisk] = SysSound.asterisk,
+				[SoundIDs.beep] = SysSound.beep,
+				[SoundIDs.exclamation] = SysSound.exclamation,
+				[SoundIDs.hand] = SysSound.hand,
+				[SoundIDs.question] = SysSound.question,
+			#endif
 
 			[SoundIDs.alarm01] = new SoundFile("alarm01.wav", true),
 			[SoundIDs.alarm02] = new SoundFile("alarm02.wav", true),

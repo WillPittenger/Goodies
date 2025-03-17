@@ -6,20 +6,14 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>0.5.0</Version>
+    <Version>0.0.0.1</Version>
     <Authors>Will Pittenger</Authors>
-    <Description>Code to convert JSON in a sorted manner</Description>
-    <Copyright>©Will Pittenger) 2025</Copyright>
+    <Description>A tool for calling yt-dlp from .NET code.</Description>
+    <Copyright>©2025 Will Pittenger</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <IncludeSymbols>True</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-    <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageProjectUrl>https://github.com/WillPittenger/Goodies/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/WillPittenger/Goodies/tree/master/WillPittenger.Goodies.JSON</RepositoryUrl>
-    <PackageTags>JSON;JSON Conversion</PackageTags>
     <Configurations>Debug;Release;NoWindowsDebug;NoWindowsRelease</Configurations>
   </PropertyGroup>
 
@@ -44,14 +38,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WillPittenger.Goodies.JSON\WillPittenger.Goodies.JSON.csproj" />
     <ProjectReference Include="..\WillPittenger.Goodies.Tools\WillPittenger.Goodies.Tools.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="readme.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
   </ItemGroup>
 
 </Project>

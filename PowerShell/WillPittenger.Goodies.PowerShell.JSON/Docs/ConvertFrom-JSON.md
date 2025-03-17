@@ -108,8 +108,9 @@ Accept wildcard characters: False
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-A JSON string.
+### A JSON string.
+What to parse
 
 ## OUTPUTS
-
-Either a WillPittenger.Goodies.JSON.ObjBase or a PSObject.
+### Either a WillPittenger.Goodies.JSON.ObjBase or a PSObject.
+The requested object

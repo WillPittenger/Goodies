@@ -80,11 +80,12 @@ Accept wildcard characters: False
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-
-Either a file or a predefined system sound ID.
+### Either a file or a predefined system sound ID.
+The sound to locate.
 
 ## OUTPUTS
-An WillPittenger.Goodies.Sounds.ISound instance.
+### An WillPittenger.Goodies.Sounds.ISound instance.
+The requested sound
 
 ## NOTES
 Unfortunately, operating systems other than Windows can't be supported as they don't have the sound API used.

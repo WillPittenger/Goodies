@@ -5,24 +5,7 @@
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>0.5.0</Version>
-		<Authors>Will Pittenger</Authors>
-		<Copyright>©2024 Will Pittenger</Copyright>
-		<NeutralLanguage>en-US</NeutralLanguage>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-		<IncludeSymbols>True</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-		<RepositoryUrl>https://github.com/WillPittenger/Goodies/tree/master/PowerShell/WillPittenger.Goodies.PowerShell.Sounds</RepositoryUrl>
-		<PackageProjectUrl>https://github.com/WillPittenger/Goodies</PackageProjectUrl>
-		<PackageTags>Windows;Sounds;Media;.NET</PackageTags>
-		<Title>CmdLets for playing sounds in PowerShell</Title>
-		<Description>If you need to play sounds like a task completion sound from your PowerShell scripts, use these CmdLets.
-
-Note; This depends on WillPittenger.Goodies.Sounds.</Description>
-		<PackageReadmeFile>readme.md</PackageReadmeFile>
 		<Configurations>Debug;Release;NoWindowsDebug;NoWindowsRelease</Configurations>
 	</PropertyGroup>
 
@@ -51,28 +34,39 @@ Note; This depends on WillPittenger.Goodies.Sounds.</Description>
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\WillPittenger.Goodies.Sounds\WillPittenger.Goodies.Sounds.csproj" />
+	  <ProjectReference Include="..\..\WillPittenger.Goodies.JSON\WillPittenger.Goodies.JSON.csproj" />
+	  <ProjectReference Include="..\..\WillPittenger.Goodies.Sounds\WillPittenger.Goodies.Sounds.csproj" />
+	  <ProjectReference Include="..\..\WillPittenger.Goodies.Tools\WillPittenger.Goodies.Tools.csproj" />
+	  <ProjectReference Include="..\..\WillPittenger.Goodies.YtDlpWrapper\WillPittenger.Goodies.YtDlpWrapper.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="WillPittenger.Goodies.PowerShell.Sounds\WillPittenger.Goodies.PowerShell.Sounds.psd1">
+	  <Compile Update="Rsrcs.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Rsrcs.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Rsrcs.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Rsrcs.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="readme.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Update="WillPittenger.Goodies.PowerShell.JSON\WillPittenger.Goodies.PowerShell.JSON.psd1">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Properties\Icons\Icon 64x64.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Docs\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Include="readme.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

@@ -1,9 +1,10 @@
 ﻿// Ignore Spelling: Org JSON jsone vals
 
 using System.Linq;
-using WillPittenger.Goodies.Tools.Ext;
 
 namespace WillPittenger.Goodies.JSON;
+
+using Tools.Ext;
 
 /// <summary>
 /// This corresponds to a JSON object.  It can contain <see cref="NamedVal"/> indexed by their name.  The values inside those <see cref="NamedVal"/> can be any

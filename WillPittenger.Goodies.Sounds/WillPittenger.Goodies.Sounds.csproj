@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0-windows</TargetFramework>
+		<TargetFramework Condition="$(Configuration) == 'NoWindowsDebug' or $(Configuration) == 'NoWindowsRelease'">net9.0</TargetFramework>
+		<TargetFramework Condition="$(Configuration) != 'NoWindowsDebug' and $(Configuration) != 'NoWindowsRelease'">net9.0-windows</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -20,6 +21,7 @@
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 		<PackageProjectUrl>https://github.com/WillPittenger/Goodies/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/WillPittenger/Goodies/tree/master/WillPittenger.Goodies.Sounds</RepositoryUrl>
+		<Configurations>Debug;Release;NoWindowsDebug;NoWindowsRelease</Configurations>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -27,13 +29,46 @@
 		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoWindowsDebug|AnyCPU'">
+	  <WarningLevel>9999</WarningLevel>
+	  <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<WarningLevel>9999</WarningLevel>
 		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
 	</PropertyGroup>
 
-	<ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoWindowsRelease|AnyCPU'">
+	  <WarningLevel>9999</WarningLevel>
+	  <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+	</PropertyGroup>
+
+	<ItemGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetFramework), 'Windows$'))">
 		<PackageReference Include="System.Windows.Extensions" Version="9.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="SFML.Audio" Version="2.6.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\WillPittenger.Goodies.Tools\WillPittenger.Goodies.Tools.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Rsrcs.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Rsrcs.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Rsrcs.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Rsrcs.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
