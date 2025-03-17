@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/PowerShell/WillPittenger.Goodies.PowerShell.JSON/Docs/out/en-US/WillPittenger.Goodies.PowerShell.JSON.dll-Help.xml
+/PowerShell/WillPittenger.Goodies.PowerShell.Sounds/Docs/out/en-US/WillPittenger.Goodies.PowerShell.Sounds.dll-Help.xml
