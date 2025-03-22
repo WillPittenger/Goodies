@@ -1,6 +1,4 @@
-﻿// Ignore Spelling: astr Dlp
-
-using System.Diagnostics.CodeAnalysis;
+﻿// Ignore Spelling: astr yt Dlp runas
 
 namespace WillPittenger.Goodies.YtDlpWrapper;
 
@@ -241,12 +239,14 @@ public class YtDlpWrapper
 		} = null;
 	}
 
-	public static YtDlpInfo InvokeYtDlp(params string[] astrParams)
-		=> InvokeYtDlp(null, null, astrParams);
+	public static YtDlpInfo InvokeYtDlp(in Sounds.ISound? soundCompletion = null, params string[] astrParams)
+		=> InvokeYtDlp(soundCompletion, null, null, astrParams);
 
-	public static YtDlpInfo InvokeYtDlp(System.Diagnostics.DataReceivedEventHandler? handlerStdOut = null, System.Diagnostics.DataReceivedEventHandler?
-		handlerStdErr = null, params string[] astrParams)
+	public static YtDlpInfo InvokeYtDlp(Sounds.ISound? soundCompletion = null, in System.Diagnostics.DataReceivedEventHandler? handlerStdOut = null, in System
+		.Diagnostics.DataReceivedEventHandler? handlerStdErr = null, params string[] astrParams)
 	{
+		soundCompletion ??= Sounds.PredefinedSounds.AllPredefinedSounds[Sounds.PredefinedSounds.SoundIDs.tada];
+
 		YtDlpInfo result = new();
 
 		using System.Diagnostics.Process procYtlp = new()
@@ -279,15 +279,65 @@ public class YtDlpWrapper
 				}, System.Threading.Tasks.TaskCreationOptions.PreferFairness | System.Threading.Tasks.TaskCreationOptions.LongRunning
 		);
 
+		soundCompletion.Play();
+
 		return result;
 	}
 
-	public static YtDlpInfoWithJSON InvokeYtDlpForJSON(bool bUpdatePlayListEntries, params string[] astrParams)
-		=> InvokeYtDlpForJSON(bUpdatePlayListEntries, null, null, astrParams);
+	public static YtDlpInfo InvokeYtDlpAsElevatedProcess(in Sounds.ISound? soundCompletion = null, params string[] astrParams)
+		=>  InvokeYtDlpAsElevatedProcess(soundCompletion, null, null, astrParams);
 
-	public static YtDlpInfoWithJSON InvokeYtDlpForJSON(in bool bUpdatePlayListEntries, System.Diagnostics.DataReceivedEventHandler? handlerStdOut = null, System
-		.Diagnostics.DataReceivedEventHandler? handlerStdErr = null, params string[] astrParams)
+	public static YtDlpInfo InvokeYtDlpAsElevatedProcess(Sounds.ISound? soundCompletion = null, in System.Diagnostics.DataReceivedEventHandler? handlerStdOut =
+		null, in System.Diagnostics.DataReceivedEventHandler? handlerStdErr = null, params string[] astrParams)
 	{
+		soundCompletion ??= Sounds.PredefinedSounds.AllPredefinedSounds[Sounds.PredefinedSounds.SoundIDs.tada];
+
+		YtDlpInfo result = new();
+
+		using System.Diagnostics.Process procYtlp = new()
+		{
+			EnableRaisingEvents = true,
+			PriorityClass = System.Diagnostics.ProcessPriorityClass.Normal,
+			StartInfo = new(YtDlpExe.FullName, astrParams)
+			{
+				CreateNoWindow = true,
+				RedirectStandardError = true,
+				RedirectStandardOutput = true,
+				WorkingDirectory = System.Environment.CurrentDirectory,
+				Verb = @"Runas",
+			},
+		};
+
+		if(handlerStdOut != null)
+			procYtlp.OutputDataReceived += handlerStdOut;
+		if(handlerStdErr != null)
+			procYtlp.ErrorDataReceived += handlerStdErr;
+
+		using System.Threading.Tasks.Task taskYtDlpRunner = new
+			(
+				() =>
+				{
+					procYtlp.Start();
+					procYtlp.WaitForExit();
+
+					result.StdOutCnts = procYtlp.StandardOutput.ReadToEnd();
+					result.StdErrCnts = procYtlp.StandardError.ReadToEnd();
+				}, System.Threading.Tasks.TaskCreationOptions.PreferFairness | System.Threading.Tasks.TaskCreationOptions.LongRunning
+		);
+
+		soundCompletion.Play();
+
+		return result;
+	}
+
+	public static YtDlpInfoWithJSON InvokeYtDlpForJSON(in bool bUpdatePlayListEntries, in Sounds.ISound? soundCompletion = null, params string[] astrParams)
+		=> InvokeYtDlpForJSON(bUpdatePlayListEntries, soundCompletion, null, null, astrParams);
+
+	public static YtDlpInfoWithJSON InvokeYtDlpForJSON(in bool bUpdatePlayListEntries, Sounds.ISound? soundCompletion = null, System.Diagnostics
+		.DataReceivedEventHandler? handlerStdOut = null, System.Diagnostics.DataReceivedEventHandler? handlerStdErr = null, params string[] astrParams)
+	{
+		soundCompletion ??= Sounds.PredefinedSounds.AllPredefinedSounds[Sounds.PredefinedSounds.SoundIDs.tada];
+
 		YtDlpInfoWithJSON result = new();
 
 		using System.Diagnostics.Process procYtlp = new()
@@ -327,6 +377,8 @@ public class YtDlpWrapper
 				CommentHandling = System.Text.Json.JsonCommentHandling.Skip,
 				MaxDepth = int.MaxValue
 			}).RootElement;
+
+		Sounds.PredefinedSounds.AllPredefinedSounds[Sounds.PredefinedSounds.SoundIDs.tada].Play();
 
 		return result;
 	}

@@ -169,61 +169,61 @@ public class SoundFile : ISound
 	#endregion
 
 	#region Methods
-	/// <summary>
-	/// Plays the sound.  This might be played asynchronously.  It won't loop.  For looped sounds, see <see cref="PlayLooping"/>.  To ensure you get
-	/// synchronous sound, use <see cref="PlaySync"/>.
-	/// </summary>
-	public void Play()
-	{
-		if(player.Status != SFML.Audio.SoundStatus.Stopped)
+		/// <summary>
+		/// Plays the sound.  This might be played asynchronously.  It won't loop.  For looped sounds, see <see cref="PlayLooping"/>.  To ensure you get
+		/// synchronous sound, use <see cref="PlaySync"/>.
+		/// </summary>
+		public void Play()
 		{
-			if(fileSrc is null)
-				throw new Exception(Exception.Reasons.playerBusy, Rsrcs.strPlayerForSoundBusy);
+			if(player.Status != SFML.Audio.SoundStatus.Stopped)
+			{
+				if(fileSrc is null)
+					throw new Exception(Exception.Reasons.playerBusy, Rsrcs.strPlayerForSoundBusy);
 
-			throw new Exception(Exception.Reasons.playerBusy, Rsrcs.strPlayerForSoundBusyWithFileName.Fmt(fileSrc.FullName));
+				throw new Exception(Exception.Reasons.playerBusy, Rsrcs.strPlayerForSoundBusyWithFileName.Fmt(fileSrc.FullName));
+			}
+
+			player.Loop = false;
+			player.Play();
 		}
 
-		player.Loop = false;
-		player.Play();
-	}
-
-	/// <summary>
-	/// Play the sound so that it loops continuously.  Call <see cref="Stop"/> to stop the playback loop.  Note that looping isn't supported by some
-	/// predefined sounds in <see cref="PredefinedSounds"/>.  See that class for more details.
-	/// </summary>
-	public void PlayLooping()
-	{
-		if(player.Status != SFML.Audio.SoundStatus.Stopped)
+		/// <summary>
+		/// Play the sound so that it loops continuously.  Call <see cref="Stop"/> to stop the playback loop.  Note that looping isn't supported by some
+		/// predefined sounds in <see cref="PredefinedSounds"/>.  See that class for more details.
+		/// </summary>
+		public void PlayLooping()
 		{
-			if(fileSrc is null)
-				throw new Exception(Exception.Reasons.playerBusy, Rsrcs.strPlayerForSoundBusy);
+			if(player.Status != SFML.Audio.SoundStatus.Stopped)
+			{
+				if(fileSrc is null)
+					throw new Exception(Exception.Reasons.playerBusy, Rsrcs.strPlayerForSoundBusy);
 
-			throw new Exception(Exception.Reasons.playerBusy, Rsrcs.strPlayerForSoundBusyWithFileName.Fmt(fileSrc.FullName));
+				throw new Exception(Exception.Reasons.playerBusy, Rsrcs.strPlayerForSoundBusyWithFileName.Fmt(fileSrc.FullName));
+			}
+
+			player.Loop = true;
+			player.Play();
 		}
 
-		player.Loop = true;
-		player.Play();
-	}
+		/// <summary>
+		/// Same as <see cref="Play"/> in some cases.  However, instances of <see cref="SoundFile"/> will attempt to play back the sound entirely before <see
+		/// cref="PlaySync"/> returns.  For instances of <see cref="PredefinedSounds.SysSound"/>, this is the same as a call to <see cref="Play"/> as the sound
+		/// files are preloaded by Windows.
+		/// </summary>
+		/// <remarks>
+		///		<para>SFML doesn't have a synchronous option.  We needed it for non-Windows support.  Function may be removed at a later date.  It does nothing.</para>
+		/// </remarks>
+		[System.Obsolete(@"SFML doesn't have a synchronous option.  We needed it for non-Windows support.  Function may be removed at a later date.  It does " +
+			@"nothing.")]
+		public void PlaySync()
+		{
+		}
 
-	/// <summary>
-	/// Same as <see cref="Play"/> in some cases.  However, instances of <see cref="SoundFile"/> will attempt to play back the sound entirely before <see
-	/// cref="PlaySync"/> returns.  For instances of <see cref="PredefinedSounds.SysSound"/>, this is the same as a call to <see cref="Play"/> as the sound
-	/// files are preloaded by Windows.
-	/// </summary>
-	/// <remarks>
-	///		<para>SFML doesn't have a synchronous option.  We needed it for non-Windows support.  Function may be removed at a later date.  It does nothing.</para>
-	/// </remarks>
-	[System.Obsolete(@"SFML doesn't have a synchronous option.  We needed it for non-Windows support.  Function may be removed at a later date.  It does " +
-		@"nothing.")]
-	public void PlaySync()
-	{
-	}
-
-	/// <summary>
-	/// If you started playback with <see cref="PlayLooping"/>, this stops playback.
-	/// </summary>
-	public void Stop()
-			=> player.Stop();
+		/// <summary>
+		/// If you started playback with <see cref="PlayLooping"/>, this stops playback.
+		/// </summary>
+		public void Stop()
+				=> player.Stop();
 	#endregion
 
 	#region Event Handlers

@@ -38,8 +38,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WillPittenger.Goodies.JSON\WillPittenger.Goodies.JSON.csproj" />
-    <ProjectReference Include="..\WillPittenger.Goodies.Tools\WillPittenger.Goodies.Tools.csproj" />
+    <ProjectReference Include="..\WillPittenger.Goodies.JSON\WillPittenger.Goodies.JSON.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\WillPittenger.Goodies.Sounds\WillPittenger.Goodies.Sounds.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\WillPittenger.Goodies.Tools\WillPittenger.Goodies.Tools.csproj">
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
