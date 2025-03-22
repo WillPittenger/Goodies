@@ -65,7 +65,7 @@ public class Array : ObjBase, System.Collections.Generic.IEnumerable<ObjBase>, S
 	}
 
 	/// <summary>
-	/// Lets you add many items at once.  This is more efficient than calling <see cref="Add(ObjBase)"/> repeatedly.
+	/// Lets you add many items at once.  This is more efficient than calling <see cref="Add(in ObjBase)"/> repeatedly.
 	/// </summary>
 	/// <param name="objects">A <see cref="System.Collections.Generic.IEnumerable{ObjBase}"/> containing the new items.</param>
 	public void Add(in System.Collections.Generic.IEnumerable<ObjBase> objects)

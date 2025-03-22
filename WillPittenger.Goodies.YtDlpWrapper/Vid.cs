@@ -186,25 +186,25 @@ public class Vid : Playable
 		protected override YtDlpWrapper.FieldDef ExpectedIdField
 			=> YtDlpWrapper.KnownYtDlpFields.fieldID;
 
-	protected override System.Uri UpdateURL
-	{
-		get
+		protected override System.Uri UpdateURL
 		{
-			PlayList? plParent = ParentPlayList;
+			get
+			{
+				PlayList? plParent = ParentPlayList;
 
-			return new(plParent is null
-					? $"https://www.youtube.com/watch?v={strID}"
-					: $"https://www.youtube.com/watch?v={strID}&list={plParent.strID}"
-				);
+				return new(plParent is null
+						? $"https://www.youtube.com/watch?v={strID}"
+						: $"https://www.youtube.com/watch?v={strID}&list={plParent.strID}"
+					);
+			}
 		}
-	}
 
-	public double? AudioBitRate
-		{
-			get;
+		public double? AudioBitRate
+			{
+				get;
 
-			private set;
-		}
+				private set;
+			}
 
 		public string? AudioCodec
 		{
@@ -260,14 +260,14 @@ public class Vid : Playable
 			get;
 
 			private set;
-		}
+		} = new System.Collections.Generic.HashSet<string>();
 
 		public System.Collections.Generic.IReadOnlyList<Chapter> Chapters
 		{
 			get;
 
 			private set;
-		}
+		} = [];
 
 		public long? CommentCnt
 		{
@@ -512,6 +512,14 @@ public class Vid : Playable
 
 			private set;
 		}
+
+		public System.Collections.Generic.IEnumerable<PlayList> AllKnownPlayListParents
+			=> from PlayList plCur in PlayList.AllKnownPlayLists.Values
+					where plCur.EntriesByID.Values.Contains(this)
+					select plCur;
+
+		public static System.Collections.Generic.IReadOnlyDictionary<string, Vid> AllKnownVids
+			=> mapAllKnownVidsByID;
 	#endregion
 
 	#region Methods

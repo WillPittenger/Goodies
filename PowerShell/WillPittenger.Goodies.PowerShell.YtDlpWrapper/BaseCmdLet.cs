@@ -3,24 +3,44 @@
 namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 
 /// <summary>
-/// All CmdLets in this module should derive from here.  It declares the <see cref="AllGlobalOpts"/> instance <see cref="Opts"/> parameter property for advanced
-/// usage.
+/// All CmdLets in this module except Get-YtDlpVersion should derive from here.  <see cref="BaseCmdLet"/> simplifies checking if the user wants Verbose or WhatIf
+/// and simplifies writing some times of objects either derived from <see cref="JSON.Obj"/> and the object represents a <see
+/// cref="Goodies.YtDlpWrapper.BaseObj"/> value or the object is another type derived from <see cref="JSON.ObjBase"/>.
 /// </summary>
 public abstract class BaseCmdLet : System.Management.Automation.PSCmdlet
 {
+	/// <summary>
+	/// Tests to see if the user activated Verbose.
+	/// </summary>
 	protected bool IsVerboseOn
 		=> MyInvocation.BoundParameters[@"verbose"] is true;
 
+	/// <summary>
+	/// Tests if the user activated WhatIf.
+	/// </summary>
 	protected bool IsWhatIfOn
-		=> MyInvocation.BoundParameters["whatif"] is true;
+		=> MyInvocation.BoundParameters[@"whatif"] is true;
+
+	/// <summary>
+	/// Specifies the sound to be played when the task completes.
+	/// </summary>
+	/// <inheritdoc/>
+	protected Sounds.ISound? TaskCompletionSound
+		=> SessionState.PSVariable.Get(@"TaskCompletionSound").Value as Sounds.ISound;
 
 
+	/// <summary>
+	/// Writes the specified object to the pipeline using <see cref="System.Management.Automation.Cmdlet.WriteObject(object)"/>, but attempting to convert such objects as needed into different formats that make more sense.  For example, if <see cref="WriteObj(JSON.ObjBase)"/> detects <paramref name="jobDataToWrite"/> contains a Channel that could be represented by <see cref="Goodies.YtDlpWrapper.Chan"/>, it converts it.
+	/// </summary>
+	/// <param name="jobDataToWrite">The object to write</param>
+	/// <exception cref="System.Exception">Found an object that’s a yt-dlp data structure, but item type was <see langword="null"/>.</exception>
+	/// <exception cref="System.InvalidOperationException"><see cref="WriteObj(JSON.ObjBase)"/> was unable to interpret data sent back from yt-dlp.</exception>
 	protected void WriteObj(JSON.ObjBase jobDataToWrite)
 	{
 		if(jobDataToWrite is JSON.Obj joDataToWrite)
 		{
 			object objValEncountered = joDataToWrite.Values[Goodies.YtDlpWrapper.YtDlpWrapper.KnownYtDlpFields.field_ItemType.strName].val.objVal
-				?? throw new System.Exception("Unexpected null value in JSON data for the item type field");
+				?? throw new System.Exception(@"Unexpected null value in JSON data for the item type field");
 
 			if(objValEncountered is string strValEncountered)
 				switch(System.Enum.Parse<Goodies.YtDlpWrapper.YtDlpWrapper.ItemTypes>(strValEncountered))
@@ -41,8 +61,10 @@ public abstract class BaseCmdLet : System.Management.Automation.PSCmdlet
 						break;
 
 					default:
-						throw new System.InvalidOperationException($"Unable to interpret entry sent back from yt-dlp.");
+						throw new System.InvalidOperationException(@"Unable to interpret entry sent back from yt-dlp.");
 				}
+			else
+				WriteObject(jobDataToWrite);
 		}
 		else if(jobDataToWrite is JSON.Array jaDataToWrite)
 			foreach(JSON.ObjBase jobCurEntry in jaDataToWrite.Elements)

@@ -400,7 +400,7 @@
     <value>"Extractor names to use separated by commas.  You can also use regular expressions, “all”, “default”, “end” (end URL matching) like "holodex.*,end,youtube".  Prefix the name with a “-” to exclude it."</value>
   </data>
   <data name="strGeneralWaitForVid" xml:space="preserve">
-    <value>Wait for scheduled streams to become available.  Pass the minimum number of seconds (or range) to wait between retries.  Put the start in the Start property and the end in the End property.  End isn’t valid until Start is non-null.  That’s because yt-dlp requires a range with a start regardless.</value>
+    <value>Wait for scheduled streams to become available.  Pass the minimum number of seconds (or range) to wait between retries.  Put the start in the Start property and the end in the End property.  End isn’t valid until Start is non-null.  That’s because yt-dlp requires a range with a start regardless.  By default, yt-dlp doesn't wait for videos, unless a config file specifies --wait-for-video.  You can specify this behavior by specifying a null value for WaitForVid or creating a TimeRangeVal, but not setting Start.  Note: TimeRangeVal.invalid is special.  It causes --no-wait-for-video to be passed.</value>
   </data>
   <data name="strGeoRestrictionVerificationProxy" xml:space="preserve">
     <value>Use this proxy to verify the IP address for some geo-restricted sites.  The default proxy specified by Net.ProxyURL (or none, if the option is null) is used for the actual downloading.</value>
@@ -688,7 +688,7 @@
     <value>If true, multiple video streams can be merged into one file.  If false, that won't be allowed.  If you use the default value of null, yt-dlp will act as though vidMultiStreamsAlloweed is false unless a config file sets either --video-multistreams or --no-video-multistreams.</value>
   </data>
   <data name="strVidFmtCheck" xml:space="preserve">
-    <value>Controls if yt-dlp should check if a format can be actually downloaded.  If this is FmtCheckChoices.@default and no config file sets --check-formats, --check-all-formats, or --no-check-formats, yt-dlp will act as though Check is set to FmtCheckChoices.never.  Use FmtCheckChoices.yes to check selected files that they can be downloaded.  Use FmtCheckChoices.all to check all files that they can be downloaded.  Use FmtCheckCHoices.never to never check.</value>
+    <value>Controls if yt-dlp should check if a format can be actually downloaded.  If this is FmtCheckChoices.@default and no config file sets --check-formats, --check-all-formats, or --no-check-formats, yt-dlp will act as though Check is set to FmtCheckChoices.never.  Use FmtCheckChoices.yes to check selected files that they can be downloaded.  Use FmtCheckChoices.all to check all files that they can be downloaded.  Use FmtCheckCHoices.none to never check.</value>
   </data>
   <data name="strVidFmtForceSorting" xml:space="preserve">
     <value>If true, user-specified fields have precedence over all other fields.  If false, some fields will have precedence over those specified by the user.  For what user-specified fields were specified, see fmtSorting/--format-sort.  If you leave this at the default value of null, a config file may set --format-sort-force or --no-format-sort-force.  By default, if forceFmtSorting is null and no config file sets a value, yt-dlp will act as though forceFmtSorting is false.</value>

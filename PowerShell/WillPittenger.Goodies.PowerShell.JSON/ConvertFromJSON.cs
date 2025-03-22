@@ -9,14 +9,17 @@ namespace WillPittenger.Goodies.PowerShell.JSON;
 [System.Management.Automation.Cmdlet(System.Management.Automation.VerbsData.ConvertFrom, "JSON")]
 public class ConvertFromJSON : System.Management.Automation.Cmdlet
 {
-	[System.Management.Automation.Parameter(Position=0, Mandatory = true, HelpMessage = "Pass any JSON string.", ValueFromPipeline = true)]
+	/// <summary>
+	/// Pass any JSON string.
+	/// </summary>
+	[System.Management.Automation.Parameter(Position=0, Mandatory = true, HelpMessage = @"Pass any JSON string.", ValueFromPipeline = true)]
 	[System.Management.Automation.ValidateNotNullOrWhiteSpace]
-	public string Input
+	public required string Input
 	{
 		get;
 
 		set;
-	}
+	} = string.Empty;
 
 	/// <summary>
 	/// By default, the code allows the parser to go up to <see cref="int.MaxValue"/> levels deep.  However, you can use <see cref="MaxDepth"/> to limit that.  The

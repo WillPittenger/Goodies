@@ -4,7 +4,7 @@ namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 
 [System.Management.Automation.Alias("swyd")]
 [System.Management.Automation.Cmdlet(System.Management.Automation.VerbsData.Save, @"WithYtDlp")]
-public class SaveWithYtDlp : BaseSaveCmdLet
+public class SaveWithYtDlp : BaseVidCmdLet
 {
 	[System.Management.Automation.Parameter(HelpMessage = @"This can be any mix of ID values, URLs, plus anything returned by Get-InfoFromYtDlp.  Other types "
 		+ @"aren't allowed.", Mandatory = true, Position = 1, ValueFromPipeline = true, ValueFromRemainingArguments = true)]
@@ -14,25 +14,29 @@ public class SaveWithYtDlp : BaseSaveCmdLet
 
 		set;
 	}
+	
+	protected override System.Diagnostics.DataReceivedEventHandler? StdOutDataReceivedHandler
+		=> IsWhatIfOn
+			? (sender, e)
+				=>
+				{
+					if(e.Data is string strData && strData.Length > 0)
+					{
+						try
+						{
+							WriteObject(new System.IO.FileInfo(strData ?? ""));
+						}
+						catch(System.Exception ex)
+						{
+							WriteWarning(@$"“{strData}” doesn't look like a filename: {ex.Message}");
 
-	[System.Management.Automation.PSDefaultValue(Value = PartsOfUrlsThatCanBeDownloaded.both)]
-	[System.Management.Automation.Parameter(HelpMessage = @"If some of the URLs specify both a video and a playlist, use this to control what you get.")]
-	public PartsOfUrlsThatCanBeDownloaded DownloadWhatInSpecifiedURLs
-	{
-		get;
-
-		set;
-	} = PartsOfUrlsThatCanBeDownloaded.both;
-
-	[System.Management.Automation.PSDefaultValue(Value = null)]
-	[System.Management.Automation.Parameter(HelpMessage = @"Use to specify how yt-dlp generates file names.  See the instructions on how to do that from " +
-		@"https://github.com/yt-dlp/yt-dlp/blob/master/README.md#output-template.")]
-	public string? FileNameFmt
-	{
-		get;
-
-		set;
-	} = null;
+							WriteObject(null);
+						}
+					}
+					else
+						WriteObject(null);
+				}
+			: null;
 
 	protected override System.Collections.Generic.IEnumerable<object> AllURLs
 		=> lliststrWhatToDownload;
@@ -40,12 +44,12 @@ public class SaveWithYtDlp : BaseSaveCmdLet
 
 	private readonly System.Collections.Generic.LinkedList<string> lliststrWhatToDownload = [];
 
+	private ulong ulCurParam = 1;
 
 	/// <inheritdoc/>
 	protected override void ProcessRecord()
 	{
 		base.ProcessRecord();
-		int iCurParam = 1;
 
 		if(WhatToDownload is not null)
 			foreach(object objCurInput in WhatToDownload)
@@ -57,9 +61,15 @@ public class SaveWithYtDlp : BaseSaveCmdLet
 				else if(objCurInput is Goodies.YtDlpWrapper.BaseObj bobjCurInput)
 					lliststrWhatToDownload.AddLast(bobjCurInput.strID);
 				else
-					WriteWarning(@$"Unable to interpret parameter {iCurParam}: “{objCurInput}”");
+					WriteWarning(@$"Unable to interpret parameter {ulCurParam}: “{objCurInput}”");
 
-				iCurParam++;
+				ulCurParam++;
 			}
 	}
+
+	/// <inheritdoc/>
+	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDLpParams
+		=> IsWhatIfOn
+			? [@"--print", @"filename"]
+			: [];
 }

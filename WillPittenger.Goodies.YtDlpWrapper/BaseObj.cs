@@ -3,22 +3,28 @@
 public abstract class BaseObj
 {
 	#region Constructors & Deconstructors
-		public BaseObj(in JSON.Obj joInfo)
+		protected BaseObj(in JSON.Obj joInfo)
 		{
 			strID = (string?)joInfo.Values[YtDlpWrapper.KnownYtDlpFields.fieldID.strName].val.objVal ?? "";
 
 			Update(joInfo);
+
+			OriginalURL = new(joInfo.Values[YtDlpWrapper.KnownYtDlpFields.fieldOriginalURL.strName].val.objVal as string ?? throw new System.ArgumentException(@"Can't find the original url in the passed data.", nameof(joInfo)));
 		}
 
-		public BaseObj(in string strID)
+		protected BaseObj(in string strID)
 			=> this.strID = strID;
 
-		public BaseObj(in System.Uri uriWhichObj)
-			=> strID = System.Web.HttpUtility.ParseQueryString(uriWhichObj.Query).AllKeys['v'] ?? "";
+		protected BaseObj(in System.Uri uriWhichObj)
+		{
+			strID = System.Web.HttpUtility.ParseQueryString(uriWhichObj.Query).AllKeys['v'] ?? "";
+
+			OriginalURL = uriWhichObj;
+		}
 	#endregion
 
 	#region Members
-		public readonly string strID;
+	public readonly string strID;
 	#endregion
 
 	#region Properties
@@ -93,7 +99,7 @@ public abstract class BaseObj
 			private set;
 		} = null;
 
-		public System.Uri OriginalURL
+		public System.Uri? OriginalURL
 		{
 			get;
 
@@ -160,7 +166,7 @@ public abstract class BaseObj
 	#region Methods
 		public void Update(JSON.Obj? joInfo = null, in bool bUpdatePlayListsEntriesToo = false)
 		{
-			joInfo ??= (JSON.Obj)JSON.ObjBase.Make(YtDlpWrapper.InvokeYtDlpForJSON(bUpdatePlayListsEntriesToo, astrParams: UpdateURL.AbsoluteUri).RootOfData
+			joInfo ??= (JSON.Obj)JSON.ObjBase.Make(YtDlpWrapper.InvokeYtDlpForJSON(bUpdatePlayListsEntriesToo, null, UpdateURL.AbsoluteUri).RootOfData
 				?? throw new System.InvalidOperationException("Failed to get JSON data from yt-dlp"));
 
 			if(joInfo.Values[ExpectedIdField.strName].val.objVal is string strFoundId && strFoundId != strID)

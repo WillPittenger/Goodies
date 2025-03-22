@@ -3,7 +3,7 @@
 namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 
 [System.Management.Automation.Alias(@"uyd")]
-public class UpdateYtDlp : BaseVidCmdLet
+public class UpdateYtDlp : BaseCmdLet
 {
 	[System.Management.Automation.Parameter(ParameterSetName = @"Nightly", HelpMessage = @"If set, yt-dlp will be told to get the latest nightly.  Otherwise, it "
 		+ @"will use the latest version of whatever is installed.")]
@@ -20,7 +20,7 @@ public class UpdateYtDlp : BaseVidCmdLet
 		get;
 
 		set;
-	}
+	} = string.Empty;
 
 	/// <inheritdoc/>
 	protected override void EndProcessing()
@@ -37,6 +37,6 @@ public class UpdateYtDlp : BaseVidCmdLet
 		if(IsVerboseOn)
 			liststrArgsForYtDlp.Add(@"--verbose");
 
-		Goodies.YtDlpWrapper.YtDlpWrapper.InvokeYtDlpAsElevatedProcess([..liststrArgsForYtDlp]);
+		Goodies.YtDlpWrapper.YtDlpWrapper.InvokeYtDlpAsElevatedProcess(TaskCompletionSound, [..liststrArgsForYtDlp]);
 	}
 }

@@ -907,7 +907,7 @@ namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wait for scheduled streams to become available.  Pass the minimum number of seconds (or range) to wait between retries.  Put the start in the Start property and the end in the End property.  End isn’t valid until Start is non-null.  That’s because yt-dlp requires a range with a start regardless..
+        ///   Looks up a localized string similar to Wait for scheduled streams to become available.  Pass the minimum number of seconds (or range) to wait between retries.  Put the start in the Start property and the end in the End property.  End isn’t valid until Start is non-null.  That’s because yt-dlp requires a range with a start regardless.  By default, yt-dlp doesn&apos;t wait for videos, unless a config file specifies --wait-for-video.  You can specify this behavior by specifying a null value for WaitForVid or creating a TimeRangeVal, but not setting Star [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string strGeneralWaitForVid {
             get {
@@ -1771,7 +1771,7 @@ namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Controls if yt-dlp should check if a format can be actually downloaded.  If this is FmtCheckChoices.@default and no config file sets --check-formats, --check-all-formats, or --no-check-formats, yt-dlp will act as though Check is set to FmtCheckChoices.never.  Use FmtCheckChoices.yes to check selected files that they can be downloaded.  Use FmtCheckChoices.all to check all files that they can be downloaded.  Use FmtCheckCHoices.never to never check..
+        ///   Looks up a localized string similar to Controls if yt-dlp should check if a format can be actually downloaded.  If this is FmtCheckChoices.@default and no config file sets --check-formats, --check-all-formats, or --no-check-formats, yt-dlp will act as though Check is set to FmtCheckChoices.never.  Use FmtCheckChoices.yes to check selected files that they can be downloaded.  Use FmtCheckChoices.all to check all files that they can be downloaded.  Use FmtCheckCHoices.none to never check..
         /// </summary>
         internal static string strVidFmtCheck {
             get {

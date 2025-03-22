@@ -25,34 +25,23 @@ public class GetInfoFromYtDlp : BaseVidCmdLet
 		set;
 	}
 
-	[System.Management.Automation.PSDefaultValue(Value = PartsOfUrlsThatCanBeDownloaded.both)]
-	[System.Management.Automation.Parameter(HelpMessage = @"If some of the URLs specify both a video and a playlist, use this to control what you get.")]
-	public PartsOfUrlsThatCanBeDownloaded DownloadWhatInSpecifiedURLs
-	{
-		get;
+	/// <inheritdoc/>
+	protected override System.Collections.Generic.IEnumerable<object> AllURLs
+		=> lliststrWhatToDownload;
 
-		set;
-	} = PartsOfUrlsThatCanBeDownloaded.both;
-
-	[System.Management.Automation.PSDefaultValue(Value = null)]
-	[System.Management.Automation.Parameter(HelpMessage = @"Use to specify how yt-dlp generates file names.  See the instructions on how to do that from " +
-		@"https://github.com/yt-dlp/yt-dlp/blob/master/README.md#output-template.  Note: The structure will contain a file field that shows what the file name with "
-		+ @"this template would be.  However, if you later save it with a different template, the name could be very different.")]
-	public string? FileNameFmt
-	{
-		get;
-
-		set;
-	} = null;
+	/// <inheritdoc/>
+	protected override bool YtDlpCalledByDerivedClass
+		=> true;
 
 
 	private readonly System.Collections.Generic.LinkedList<string> lliststrWhatToDownload = [];
 
+	private ulong ulCurParam = 1;
+
+
 	protected override void ProcessRecord()
 	{
 		base.ProcessRecord();
-
-		int iCurParam = 1;
 
 		if(WhatToObtain is not null)
 			foreach(object objCurInput in WhatToObtain)
@@ -62,16 +51,14 @@ public class GetInfoFromYtDlp : BaseVidCmdLet
 				else if(objCurInput is System.Uri uriCurInput)
 					lliststrWhatToDownload.AddLast(uriCurInput.AbsolutePath);
 				else
-					WriteWarning(@$"Unable to interpret parameter {iCurParam}: “{objCurInput}”");
+					WriteWarning(@$"Unable to interpret parameter {ulCurParam}: “{objCurInput}”");
 
-				iCurParam++;
+				ulCurParam++;
 			}
 	}
 
 	protected override void EndProcessing()
 	{
-		base.EndProcessing();
-
 		if(IsVerboseOn)
 			lliststrWhatToDownload.AddLast(@"--verbose");
 

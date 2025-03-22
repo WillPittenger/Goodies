@@ -56,6 +56,9 @@ public class PlayList : Playable
 
 		public System.Collections.Generic.IReadOnlyList<Playable> EntriesInOrder
 			=> listEntriesByIndex;
+
+		public static System.Collections.Generic.IReadOnlyDictionary<string, PlayList> AllKnownPlayLists
+			=> mapAllKnownPlayListsByID;
 	#endregion
 
 	#region Methods
