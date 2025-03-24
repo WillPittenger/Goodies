@@ -4,6 +4,8 @@ namespace WillPittenger.Goodies.PowerShell.DocBuilder;
 
 using Tools.Ext;
 
+using WillPittenger.Goodies.PowerShell.DocBuilder.MetaData;
+
 public partial class MainWnd :Avalonia.Controls.Window
 {
 	public MainWnd()
@@ -45,6 +47,9 @@ public partial class MainWnd :Avalonia.Controls.Window
 
 			if(efileSolutionSelected.Count > 0 )
 				App.Solution = new(efileSolutionSelected[0].Path.AbsolutePath);
+
+
+			dgProjectsFound.ItemsSource = App.Sln?.AllProjByName?.Values ?? throw new System.InvalidProgramException(@"How did we get here without a solution?");
 		}
 	}
 

@@ -2,8 +2,9 @@
 
 using System.Linq;
 
-namespace WillPittenger.Goodies.PowerShell.DocBuilder;
+namespace WillPittenger.Goodies.PowerShell.DocBuilder.MetaData;
 
+[System.ComponentModel.ImmutableObject(true)]
 public class ProjDef
 {
 	public ProjDef(System.IO.FileInfo fileProj)

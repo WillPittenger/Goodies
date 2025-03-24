@@ -15,67 +15,78 @@
 				SizeToContent="WidthAndHeight"
 				Title="PowerShell Doc Builder">
 	<Window.Styles>
-		<Style Selector="NoCmdLets">
+		<Style Selector=":is(Control).NoCmdLets">
 			<Setter Property="Background"
 							Value="Red"/>
-			<Setter Property="BorderBrush"
-							Value="Black"/>
-			<Setter Property="BorderThickness"
-							Value="3"/>
 		</Style>
-		<Style Selector="NotCompiled">
+		<Style Selector=":is(Control).NotCompiled">
 			<Setter Property="Background"
 							Value="Yellow"/>
-			<Setter Property="BorderBrush"
-							Value="Black"/>
-			<Setter Property="BorderThickness"
-							Value="3"/>
 		</Style>
-		<Style Selector="CompiledButNoHelp">
+		<Style Selector=":is(Control).CompiledButNoHelp">
 			<Setter Property="Background"
 							Value="Purple"/>
-			<Setter Property="BorderBrush"
-							Value="Black"/>
-			<Setter Property="BorderThickness"
-							Value="3"/>
 		</Style>
-		<Style Selector="HasHelp">
+		<Style Selector=":is(Control).HasHelp">
 			<Setter Property="Background"
 							Value="Green"/>
-			<Setter Property="BorderBrush"
-							Value="Black"/>
-			<Setter Property="BorderThickness"
-							Value="3"/>
 		</Style>
 	</Window.Styles>
 	<StackPanel Orientation="Vertical">
 		<Grid ColumnDefinitions="Auto,10,20,10,Auto,10,20,10,Auto,10,20,10,Auto,10,20"
 					RowDefinitions="Auto,10,*">
 			<Label Grid.ColumnSpan="6"
-						 Content="Color definitions"/>
+						 Content="Color meanings"/>
 			<Label Grid.Row="2"
 						 Content="No Cmdlets found:"/>
 			<Border Grid.Row="2"
 							Grid.Column="2"
+							Border="Black"
+							BorderThickness="3"
 							Classes="NoCmdLets"/>
 			<Label Grid.Row="2"
 						 Grid.Column="4"
 						 Content="No Cmdlets found:"/>
 			<Border Grid.Row="2"
 							Grid.Column="6"
+							Border="Black"
+							BorderThickness="3"
 							Classes="NotCompiled"/>
 			<Label Grid.Row="2"
 						 Grid.Column="8"
 						 Content="No Cmdlets found:"/>
 			<Border Grid.Row="2"
 							Grid.Column="10"
+							Border="Black"
+							BorderThickness="3"
 							Classes="CompiledButNoHelp"/>
 			<Label Grid.Row="2"
 						 Grid.Column="12"
 						 Content="Help ready for use:"/>
 			<Border Grid.Row="2"
 							Grid.Column="14"
+							Border="Black"
+							BorderThickness="3"
 							Classes="HasHelp"/>
 		</Grid>
+		<Label Content="Projects found:"
+					 Margin="0,20,0,0"/>
+		<DataGrid x:Name="dgProjectsFound"
+							AlternatingRowBackground="Gray"
+							AutoGenerateColumns="false"
+							CanUserReorderColumns="true"
+							CanUserResizeColumns="true"
+							CanUserSortColumns="true"
+							GridLinesVisibility="All"
+							IsReadOnly="true"
+							SelectionMode="Extended">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Name"
+														Width="Auto"/>
+				<DataGridTextColumn Header="Path of csproj file"
+														MaxWidth="600"
+														Width="Auto"/>
+			</DataGrid.Columns>
+		</DataGrid>
 	</StackPanel>
 </Window>

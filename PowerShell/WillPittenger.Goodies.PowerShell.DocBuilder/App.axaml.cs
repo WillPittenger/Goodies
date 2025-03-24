@@ -16,7 +16,7 @@ public partial class App : Avalonia.Application
 	}
 
 
-	public delegate void DNewSolutionLoaded(in System.IO.FileInfo fileSolution, in SolutionDef slnNew);
+	public delegate void DNewSolutionLoaded(in System.IO.FileInfo fileSolution, in MetaData.SolutionDef slnNew);
 
 
 	public static event DNewSolutionLoaded? evtNewSolutionLoaded;
@@ -24,7 +24,7 @@ public partial class App : Avalonia.Application
 
 	private static System.IO.FileInfo? fileSolution = null;
 
-	private static SolutionDef? sln = null;
+	private static MetaData.SolutionDef? sln = null;
 
 
 	public static System.IO.FileInfo? Solution
@@ -41,7 +41,7 @@ public partial class App : Avalonia.Application
 		}
 	}
 
-	public static SolutionDef? Sln
+	public static MetaData.SolutionDef? Sln
 		=> sln;
 
 

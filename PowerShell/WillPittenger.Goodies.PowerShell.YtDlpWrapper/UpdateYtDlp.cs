@@ -6,8 +6,7 @@ namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 /// Attempts to update yt-dlp.  Depending on where you installed yt-dlp, you might need to provide Administrator privileges.
 /// </summary>
 [System.Management.Automation.Alias(@"uyd")]
-[System.Management.Automation.Cmdlet(System.Management.Automation.VerbsData.Update, @"YtDlp")]
-[System.Management.Automation.CmdletBinding(DefaultParameterSetName = @"Normal")]
+[System.Management.Automation.Cmdlet(System.Management.Automation.VerbsData.Update, @"YtDlp", DefaultParameterSetName = @"Normal")]
 public class UpdateYtDlp : BaseCmdLet
 {
 	/// <summary>

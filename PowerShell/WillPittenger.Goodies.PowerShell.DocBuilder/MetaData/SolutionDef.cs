@@ -2,8 +2,9 @@
 
 using System.Linq;
 
-namespace WillPittenger.Goodies.PowerShell.DocBuilder;
+namespace WillPittenger.Goodies.PowerShell.DocBuilder.MetaData;
 
+[System.ComponentModel.ImmutableObject(true)]
 public partial class SolutionDef
 {
 	private static readonly System.Text.RegularExpressions.Regex regexParser = ParserMaker();
