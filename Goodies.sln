@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.Power
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.YtDlpWrapper", "WillPittenger.Goodies.YtDlpWrapper\WillPittenger.Goodies.YtDlpWrapper.csproj", "{17CD95F3-4B4E-4122-8B60-940B02FF6CFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.PowerShell.DocBuilder", "PowerShell\WillPittenger.Goodies.PowerShell.DocBuilder\WillPittenger.Goodies.PowerShell.DocBuilder.csproj", "{D937EAB4-B3BF-4127-86A9-B042E59E3482}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,14 @@ Global
 		{17CD95F3-4B4E-4122-8B60-940B02FF6CFF}.NoWindowsRelease|Any CPU.ActiveCfg = NoWindowsRelease|Any CPU
 		{17CD95F3-4B4E-4122-8B60-940B02FF6CFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17CD95F3-4B4E-4122-8B60-940B02FF6CFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D937EAB4-B3BF-4127-86A9-B042E59E3482}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D937EAB4-B3BF-4127-86A9-B042E59E3482}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D937EAB4-B3BF-4127-86A9-B042E59E3482}.NoWindowsDebug|Any CPU.ActiveCfg = Release|Any CPU
+		{D937EAB4-B3BF-4127-86A9-B042E59E3482}.NoWindowsDebug|Any CPU.Build.0 = Release|Any CPU
+		{D937EAB4-B3BF-4127-86A9-B042E59E3482}.NoWindowsRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{D937EAB4-B3BF-4127-86A9-B042E59E3482}.NoWindowsRelease|Any CPU.Build.0 = Release|Any CPU
+		{D937EAB4-B3BF-4127-86A9-B042E59E3482}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D937EAB4-B3BF-4127-86A9-B042E59E3482}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +100,7 @@ Global
 		{6F068BE6-02A6-4875-9493-D948B00741A1} = {4E6EEBAD-8EA5-4328-834A-6102BBDB4944}
 		{07B6FAA6-8234-41B6-972A-2C193CEEBB39} = {4E6EEBAD-8EA5-4328-834A-6102BBDB4944}
 		{60B7BDC6-0C24-43EF-8CED-998D0AA85E92} = {4E6EEBAD-8EA5-4328-834A-6102BBDB4944}
+		{D937EAB4-B3BF-4127-86A9-B042E59E3482} = {4E6EEBAD-8EA5-4328-834A-6102BBDB4944}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5F185BCE-BFF6-49B9-B1A7-2CB5A7C8A2B1}

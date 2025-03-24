@@ -1,0 +1,2 @@
+﻿Windows.Win32.UI.Shell.Shell
+IShellDispatch6

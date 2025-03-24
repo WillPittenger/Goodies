@@ -19,6 +19,10 @@ using Tools.Ext;
 
 public abstract class BaseVidCmdLet : BaseCmdLet
 {
+	protected BaseVidCmdLet()
+		=> funcStdErrDataReceivedHandler = OnStdErrDataReceived;
+
+
 	/// <summary>
 	/// When a URL has both a video ID and a playlist ID, which should it process?  <see cref="PartsOfUrlsThatCanBeDownloaded"/> lets you tell yt-dlp what you want data for and what it can ignore.
 	/// </summary>
@@ -5944,30 +5948,27 @@ public abstract class BaseVidCmdLet : BaseCmdLet
 	} = null;
 
 	/// <summary>
-	/// When implemented by a derived class, specifies the list of URLs to download.  <see cref="BaseVidCmdLet"/> takes care of translating the objects into the format it needs.  Warnings are emitted as needed.  Invalid values are discarded.  Most derived classes will provide an identical property, but change the name based on their needs.
+	/// When implemented by a derived class, specifies the list of URLs to download.
 	/// </summary>
-	protected abstract System.Collections.Generic.IEnumerable<object> AllURLs
+	protected abstract System.Collections.Generic.IEnumerable<object>? WhatToDownLoadInternal
 	{
 		get;
 	}
 
 	/// <summary>
-	/// Specifies if the derived class will call yt-dlp or if <see cref="BaseVidCmdLet"/> should do it in <see cref="EndProcessing"/>.  The default version returns <see langword="true"/>.  Override <see cref="YtDlpCalledByDerivedClass"/> and return <see langword="true"/> if you need to yt-dlp invoked differently such as getting JSON.  If <see cref="YtDlpCalledByDerivedClass"/> is set to <see langword="true"/>, <see cref="AdditionalYtDLpParams"/> won’t be called and overriding it would have no effect.
-	/// </summary>
-	protected virtual bool YtDlpCalledByDerivedClass
-		=> false;
-
-	/// <summary>
 	/// Override when you want to be notified of new data in the standard output from yt-dlp.  The main known use case is to immediately send objects further up the pipeline.  The base version returns <see langword="null"/>.
 	/// </summary>
-	protected virtual System.Diagnostics.DataReceivedEventHandler? StdOutDataReceivedHandler
-		=> null;
+	protected System.Diagnostics.DataReceivedEventHandler? funcStdOutDataReceivedHandler = null;
 
 	/// <summary>
 	/// Override when you want to be notified of new data in the standard error from yt-dlp.  As of when this documentation was written, a use case hasn't been found, but support is available anyway.  The base version returns <see langword="null"/>.
 	/// </summary>
-	protected virtual System.Diagnostics.DataReceivedEventHandler? StdErrDataReceivedHandler
-		=> null;
+	protected System.Diagnostics.DataReceivedEventHandler? funcStdErrDataReceivedHandler;
+
+
+	private readonly System.Collections.Generic.LinkedList<string> lliststrWhatToDownload = [];
+
+	private ulong ulCurParam = 1;
 
 
 	/// <summary>
@@ -5984,23 +5985,104 @@ public abstract class BaseVidCmdLet : BaseCmdLet
 	}
 
 	/// <summary>
+	/// This override of <see cref="ProcessRecord"/> examines the input in <see cref="WhatToDownLoadInternal"/> in order to categorize items by type.  If it recognizes an item, that item is sent to yt-dlp.  Otherwise, items are rejected unless the derived class implements <see cref="OnInputOfUnknownTypeReceived(object)"/> and handles it.  If <see cref="OnInputOfUnknownTypeReceived(object)"/> returns <see langword="true"/>, this override of <see cref="ProcessRecord"/> assumes the derived class handled the item already and it doesn't need to be passed to yt-dlp.  If item was a <see cref="string"/> <see cref="OnInputOfUnknownTypeReceived(object)"/> returns <see langword="false"/>, the item assumed to be something yt-dlp understands.  If the item isn’t a string and <see cref="OnInputOfUnknownTypeReceived(object)"/> returns <see langword="false"/>, a warning will be issued the item wasn’t understood.  Note: The default version of <see cref="OnInputOfUnknownTypeReceived(object)"/> always returns false.  Derived classes that can recognize other types should override it.
+	/// </summary>
+	/// <remarks>
+	/// <para>Below is a complete list of supported types and how it’s interpreted.</para>
+	/// <list type="bullet">
+	///		<listheader>
+	///			<term>Type</term>
+	///			<description>What happens</description>
+	///		</listheader>
+	///		<item>
+	///			<term><see cref="string"/></term>
+	///			<description>If the item appears to be a HTTP/HTTPS URL, it’s passed to yt-dlp.  If it doesn't look like a HTTP/HTTPS URL, <see cref="OnInputOfUnknownTypeReceived(object)"/> gets called.  If it returns <see langword="false"/>, the item is sent to yt-dlp.  If <see cref="OnInputOfUnknownTypeReceived(object)"/> returns <see langword="true"/>, the item is ignored.</description>
+	///		</item>
+	///		<item>
+	///			<term><see cref="System.Uri"/></term>
+	///			<description>The value in <see cref="System.Uri.AbsolutePath"/> gets sent to yt-dlp</description>
+	///		</item>
+	///		<item>
+	///			<term>Anything derived from <see cref="Goodies.YtDlpWrapper.BaseObj"/></term>
+	///			<description>The value in <see cref="Goodies.YtDlpWrapper.BaseObj.OriginalURL"/> is sent to yt-dlp.  Note: If you only need to update one <see cref="Goodies.YtDlpWrapper.BaseObj"/>, it can be simpler to call its <see cref="Goodies.YtDlpWrapper.BaseObj.UpdateFields(in JSON.ObjBase, in bool)"/> with <see langword="null"/> for the first parameter.  However, that must call yt-dlp once per item whereas the cmdlets can call yt-dlp just once for all inputs.  Do note this implementation of <see cref="ProcessRecord"/> assumes the contents of the object are out of date.</description>
+	///		</item>
+	///		<item>
+	///			<term>Anything else</term>
+	///			<description>What happens depends on the return value from <see cref="OnInputOfUnknownTypeReceived(object)"/>.  If it returns <see langword="false"/>, a warning would be issued to the user.  If <see cref="OnInputOfUnknownTypeReceived(object)"/> returns <see langword="true"/>, it’s assumed the derived class already wrote the result to the pipeline.</description>
+	///		</item>
+	/// </list>
+	/// <para>Because of the way <see cref="ProcessRecord"/> override works and the need to call yt-dlp only once, results may be sent to the pipeline in a different order from the matching input.  Specifically, anything returned by the derived class is written first.  Then yt-dlp is called and its results returned.</para>
+	/// </remarks>
+	/// <inheritdoc/>
+	protected override void ProcessRecord()
+	{
+		base.ProcessRecord();
+
+		if(WhatToDownLoadInternal is not null)
+			foreach(object objCurInput in WhatToDownLoadInternal)
+			{
+				if(objCurInput is string strCurInput)
+				{
+					if(strCurInput.StartsWith(@"http://") || strCurInput.StartsWith(@"https://"))
+					{
+						lliststrWhatToDownload.AddLast(strCurInput);
+
+						WriteVerbose($@"Input# {ulCurParam} “{strCurInput}” will be sent to yt-dlp.");
+					}
+					else if(!OnInputOfUnknownTypeReceived(objCurInput))
+					{
+						lliststrWhatToDownload.AddLast(strCurInput);
+
+						WriteVerbose($@"Input# {ulCurParam} “{strCurInput}” will be sent to yt-dlp verbatim.  It may or may not be the ID for a video.  Hopefully, yt-dlp knows what to do with it.");
+					}
+				}
+				else if(objCurInput is System.Uri uriCurInput)
+				{
+					lliststrWhatToDownload.AddLast(uriCurInput.AbsolutePath);
+
+					WriteVerbose($@"Input# {ulCurParam} “{uriCurInput.AbsolutePath}” will be sent to yt-dlp.");
+				}
+				else if(objCurInput is Goodies.YtDlpWrapper.BaseObj bobjCurInput)
+				{
+					lliststrWhatToDownload.AddLast(bobjCurInput.strID);
+
+					WriteVerbose($@"Input# {ulCurParam} “{bobjCurInput.OriginalURL}” will be sent to yt-dlp.");
+				}
+				else if(!OnInputOfUnknownTypeReceived(objCurInput))
+					WriteWarning(@$"Unable to interpret input# {ulCurParam}: “{objCurInput}”");
+
+				ulCurParam++;
+			}
+	}
+
+	/// <summary>
+	/// Called by <see cref="ProcessRecord"/> when it encounters a object in <see cref="WhatToDownLoadInternal"/> it doesn’t know how to handle.  The default version just returns <see langword="false"/>.
+	/// </summary>
+	/// <param name="objCurUnknownInput">The object that <see cref="ProcessRecord"/> needs help with</param>
+	/// <returns><see langword="true"/> if the item could be handled by <see cref="OnInputOfUnknownTypeReceived(object)"/> and <see langword="false"/> otherwise</returns>
+	/// <remarks>
+	/// <para>If the object is a <see cref="string"/> and <see cref="OnInputOfUnknownTypeReceived(object)"/> returns <see langword="false"/>, <see cref="ProcessRecord"/> assumes yt-dlp knows how to interpret the string.  In all other cases in which <see cref="OnInputOfUnknownTypeReceived(object)"/> returns <see langword="false"/>, <see cref="ProcessRecord"/> issues a warning and skips the object.  Note: The default implementation <em>always</em> returns <see langword="false"/>.</para>
+	/// </remarks>
+	protected virtual bool OnInputOfUnknownTypeReceived(object objCurUnknownInput)
+		=> false;
+
+	/// <summary>
 	/// This override of <see cref="EndProcessing"/> provides a automatic means to invoke yt-dlp for most derived classes.  Override it if your derived class needs a specific means of invoking yt-dlp such as the <see cref="o:Goodies.YtDlpWrapper.YtDlpWrapper.InvokeYtDlpForJSON()"/> overloads.  This override handles all the parameters declared by <see cref="BaseVidCmdLet"/> for you.
 	/// </summary>
 	/// <inheritdoc/>
 	protected override void EndProcessing()
 	{
-		if(YtDlpCalledByDerivedClass)
+		if(lliststrWhatToDownload.Count == 0)
+		{
+			WriteWarning(@"Nothing to download");
+
 			return;
+		}
 
 		System.Collections.Generic.List<string> liststrAllURLs =
 			[
 				..AdditionalYtDLpParams,
-				..from object objCurURL in AllURLs
-					select objCurURL is string strCurURL
-						? strCurURL
-						: objCurURL is System.Uri uriCur
-							 ? uriCur.AbsolutePath
-							 : throw new System.InvalidOperationException(@$"Unexpected type in list of URLs to send to yt-dlp: {objCurURL.GetType()}"),
+				..lliststrWhatToDownload,
 			];
 
 		if(FirstItem is ulong ulFirstItem)
@@ -6018,9 +6100,10 @@ public abstract class BaseVidCmdLet : BaseCmdLet
 		if(IsWhatIfOn)
 			Opts.VerbosityAndSimulation.SimMode.Val = true;
 
-		if(liststrAllURLs.Count > 0)
-			Goodies.YtDlpWrapper.YtDlpWrapper.InvokeYtDlp(TaskCompletionSound, StdOutDataReceivedHandler, StdErrDataReceivedHandler, [..liststrAllURLs, ..Opts
-				.AllOpt]);
+		WriteVerbose($@"Calling yt-dlp with these parameters: {liststrAllURLs.Select(strCurURL => $@"“{strCurURL}”").Join(' ')}");
+
+		Goodies.YtDlpWrapper.YtDlpWrapper.InvokeYtDlp(TaskCompletionSound, funcStdOutDataReceivedHandler, funcStdErrDataReceivedHandler, [..liststrAllURLs, ..Opts
+			.AllOpt]);
 	}
 
 	/// <summary>
@@ -6029,4 +6112,13 @@ public abstract class BaseVidCmdLet : BaseCmdLet
 	/// <returns></returns>
 	protected virtual System.Collections.Generic.IEnumerable<string> AdditionalYtDLpParams
 		=> [];
+
+
+	/// <summary>
+	/// Used to connect yt-dlp to our console.  The default value of <see cref="funcStdErrDataReceivedHandler"/> is <see cref="OnStdErrDataReceived(object, System.Diagnostics.DataReceivedEventArgs)"/>.  <see cref="BaseVidCmdLet.EndProcessing"/> passes <see cref="funcStdErrDataReceivedHandler"/> to <see cref="o:Goodies.YtDlpWrapper.YtDlpWrapper.InvokeYtDlpAsElevatedProcess()"/>.
+	/// </summary>
+	/// <param name="objSender">The sender of the event.  Ignored.</param>
+	/// <param name="e">The information.  What is needed is in <see cref="System.Diagnostics.DataReceivedEventArgs.Data"/>.</param>
+	private void OnStdErrDataReceived(object objSender, System.Diagnostics.DataReceivedEventArgs e)
+		=> System.Console.WriteLine(e.Data ?? "");
 }

@@ -3,15 +3,15 @@
 public abstract class Playable : BaseObj
 {
 	#region Constructors & Deconstructors
-		public Playable(in JSON.Obj joInfo) : base(joInfo)
+		protected Playable(in JSON.Obj joInfo) : base(joInfo)
 		{
 		}
 
-		public Playable(in string strID) : base(strID)
+		protected Playable(in string strID) : base(strID)
 		{
 		}
 
-		public Playable(in System.Uri uriWhichObj) : base(uriWhichObj)
+		protected Playable(in System.Uri uriWhichObj) : base(uriWhichObj)
 		{
 		}
 	#endregion

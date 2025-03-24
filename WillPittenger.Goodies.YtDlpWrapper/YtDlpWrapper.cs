@@ -4,6 +4,24 @@ namespace WillPittenger.Goodies.YtDlpWrapper;
 
 public class YtDlpWrapper
 {
+	static YtDlpWrapper()
+	{
+		foreach(string strCurDir in System.Environment.GetEnvironmentVariable(@"path")?.Split(";") ?? [])
+		{
+			string strCurPossiblePath = System.IO.Path.Combine(strCurDir, @"yt-dlp");
+
+			if(System.IO.File.Exists(strCurPossiblePath))
+			{
+				YtDlpExe = new(strCurPossiblePath);
+
+				return;
+			}
+		}
+
+		YtDlpExe = new(@"yt-dlp");
+	}
+
+
 	[System.ComponentModel.ImmutableObject(true)]
 	public record FieldDef(in string strName, in FieldDef.Types type)
 	{
@@ -388,5 +406,5 @@ public class YtDlpWrapper
 		get;
 
 		set;
-	} = new("yt-dlp");
+	}
 }
