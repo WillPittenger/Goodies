@@ -1,0 +1,91 @@
+<Window xmlns="https://github.com/avaloniaui"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				mc:Ignorable="d"
+				x:Class="WillPittenger.Goodies.PowerShell.DocBuilder.MainWnd"
+				BorderThickness="3"
+				CanResize="True"
+				FontFamily="Times New Roman"
+				MinHeight="600"
+				MinWidth="800"
+				Padding="5"
+				ShowActivated="true"
+				ShowInTaskbar="true"
+				SizeToContent="WidthAndHeight"
+				Title="PowerShell Doc Builder">
+	<Window.Styles>
+		<Style Selector=":is(Control).NoCmdLets">
+			<Setter Property="Background"
+							Value="Red"/>
+		</Style>
+		<Style Selector=":is(Control).NotCompiled">
+			<Setter Property="Background"
+							Value="Yellow"/>
+		</Style>
+		<Style Selector=":is(Control).CompiledButNoHelp">
+			<Setter Property="Background"
+							Value="Purple"/>
+		</Style>
+		<Style Selector=":is(Control).HasHelp">
+			<Setter Property="Background"
+							Value="Green"/>
+		</Style>
+	</Window.Styles>
+	<StackPanel Orientation="Vertical">
+		<Grid ColumnDefinitions="Auto,10,20,10,Auto,10,20,10,Auto,10,20,10,Auto,10,20"
+					RowDefinitions="Auto,10,*">
+			<Label Grid.ColumnSpan="6"
+						 Content="Color meanings"/>
+			<Label Grid.Row="2"
+						 Content="No Cmdlets found:"/>
+			<Border Grid.Row="2"
+							Grid.Column="2"
+							BorderBrush="Black"
+							BorderThickness="3"
+							Classes="NoCmdLets"/>
+			<Label Grid.Row="2"
+						 Grid.Column="4"
+						 Content="No Cmdlets found:"/>
+			<Border Grid.Row="2"
+							Grid.Column="6"
+							BorderBrush="Black"
+							BorderThickness="3"
+							Classes="NotCompiled"/>
+			<Label Grid.Row="2"
+						 Grid.Column="8"
+						 Content="No Cmdlets found:"/>
+			<Border Grid.Row="2"
+							Grid.Column="10"
+							BorderBrush="Black"
+							BorderThickness="3"
+							Classes="CompiledButNoHelp"/>
+			<Label Grid.Row="2"
+						 Grid.Column="12"
+						 Content="Help ready for use:"/>
+			<Border Grid.Row="2"
+							Grid.Column="14"
+							BorderBrush="Black"
+							BorderThickness="3"
+							Classes="HasHelp"/>
+		</Grid>
+		<Label Content="Projects found:"
+					 Margin="0,20,0,0"/>
+		<DataGrid x:Name="dgProjectsFound"
+						AutoGenerateColumns="false"
+							CanUserReorderColumns="true"
+							CanUserResizeColumns="true"
+							CanUserSortColumns="true"
+							GridLinesVisibility="All"
+							IsReadOnly="true"
+							SelectionMode="Extended">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Name"
+														Width="Auto"/>
+				<DataGridTextColumn Header="Path of csproj file"
+														MaxWidth="600"
+														Width="Auto"/>
+			</DataGrid.Columns>
+		</DataGrid>
+	</StackPanel>
+</Window>
