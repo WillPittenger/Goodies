@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/App.axaml" value="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/WillPittenger.Goodies.PowerShell.DocBuilder.csproj" />
+        <entry key="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/MainWnd.axaml" value="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/WillPittenger.Goodies.PowerShell.DocBuilder.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
