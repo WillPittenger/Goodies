@@ -117,14 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="strFileFilterDescForSlnFiles" xml:space="preserve">
-    <value>Visual Studio Solution Files (*.sln)</value>
-  </data>
   <data name="strMainWndTitleFmt" xml:space="preserve">
     <value>PowerShell Doc Builder ({0})</value>
     <comment>All copies of “{0}” will be replaced by the open solution file name.</comment>
   </data>
-  <data name="strSlnFileSelectorDlgTitle" xml:space="preserve">
-    <value>Please specify a Visual Studio solution file (*.sln) you want DocBuilder to load</value>
+  <data name="strHasCmdLets" xml:space="preserve">
+    <value>Has Cmdlets</value>
+  </data>
+  <data name="strNoCmdLets" xml:space="preserve">
+    <value>No Cmdlets found</value>
+  </data>
+  <data name="strNoBinaries" xml:space="preserve">
+    <value>Project isn't compiled yet</value>
+  </data>
+  <data name="strNoHelpCreated" xml:space="preserve">
+    <value>No help created</value>
+  </data>
+  <data name="strSomeUnpackagedHelpCreated" xml:space="preserve">
+    <value>Some help created, but not packaged yet</value>
+  </data>
+  <data name="strPackagedHelpReady" xml:space="preserve">
+    <value>Help has been packaged and is ready to upload</value>
   </data>
 </root>

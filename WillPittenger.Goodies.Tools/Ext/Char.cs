@@ -194,4 +194,7 @@ public static class Char
 		public static char ToUpperInvariant(in this char chConvertThis) 
 			=> char.ToUpperInvariant(chConvertThis);
 	#endregion
+
+	public static string RepeatChar(in this char chToRepeat, in int iHowManyTimes)
+		=> new(chToRepeat, iHowManyTimes);
 }

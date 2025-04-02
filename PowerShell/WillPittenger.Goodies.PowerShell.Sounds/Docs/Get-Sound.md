@@ -88,7 +88,7 @@ The sound to locate.
 The requested sound
 
 ## NOTES
-Unfortunately, operating systems other than Windows can't be supported as they don't have the sound API used.
+On Windows, 5 extra pre-defined sounds re supported.
 
 ## RELATED LINKS
 [Start-SoundPlayback](Start-SoundPlayback.md)

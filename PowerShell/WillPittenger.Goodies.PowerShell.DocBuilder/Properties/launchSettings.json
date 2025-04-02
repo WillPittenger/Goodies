@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WillPittenger.Goodies.PowerShell.DocBuilder": {
+      "commandName": "Project",
+      "commandLineArgs": "\"B:\\Contents\\Will Pittenger\\Goodies\\Goodies.sln\"",
+      "workingDirectory": "B:\\Contents\\Will Pittenger\\Goodies",
+      "hotReloadEnabled": false
+    }
+  }
+}

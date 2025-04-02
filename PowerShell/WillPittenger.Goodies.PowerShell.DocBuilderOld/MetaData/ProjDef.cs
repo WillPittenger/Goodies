@@ -48,8 +48,11 @@ public class ProjDef
 		};
 		fswBinCtnts.Changed += OnBinOutPutFileChanged;
 		fswBinCtnts.Created += OnBinOutPutFileCreated;
-		fswBinCtnts.Deleted += OnBInOutPutFileDeleted;
+		fswBinCtnts.Deleted += OnBinOutPutFileDeleted;
 
+
+		foreach(System.IO.FileInfo fileCurBinary in ProjFile.Directory.GetFiles(ModuleName, System.IO.SearchOption.AllDirectories))
+			AllDetectedBinaries[fileCurBinary.FullName] = fileCurBinary;
 
 		InitDoc();
 	}
@@ -182,8 +185,16 @@ public class ProjDef
 	internal System.Xml.XmlDocument OurMAML
 		=> docOurMAML;
 
+	private System.Collections.Generic.SortedList<string, System.IO.FileInfo> AllDetectedBinaries
+	{
+		get;
+	} = [];
+
 	public string ModuleName
 		=> $@"{Name}.dll";
+
+	public string RelativePathToProjFile
+		=> System.IO.Path.GetRelativePath(App.Sln?.SolutionFile?.FullName ?? throw new System.InvalidProgramException("The app doesn't have a parent solution?"), ProjFile.FullName);
 
 	public string Name
 	{
@@ -216,6 +227,13 @@ public class ProjDef
 		private init;
 	}
 
+	public string SearchStatus
+		=> AllDetectedBinaries.Count == 0
+			? Rsrcs.strNoBinaries
+			: NoCmdLetsFound
+				? Rsrcs.strNoCmdLets
+				: Rsrcs.strHasCmdLets;
+
 	public bool IsCompiledButWithoutHelp
 	{
 		get;
@@ -233,6 +251,20 @@ public class ProjDef
 
 	public bool HasPackagedHelpReady
 		=> DocsDir.GetDirectories(@"*.cab", System.IO.SearchOption.AllDirectories).Length > 0 || DocsDir.GetDirectories(@"*.zip", System.IO.SearchOption.AllDirectories).Length > 0;
+
+	public string HelpStatus
+		=> IsCompiledButWithoutHelp
+			? Rsrcs.strNoHelpCreated
+			: HasUnpackgedHelpReady
+				? Rsrcs.strSomeUnpackagedHelpCreated
+				: Rsrcs.strPackagedHelpReady;
+
+	public bool NewBuildDetected
+	{
+		get;
+
+		private set;
+	} = false;
 
 	public string AllRegisteredSolutionsAsText
 		=> string.Join(',', allRegisteredSolutions.Select(slnCur => slnCur.Name));
@@ -265,7 +297,10 @@ public class ProjDef
 	}
 
 
-	private void OnBInOutPutFileDeleted(object sender, System.IO.FileSystemEventArgs e) => throw new System.NotImplementedException();
-	private void OnBinOutPutFileCreated(object sender, System.IO.FileSystemEventArgs e) => throw new System.NotImplementedException();
-	private void OnBinOutPutFileChanged(object sender, System.IO.FileSystemEventArgs e) => throw new System.NotImplementedException();
+	private void OnBinOutPutFileDeleted(object objSender, System.IO.FileSystemEventArgs e)
+		=> AllDetectedBinaries.Remove(e.FullPath);
+	private void OnBinOutPutFileCreated(object objSender, System.IO.FileSystemEventArgs e)
+		=> AllDetectedBinaries[e.FullPath] = new(e.FullPath);
+	private void OnBinOutPutFileChanged(object objSender, System.IO.FileSystemEventArgs e)
+		=> NewBuildDetected = true;
 }

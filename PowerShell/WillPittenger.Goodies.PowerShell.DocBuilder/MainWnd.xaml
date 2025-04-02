@@ -1,0 +1,322 @@
+﻿<Window
+	x:Class="WillPittenger.Goodies.PowerShell.DocBuilder.MainWnd"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:local="clr-namespace:WillPittenger.Goodies.PowerShell.DocBuilder"
+	xmlns:MetaData="clr-namespace:WillPittenger.Goodies.PowerShell.DocBuilder.MetaData"
+	mc:Ignorable="d"
+	MinHeight="450"
+	MinWidth="800"
+	ScrollViewer.VerticalScrollBarVisibility="Disabled"
+	FontFamily="Times New Roman"
+	ResizeMode="CanResizeWithGrip"
+	SizeToContent="WidthAndHeight"
+	WindowStartupLocation="CenterScreen">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="Auto" />
+			<RowDefinition
+				Height="27" />
+			<RowDefinition
+				Height="*" />
+		</Grid.RowDefinitions>
+		<Grid.Resources>
+			<Style
+				x:Key="NoCmdLets"
+				TargetType="Control">
+				<Setter
+					Property="Opacity"
+					Value=".5" />
+			</Style>
+			<Style
+				x:Key="NotCompiled"
+				TargetType="Control">
+				<Setter
+					Property="FontStyle"
+					Value="Italic" />
+			</Style>
+			<Style
+				x:Key="HasCmdLetsCompiledButNoHelp"
+				TargetType="Control">
+				<Setter
+					Property="Foreground"
+					Value="Blue" />
+			</Style>
+			<Style
+				x:Key="HasHelpReady"
+				TargetType="Control">
+				<Setter
+					Property="Foreground"
+					Value="Green" />
+				<Setter
+					Property="FontWeight"
+					Value="Bold" />
+			</Style>
+			<Style
+				x:Key="HelpIsPackaged"
+				TargetType="Control"
+				BasedOn="{StaticResource HasHelpReady}">
+				<Setter
+					Property="FontStyle"
+					Value="Italic" />
+			</Style>
+		</Grid.Resources>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition
+					x:Name="NoCmdLets"
+					Width="*" />
+				<ColumnDefinition
+					Width="10" />
+				<ColumnDefinition
+					Width="Auto" />
+				<ColumnDefinition
+					Width="10" />
+				<ColumnDefinition
+					x:Name="NotCompiled"
+					Width="*" />
+				<ColumnDefinition
+					Width="10" />
+				<ColumnDefinition
+					Width="Auto" />
+				<ColumnDefinition
+					Width="10" />
+				<ColumnDefinition
+					x:Name="HasCmdLetsCompiledButNoHelp"
+					Width="*" />
+				<ColumnDefinition
+					Width="10" />
+				<ColumnDefinition
+					Width="Auto" />
+				<ColumnDefinition
+					Width="10" />
+				<ColumnDefinition
+					x:Name="HasHelpReady"
+					Width="*" />
+				<ColumnDefinition
+					Width="10" />
+				<ColumnDefinition
+					Width="Auto" />
+				<ColumnDefinition
+					Width="10" />
+				<ColumnDefinition
+					x:Name="HasHelpPackaged"
+					Width="*" />
+				<ColumnDefinition
+					Width="10" />
+				<ColumnDefinition
+					Width="Auto" />
+				<ColumnDefinition
+					Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition
+					Height="Auto" />
+				<RowDefinition
+					Height="10" />
+				<RowDefinition
+					Height="*" />
+			</Grid.RowDefinitions>
+			<Label
+				Content="Legend"
+				Grid.ColumnSpan="20" />
+			<Separator
+				Grid.Row="1"
+				Grid.ColumnSpan="20"
+				VerticalContentAlignment="Center"
+				Height="1"
+				Opacity=".5" />
+			<Label
+				Grid.Row="2"
+				Content="No Cmdlets:"
+				HorizontalAlignment="Right" />
+			<Border
+				Grid.Row="2"
+				Grid.Column="2"
+				BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+				BorderThickness="1">
+				<Label
+					Content="Sample"
+					Style="{DynamicResource NoCmdLets}" />
+			</Border>
+			<Separator
+				Grid.Row="2"
+				Grid.Column="3"
+				Width="1"
+				HorizontalAlignment="Center"
+				Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+			<Label
+				Grid.Row="2"
+				Grid.Column="4"
+				Content="Uncompiled:"
+				HorizontalAlignment="Right" />
+			<Border
+				Grid.Row="2"
+				Grid.Column="6"
+				BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+				BorderThickness="1">
+				<Label
+					Content="Sample"
+					Style="{DynamicResource NotCompiled}" />
+			</Border>
+			<Separator
+				Grid.Row="2"
+				Grid.Column="7"
+				Width="1"
+				HorizontalAlignment="Center"
+				Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+			<Label
+				Grid.Row="2"
+				Grid.Column="8"
+				Content="Compiled but w/o help:"
+				HorizontalAlignment="Right" />
+			<Border
+				Grid.Row="2"
+				Grid.Column="10"
+				BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+				BorderThickness="1">
+				<Label
+					Content="Sample"
+					Style="{DynamicResource HasCmdLetsCompiledButNoHelp}" />
+			</Border>
+			<Separator
+				Grid.Row="2"
+				Grid.Column="11"
+				Width="1"
+				HorizontalAlignment="Center"
+				Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+			<Label
+				Grid.Row="2"
+				Grid.Column="12"
+				Content="Unpackaged Help Ready:"
+				HorizontalAlignment="Right" />
+			<Border
+				Grid.Row="2"
+				Grid.Column="14"
+				BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+				BorderThickness="1">
+				<Label
+					Content="Sample"
+					Style="{DynamicResource HasHelpReady}" />
+			</Border>
+			<Separator
+				Grid.Row="2"
+				Grid.Column="15"
+				Width="1"
+				HorizontalAlignment="Center"
+				Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+			<Label
+				Grid.Row="2"
+				Grid.Column="16"
+				Content="Help Packaged:"
+				HorizontalAlignment="Right" />
+			<Border
+				Grid.Row="2"
+				Grid.Column="18"
+				BorderBrush="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"
+				BorderThickness="1">
+				<Label
+					Content="Sample"
+					Style="{DynamicResource HelpIsPackaged}" />
+			</Border>
+		</Grid>
+		<Separator
+			Grid.Row="1"
+			Margin="0,20,0,5"
+			Height="2" />
+		<DataGrid
+			x:Name="dgProjectsFound"
+			Grid.Row="2"
+			d:DataContext="MetaData:ProjDef"
+			AlternatingRowBackground="AliceBlue"
+			AutoGenerateColumns="False"
+			CanUserResizeRows="False"
+			EnableRowVirtualization="False"
+			Margin="5,0,5,5">
+			<DataGrid.Resources>
+				<Style
+					x:Key="NoCmdLetsRow"
+					BasedOn="{StaticResource NoCmdLets}"
+					TargetType="DataGridRow">
+					<Style.Triggers>
+						<DataTrigger
+							Binding="{Binding IsUncompiled}"
+							Value="false" />
+					</Style.Triggers>
+				</Style>
+				<Style
+					x:Key="NotCompiledRow"
+					BasedOn="{StaticResource NotCompiled}"
+					TargetType="DataGridRow">
+					<Style.Triggers>
+						<DataTrigger
+							Binding="{Binding IsUncompiled}"
+							Value="false" />
+					</Style.Triggers>
+				</Style>
+				<Style
+					x:Key="HasCmdLetsCompiledButNoHelpRow"
+					BasedOn="{StaticResource HasCmdLetsCompiledButNoHelp}"
+					TargetType="DataGridRow">
+					<Style.Triggers>
+						<DataTrigger
+							Binding="{Binding IsCompiledButWithoutHelp}"
+							Value="false" />
+					</Style.Triggers>
+				</Style>
+				<Style
+					x:Key="HasHelpReadyRow"
+					BasedOn="{StaticResource HasHelpReady}"
+					TargetType="DataGridRow">
+					<Style.Triggers>
+						<DataTrigger
+							Binding="{Binding HasUnpackgedHelpReady}"
+							Value="false" />
+					</Style.Triggers>
+				</Style>
+				<Style
+					x:Key="HelpIsPackagedRow"
+					BasedOn="{StaticResource HelpIsPackaged}"
+					TargetType="DataGridRow">
+					<Style.Triggers>
+						<DataTrigger
+							Binding="{Binding HasPackgedHelpReady}"
+							Value="false" />
+					</Style.Triggers>
+				</Style>
+			</DataGrid.Resources>
+			<DataGrid.Columns>
+				<DataGridTextColumn
+					Header="Project Name"
+					Binding="{Binding Name}"
+					Width="Auto"
+					IsReadOnly="True" />
+				<DataGridTextColumn
+					Header="Filename for csproj file"
+					Binding="{Binding ProjFile.FullName}"
+					Width="*"
+					MaxWidth="600"
+					IsReadOnly="True" />
+				<DataGridTemplateColumn
+					Header="Package Help"
+					Width="Auto"
+					IsReadOnly="True">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Button
+								Content="Build Help File"
+								Margin="1" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+		</DataGrid>
+	</Grid>
+</Window>

@@ -56,10 +56,6 @@ Note; This depends on WillPittenger.Goodies.Sounds.</Description>
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\WillPittenger.Goodies.Sounds\WillPittenger.Goodies.Sounds.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Update="WillPittenger.Goodies.PowerShell.Sounds\WillPittenger.Goodies.PowerShell.Sounds.psd1">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

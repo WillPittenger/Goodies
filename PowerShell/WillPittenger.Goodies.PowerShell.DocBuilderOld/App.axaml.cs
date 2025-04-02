@@ -5,7 +5,14 @@ namespace WillPittenger.Goodies.PowerShell.DocBuilder;
 public partial class App : Avalonia.Application
 {
 	public override void Initialize()
-		=> Avalonia.Markup.Xaml.AvaloniaXamlLoader.Load(this);
+	{
+		string[] args = System.Environment.GetCommandLineArgs();
+
+		if(args.Length > 0 && System.IO.File.Exists(args[0]))
+			Solution = new(args[0]);
+
+		Avalonia.Markup.Xaml.AvaloniaXamlLoader.Load(this);
+	}
 
 	public override void OnFrameworkInitializationCompleted()
 	{
@@ -43,11 +50,4 @@ public partial class App : Avalonia.Application
 
 	public static MetaData.SolutionDef? Sln
 		=> sln;
-
-
-	private static void Main(in string[] args)
-	{
-		if(args.Length > 0 && System.IO.File.Exists(args[0]))
-			Solution = new(args[0]);
-	}
 }

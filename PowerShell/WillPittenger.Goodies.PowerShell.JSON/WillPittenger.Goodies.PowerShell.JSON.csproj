@@ -49,10 +49,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\WillPittenger.Goodies.JSON\WillPittenger.Goodies.JSON.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Update="readme.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
