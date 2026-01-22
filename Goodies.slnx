@@ -1,0 +1,45 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="NoWindowsDebug" />
+    <BuildType Name="NoWindowsRelease" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Folder Name="/PowerShell/">
+    <Project Path="PowerShell/WillPittenger.Goodies.PowerShell.Data/WillPittenger.Goodies.PowerShell.Data.csproj">
+      <BuildType Solution="NoWindowsDebug|*" Project="Release" />
+      <BuildType Solution="NoWindowsRelease|*" Project="Release" />
+    </Project>
+    <Project Path="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilder/WillPittenger.Goodies.PowerShell.DocBuilder.csproj">
+      <BuildType Solution="NoWindowsDebug|*" Project="Release" />
+      <BuildType Solution="NoWindowsRelease|*" Project="Release" />
+    </Project>
+    <Project Path="PowerShell/WillPittenger.Goodies.PowerShell.JSON/WillPittenger.Goodies.PowerShell.JSON.csproj">
+      <Build Solution="NoWindowsDebug|*" Project="false" />
+      <Build Solution="NoWindowsRelease|*" Project="false" />
+    </Project>
+    <Project Path="PowerShell/WillPittenger.Goodies.PowerShell.Sounds/WillPittenger.Goodies.PowerShell.Sounds.csproj" />
+    <Project Path="PowerShell/WillPittenger.Goodies.PowerShell.YtDlpWrapper/WillPittenger.Goodies.PowerShell.YtDlpWrapper.csproj">
+      <Build Solution="NoWindowsDebug|*" Project="false" />
+      <Build Solution="NoWindowsRelease|*" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="WillPittenger.Goodies.Data/WillPittenger.Goodies.Data.csproj">
+    <BuildType Solution="NoWindowsDebug|*" Project="Release" />
+    <BuildType Solution="NoWindowsRelease|*" Project="Release" />
+  </Project>
+  <Project Path="WillPittenger.Goodies.JSON/WillPittenger.Goodies.JSON.csproj" />
+  <Project Path="WillPittenger.Goodies.Sounds/WillPittenger.Goodies.Sounds.csproj" />
+  <Project Path="WillPittenger.Goodies.Tools/WillPittenger.Goodies.Tools.csproj">
+    <Build Solution="NoWindowsDebug|*" Project="false" />
+    <Build Solution="NoWindowsRelease|*" Project="false" />
+  </Project>
+  <Project Path="WillPittenger.Goodies.YtDlpWrapper/WillPittenger.Goodies.YtDlpWrapper.csproj">
+    <Build Solution="NoWindowsDebug|*" Project="false" />
+    <Build Solution="NoWindowsRelease|*" Project="false" />
+  </Project>
+</Solution>

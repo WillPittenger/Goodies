@@ -60,12 +60,12 @@ public class GetVidLength : BaseVidCmdLet
 
 	protected override System.Collections.Generic.IReadOnlyDictionary<string, object>? PythonParams
 		=> new System.Collections.Generic.Dictionary<string, object>()
-			{
-				[@"forceduration"] = true,
-				[@"noprogress"] = true,
-				[@"quiet"] = true,
-				[@"simulate"] = true,
-			};
+		{
+			[@"forceduration"] = true,
+			[@"noprogress"] = true,
+			[@"quiet"] = true,
+			[@"simulate"] = true,
+		};
 
 
 	/// <summary>
@@ -82,29 +82,11 @@ public class GetVidLength : BaseVidCmdLet
 	{
 		if(objCurUnknownInput is System.IO.FileInfo fileCurInput && fileCurInput.Exists)
 		{
-			System.IO.DirectoryInfo dirParentOfCurFileInput = fileCurInput.Directory ?? throw new System.InvalidProgramException($@"Can't get a COM folder for {fileCurInput.FullName}!");
+			WriteObject(Goodies.Data.MetaData.GetMetaDataForFile(fileCurInput));
 
-			Windows.Win32.UI.Shell.Folder sfCurFileParent = mapFolderToShellFolder.ContainsKey(fileCurInput.Directory)
-				? mapFolderToShellFolder[dirParentOfCurFileInput]
-				: (mapFolderToShellFolder[dirParentOfCurFileInput] = shell.NameSpace(dirParentOfCurFileInput));
-
-			using Windows.Win32.Foundation.BSTR bstrNameOfCurInputFile = fileCurInput.Name;
-
-			try
-			{
-				WriteObject(System.TimeSpan.Parse(sfCurFileParent.GetDetailsOf(sfCurFileParent.ParseName(bstrNameOfCurInputFile), iIndexForVideoLengthInShellObjDetails)));
-
-				return true;
-			}
-			catch(System.Exception ex)
-			{
-				throw new System.Exception(@$"Unable to get the length of {fileCurInput.FullName}!  Is it a video file?", ex);
-			}
+			return true;
 		}
-		else if(objCurUnknownInput is string strCurUnknownInput && System.IO.File.Exists(strCurUnknownInput))
-			return OnInputOfUnknownTypeReceived(new System.IO.FileInfo(strCurUnknownInput));
-
-		return false;
+		return objCurUnknownInput is string strCurUnknownInput && System.IO.File.Exists(strCurUnknownInput) && OnInputOfUnknownTypeReceived(new System.IO.FileInfo(strCurUnknownInput));
 	}
 
 	/// <summary>

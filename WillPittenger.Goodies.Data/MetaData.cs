@@ -7,7 +7,7 @@ using System.Linq;
 [System.ComponentModel.ImmutableObject(true)]
 public record MetaData : BaseMetaData
 {
-	public MetaData(System.IO.FileInfo fileWhatToLookUp)
+	public MetaData(System.IO.FileInfo fileWhatToLookUp, in System.Collections.Generic.IReadOnlySet<string> estrFieldFilter)
 	{
 		Tools.Exceptions.AssertOrThrow.TestIt
 		(
@@ -36,11 +36,12 @@ public record MetaData : BaseMetaData
 			throw new System.InvalidOperationException($@"The file specified “{fileWhatToLookUp.FullName}” doesn't seem to have a parent folder.");
 
 		Us = fileWhatToLookUp;
-		Fields = GetFieldData();
+		Fields = GetFieldData(estrFieldFilter);
 		sfOurParent = shell.NameSpace(dirParentOfOurFile.FullName);
 	}
 
 	private const ushort usHighestKnownField = 266;
+	private const string strAllFilesMask = @"*";
 
 
 	/// <summary>
@@ -65,7 +66,7 @@ public record MetaData : BaseMetaData
 		get;
 	}
 
-	private System.Collections.Generic.IReadOnlyDictionary<string, string> GetFieldData()
+	private System.Collections.Generic.IReadOnlyDictionary<string, string> GetFieldData(in System.Collections.Generic.IReadOnlySet<string> estrFieldFilter)
 	{
 		System.Collections.Generic.SortedDictionary<string, string> mapFields = [];
 
@@ -77,7 +78,7 @@ public record MetaData : BaseMetaData
 		{
 			object objCurFieldName = sfOurParent.GetDetailsOf(null, usCurField);
 
-			if(objCurFieldName is string strCurFieldName)
+			if(objCurFieldName is string strCurFieldName && (estrFieldFilter.Count > 0 || estrFieldFilter.Contains(strCurFieldName)))
 				mapFieldNamesToIndices[strCurFieldName.Trim()] = usCurField;
 		}
 
@@ -87,16 +88,25 @@ public record MetaData : BaseMetaData
 		return mapFields;
 	}
 
+	public static System.Collections.Generic.IEnumerable<BaseMetaData> GetMetaDataForFiles(in bool bRecurse, in System.Collections.Generic.IReadOnlySet<string> estrFieldFilter, params System.Collections.Generic.IEnumerable<System.IO.FileSystemInfo> efsiWhatToLookUp)
+		=> GetMetaDataForFiles(strAllFilesMask, bRecurse, estrFieldFilter, efsiWhatToLookUp);
+
+	public static System.Collections.Generic.IEnumerable<BaseMetaData> GetMetaDataForFiles(in string strMask, in System.Collections.Generic.IReadOnlySet<string> estrFieldFilter, params System.Collections.Generic.IEnumerable<System.IO.FileSystemInfo> efsiWhatToLookUp)
+		=> GetMetaDataForFiles(strMask, false, estrFieldFilter, efsiWhatToLookUp);
+
+	public static System.Collections.Generic.IEnumerable<BaseMetaData> GetMetaDataForFiles(in System.Collections.Generic.IReadOnlySet<string> estrFieldFilter, params System.Collections.Generic.IEnumerable<System.IO.FileSystemInfo> efsiWhatToLookUp)
+		=> GetMetaDataForFiles(strAllFilesMask, false, estrFieldFilter, efsiWhatToLookUp);
+
 	public static System.Collections.Generic.IEnumerable<BaseMetaData> GetMetaDataForFiles(params System.Collections.Generic.IEnumerable<System.IO.FileSystemInfo> efsiWhatToLookUp)
-		=> GetMetaDataForFiles(@"*", false, efsiWhatToLookUp);
+		=> GetMetaDataForFiles(strAllFilesMask, false, new System.Collections.Generic.HashSet<string>() { }, efsiWhatToLookUp);
 
 	public static System.Collections.Generic.IEnumerable<BaseMetaData> GetMetaDataForFiles(in bool bRecurse, params System.Collections.Generic.IEnumerable<System.IO.FileSystemInfo> efsiWhatToLookUp)
-		=> GetMetaDataForFiles(@"*", bRecurse, efsiWhatToLookUp);
+		=> GetMetaDataForFiles(strAllFilesMask, bRecurse, new System.Collections.Generic.HashSet<string>() { }, efsiWhatToLookUp);
 
 	public static System.Collections.Generic.IEnumerable<BaseMetaData> GetMetaDataForFiles(in string strMask, params System.Collections.Generic.IEnumerable<System.IO.FileSystemInfo> efsiWhatToLookUp)
-		=> GetMetaDataForFiles(strMask, false, efsiWhatToLookUp);
+		=> GetMetaDataForFiles(strMask, false, new System.Collections.Generic.HashSet<string>() { }, efsiWhatToLookUp);
 
-	public static System.Collections.Generic.IEnumerable<BaseMetaData> GetMetaDataForFiles(in string strMask, in bool bRecurse, params System.Collections.Generic.IEnumerable<System.IO.FileSystemInfo> efsiWhatToLookUp)
+	public static System.Collections.Generic.IEnumerable<BaseMetaData> GetMetaDataForFiles(in string strMask, in bool bRecurse, System.Collections.Generic.IReadOnlySet<string> estrFieldFilter, params System.Collections.Generic.IEnumerable<System.IO.FileSystemInfo> efsiWhatToLookUp)
 	{
 		System.Collections.Generic.List<BaseMetaData> listmdResults = [];
 
@@ -114,20 +124,20 @@ public record MetaData : BaseMetaData
 									RecurseSubdirectories = bRecurse,
 								}
 							)
-						select new MetaData(fileCurInDir) into mdNew
+						select new MetaData(fileCurInDir, estrFieldFilter) into mdNew
 						select mdNew[FieldNames.strKind] switch
 						{
 							MusicFileMetaData.strKind
 								=> (MusicFileMetaData)mdNew,
 
-							VidMetaData.strKind
-								=> (VidMetaData)mdNew,
+							VidFileMetaData.strKind
+								=> (VidFileMetaData)mdNew,
 
-							GenericMediaFileMetaData.strKind
-								=> (GenericMediaFileMetaData)mdNew,
+							DocFileMetaData.strKind
+								=> (DocFileMetaData)mdNew,
 
-							GenericFileMetaData.strKind
-								=> (GenericFileMetaData)mdNew,
+							ImgFileMetaData.strKind
+								=> (ImgFileMetaData)mdNew,
 
 							_
 								=> (BaseMetaData)mdNew,
@@ -135,7 +145,7 @@ public record MetaData : BaseMetaData
 					);
 			else if(fsiCur is System.IO.FileInfo fileCurInDir)
 			{
-				MetaData mdNew = new(fileCurInDir);
+				MetaData mdNew = new(fileCurInDir, estrFieldFilter);
 				listmdResults.Add
 				(
 					mdNew[FieldNames.strKind] switch
@@ -143,14 +153,14 @@ public record MetaData : BaseMetaData
 						MusicFileMetaData.strKind
 							=> (MusicFileMetaData)mdNew,
 
-						VidMetaData.strKind
-							=> (VidMetaData)mdNew,
+						VidFileMetaData.strKind
+							=> (VidFileMetaData)mdNew,
 
-						GenericMediaFileMetaData.strKind
-							=> (GenericMediaFileMetaData)mdNew,
+						DocFileMetaData.strKind
+							=> (DocFileMetaData)mdNew,
 
-						GenericFileMetaData.strKind
-							=> (GenericFileMetaData)mdNew,
+						ImgFileMetaData.strKind
+							=> (ImgFileMetaData)mdNew,
 
 						_
 							=> mdNew,
@@ -162,5 +172,17 @@ public record MetaData : BaseMetaData
 	}
 
 	public string this[string strWhichKey]
-		=> Fields[strWhichKey];
+	{
+		get
+		{
+			try
+			{
+				return Fields[strWhichKey];
+			}
+			catch
+			{
+				return string.Empty;
+			}
+		}
+	}
 }
