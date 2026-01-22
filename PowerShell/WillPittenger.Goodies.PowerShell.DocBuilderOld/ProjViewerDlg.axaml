@@ -1,0 +1,89 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:local="using:WillPittenger.Goodies.PowerShell.DocBuilder"
+				xmlns:data="using:WillPittenger.Goodies.PowerShell.DocBuilder.MetaData"
+				xmlns:group="using:GroupBox.Avalonia.Controls"
+				mc:Ignorable="d"
+				d:DataType="{x:Type data:ModuleDef}"
+
+
+				BorderThickness="3"
+				CanResize="True"
+				FontFamily="Times New Roman"
+				MinHeight="600"
+				MinWidth="800"
+				Padding="5"
+				ShowActivated="true"
+				ShowInTaskbar="False"
+				SizeToContent="WidthAndHeight"
+				x:Class="WillPittenger.Goodies.PowerShell.DocBuilder.ProjViewerDlg">
+	<Grid ColumnDefinitions="Auto,4,*"
+				RowDefinitions="Auto,4,Auto,4,Auto,4,Auto,4,Auto,4,*">
+		<Label Content="Name:"
+					HorizontalAlignment="Right"/>
+		<Label Grid.Column="2"
+					Content="{Binding Name}"/>
+		<Label Grid.Row="2"
+					Content="Path:"
+					HorizontalAlignment="Right"/>
+		<Label Grid.Row="2"
+					Grid.Column="2"
+					Content="{Binding RelativePathToProjFile}"/>
+		<Label Grid.Row="4"
+					Content="Status:"
+					HorizontalAlignment="Right"/>
+		<Label Grid.Row="4"
+					Grid.Column="2"
+					Content="{Binding SearchStatus}"/>
+		<Label Grid.Row="6"
+					Content="Help status:"
+					HorizontalAlignment="Right"/>
+		<Label Grid.Row="6"
+					Grid.Column="2"
+					Content="{Binding HelpStatus}"/>
+		<group:GroupBox Grid.Row="8"
+										Grid.ColumnSpan="3"
+										Header="Binaries found">
+			<ListBox DataContext="{Binding AllDetectedBinaries.Values}"/>
+		</group:GroupBox>
+		<group:GroupBox Grid.Row="10"
+										Grid.ColumnSpan="3"
+										Header="Cmdlets found:">
+			<DataGrid AutoGenerateColumns="False"
+								CanUserReorderColumns="True"
+								CanUserResizeColumns="True"
+								CanUserSortColumns="True"
+								GridLinesVisibility="All"
+								IsReadOnly="True"
+								ItemsSource="{Binding AllCmdLetsByName.Values}"
+								SelectionMode="Extended">
+				<DataGrid.Columns>
+					<DataGridTextColumn Binding="{Binding Name}"
+															Header="Name"
+															Width="Auto"/>
+					<DataGridTextColumn Binding="{Binding Verb}"
+															Header="Verb"
+															Width="Auto"/>
+					<DataGridTextColumn Binding="{Binding Noun}"
+															Header="Noun"
+															Width="Auto"/>
+					<DataGridCheckBoxColumn Binding="{Binding IsHelpStarted}"
+																	Header="Is Help Started?"
+																	IsReadOnly="True"
+																	Width="Auto"/>
+					<DataGridTemplateColumn Header="Edit Help?"
+																	Width="Auto">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Button Content="Edit Help…"
+												Margin="4"/>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+		</group:GroupBox>
+	</Grid>
+</Window>

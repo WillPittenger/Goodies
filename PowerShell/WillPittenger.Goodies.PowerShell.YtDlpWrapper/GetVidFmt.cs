@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: yt Dlp gvf vid
+﻿// Ignore Spelling: yt Dlp gvf vid liststr
 
 namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 
@@ -34,8 +34,14 @@ public class GetVidFmt : BaseVidCmdLet
 		=> WhatToObtain ?? [];
 
 	/// <inheritdoc/>
-	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDLpParams
+	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDlpParams
 		=> [@"--get-format"];
+
+	protected override System.Collections.Generic.IReadOnlyDictionary<string, object>? PythonParams
+		=> new System.Collections.Generic.Dictionary<string, object>()
+			{
+				[@"listformats"] = true,
+			};
 
 
 	/// <summary>

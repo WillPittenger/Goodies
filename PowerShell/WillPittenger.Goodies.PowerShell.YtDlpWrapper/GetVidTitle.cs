@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: yt Dlp gvt
+﻿// Ignore Spelling: yt Dlp gvt Vid
 
 namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 
@@ -34,8 +34,17 @@ public class GetVidTitle : BaseVidCmdLet
 		=> WhatToObtain ?? [];
 
 	/// <inheritdoc/>
-	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDLpParams
+	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDlpParams
 		=> [@"--get-title"];
+
+	protected override System.Collections.Generic.IReadOnlyDictionary<string, object>? PythonParams
+		=> new System.Collections.Generic.Dictionary<string, object>()
+			{
+				[@"forcetitle"] = true,
+				[@"noprogress"] = true,
+				[@"quiet"] = true,
+				[@"simulate"] = true,
+			};
 
 
 	/// <summary>

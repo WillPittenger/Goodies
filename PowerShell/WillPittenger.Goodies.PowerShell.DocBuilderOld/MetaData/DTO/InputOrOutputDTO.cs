@@ -8,10 +8,11 @@ internal record InputOrOutputDTO : AbstractDTO
 	{
 	}
 
-	public InputOrOutputDTO(in string strTypeName, in string strComment)
+	public InputOrOutputDTO(in string strTypeName, in string strComment, in bool bIsFromAttr)
 	{
 		TypeName = strTypeName;
 		Comment = strComment;
+		IsFromAttr = bIsFromAttr;
 	}
 
 
@@ -30,6 +31,13 @@ internal record InputOrOutputDTO : AbstractDTO
 
 		set;
 	} = string.Empty;
+
+	public bool IsFromAttr
+	{
+		get;
+
+		set;
+	} = false;
 
 
 	[System.Xml.Serialization.XmlElement("Comment")]

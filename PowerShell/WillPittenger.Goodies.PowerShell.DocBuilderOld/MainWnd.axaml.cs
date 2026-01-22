@@ -10,7 +10,7 @@ public partial class MainWnd :Avalonia.Controls.Window
 {
 	public MainWnd()
 	{
-		App.evtNewSolutionLoaded += OnNewSolutionLoaded;
+		App.Instance.evtNewSolutionLoaded += OnNewSolutionLoaded;
 
 		InitializeComponent();
 
@@ -25,7 +25,7 @@ public partial class MainWnd :Avalonia.Controls.Window
 	{
 		base.OnInitialized();
 
-		if(App.Solution is null)
+		if(App.Instance.Solution is null)
 		{
 			fpoo ??= new()
 			{
@@ -45,15 +45,15 @@ public partial class MainWnd :Avalonia.Controls.Window
 
 			System.Collections.Generic.IReadOnlyList<Avalonia.Platform.Storage.IStorageFile> efileSolutionSelected = StorageProvider.OpenFilePickerAsync(fpoo).Result;
 
-			if(efileSolutionSelected.Count > 0 )
-				App.Solution = new(efileSolutionSelected[0].Path.AbsolutePath);
+			if(efileSolutionSelected.Count > 0)
+				App.Instance.Solution = new(efileSolutionSelected[0].Path.AbsolutePath);
 		}
 
-		dgProjectsFound.ItemsSource = App.Sln?.AllProjByName?.Values ?? throw new System.InvalidProgramException(@"How did we get here without a solution?");
+		dgProjectsFound.ItemsSource = App.Instance.Sln?.AllModulesByName?.Values ?? throw new System.InvalidProgramException(@"How did we get here without a solution?");
 	}
 
 	private void UpdateTitleBar()
-		=> Title = Rsrcs.strMainWndTitleFmt.Fmt(App.Solution?.FullName ?? string.Empty);
+		=> Title = Rsrcs.strMainWndTitleFmt.Fmt(App.Instance.Solution?.FullName ?? string.Empty);
 
 
 	private void OnNewSolutionLoaded(in System.IO.FileInfo arg1, in SolutionDef arg2)

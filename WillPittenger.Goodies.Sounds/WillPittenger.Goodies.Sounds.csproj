@@ -22,6 +22,7 @@
 		<PackageProjectUrl>https://github.com/WillPittenger/Goodies/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/WillPittenger/Goodies/tree/master/WillPittenger.Goodies.Sounds</RepositoryUrl>
 		<Configurations>Debug;Release;NoWindowsDebug;NoWindowsRelease</Configurations>
+		<WarningsAsErrors>$(WarningsAsErrors);NU1605;CS8618;CA2021;CS8524;CS8509;CS0108;CS0114;CS8604;CS8603</WarningsAsErrors>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -44,12 +45,12 @@
 	  <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
 	</PropertyGroup>
 
-	<ItemGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetFramework), 'Windows$'))">
-		<PackageReference Include="System.Windows.Extensions" Version="9.0.0" />
+	<ItemGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch($(TargetFramework), 'windows$'))">
+		<PackageReference Include="System.Windows.Extensions" Version="10.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="SFML.Audio" Version="2.6.1" />
+	  <PackageReference Include="SFML.Audio" Version="3.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

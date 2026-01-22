@@ -9,6 +9,14 @@ namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 /// </summary>
 public abstract class BaseCmdLet : System.Management.Automation.PSCmdlet
 {
+	[System.Management.Automation.Parameter(HelpMessage = @"Controls how yt-dlp is called.  You can supply your own instance or use a default instance, but the default attempts to set up both python and the EXE.")]
+	public Goodies.YtDlpWrapper.YtDlpWrapper? YtWrapper
+	{
+		get;
+
+		set;
+	}
+
 	/// <summary>
 	/// Tests to see if the user activated Verbose.
 	/// </summary>
@@ -27,6 +35,13 @@ public abstract class BaseCmdLet : System.Management.Automation.PSCmdlet
 	/// <inheritdoc/>
 	protected Sounds.ISound? TaskCompletionSound
 		=> SessionState.PSVariable.Get(@"TaskCompletionSound").Value as Sounds.ISound;
+
+	public Goodies.YtDlpWrapper.YtDlpWrapper.ILogger? Looger
+	{
+		get;
+
+		set;
+	} = null;
 
 
 	/// <summary>

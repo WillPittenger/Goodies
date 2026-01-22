@@ -1,6 +1,6 @@
 ﻿// Ignore Spelling: yt Dlp Rsrc astr
 
-namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
+namespace WillPittenger.Goodies.YtDlpWrapper;
 
 using Tools.Ext;
 

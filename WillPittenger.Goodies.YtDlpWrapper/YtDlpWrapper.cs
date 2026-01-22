@@ -1,24 +1,60 @@
-﻿// Ignore Spelling: astr yt Dlp runas
+﻿// Ignore Spelling: astr yt Dlp runas Exe uri
 
 namespace WillPittenger.Goodies.YtDlpWrapper;
 
+using System.Diagnostics;
+using Python.Runtime;
+
 public class YtDlpWrapper
 {
-	static YtDlpWrapper()
+	public YtDlpWrapper(WhatToInit whatToInit)
 	{
-		foreach(string strCurDir in System.Environment.GetEnvironmentVariable(@"path")?.Split(";") ?? [])
+		if(whatToInit != WhatToInit.python)
+			InitForExe();
+
+		if(whatToInit != WhatToInit.exe)
+			InitForPython();
+	}
+
+	~YtDlpWrapper()
+		=> PythonEngine.Shutdown();
+
+
+	internal dynamic? yt = null;
+
+	public readonly System.DateOnly doMinYtDlpVer = new(2026, 1, 1);
+	public readonly System.Version verMinPython = new(3, 10);
+
+
+	public enum HowToUseYtDlp
+	{
+		asExe,
+		fromPython,
+	}
+
+	public enum WhatToInit : byte
+	{
+		exe,
+		python,
+		both,
+	}
+
+
+	public class PythonExeName
+	{
+		internal PythonExeName(in System.IO.FileInfo fileExeName, in System.IO.FileInfo fileDllName)
 		{
-			string strCurPossiblePath = System.IO.Path.Combine(strCurDir, @"yt-dlp");
-
-			if(System.IO.File.Exists(strCurPossiblePath))
-			{
-				YtDlpExe = new(strCurPossiblePath);
-
-				return;
-			}
+			this.fileExeName = fileExeName;
+			this.fileDllName = fileDllName;
 		}
 
-		YtDlpExe = new(@"yt-dlp");
+
+		public readonly System.IO.FileInfo fileExeName;
+		public readonly System.IO.FileInfo fileDllName;
+
+
+		public class GenericPythonExeName(in System.IO.FileInfo fileExeName, in System.IO.FileInfo fileDllName)
+			: PythonExeName(fileExeName, fileDllName);
 	}
 
 
@@ -47,6 +83,7 @@ public class YtDlpWrapper
 		public Types type = type;
 	}
 
+	[System.ComponentModel.ImmutableObject(true)]
 	public record GenFieldDef(in FieldDef src, in System.Type typeOutput)
 	{
 		public FieldDef src = src;
@@ -68,6 +105,7 @@ public class YtDlpWrapper
 			=> new(strUri);
 	}
 
+	[System.ComponentModel.ImmutableObject(true)]
 	public static class KnownYtDlpFields
 	{
 		public static readonly FieldDef fieldAvailability = new("availability", FieldDef.Types.str);
@@ -225,6 +263,7 @@ public class YtDlpWrapper
 		vid,
 	}
 
+	[System.ComponentModel.ImmutableObject(true)]
 	public record YtDlpInfo
 	{
 		internal YtDlpInfo()
@@ -246,6 +285,7 @@ public class YtDlpWrapper
 		} = "";
 	}
 
+	[System.ComponentModel.ImmutableObject(true)]
 	public record YtDlpInfoWithJSON()
 		: YtDlpInfo()
 	{
@@ -257,28 +297,211 @@ public class YtDlpWrapper
 		} = null;
 	}
 
-	public static YtDlpInfo InvokeYtDlp(in Sounds.ISound? soundCompletion = null, params string[] astrParams)
+	public interface ILogger
+	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Name must match python declaration")]
+		void debug(string strMsg);
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Name must match python declaration")]
+		void warning(string strMsg);
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Name must match python declaration")]
+		void error(string strMsg);
+	}
+
+	public enum ProgressStatuses : byte
+	{
+		finished,
+
+		error,
+
+		downloading,
+	}
+
+	public delegate void DProgressUpdate(in System.IO.FileInfo? fileCur, in ProgressStatuses status, in System.IO.FileInfo fileCurTemp, in long lDownLoadedBytes, in long? lTotalBytes, in long? lTotalEstimatedBytes, in System.TimeSpan? tsETA, in double? dblSpeed, in System.TimeSpan? tsElapsed, in long lFragmentIndex, in long lFragmentCnt, in JSON.Obj jobjOtherDataFields, in JSON.Obj? jobjInfoDict);
+
+	public delegate void DPostProcessorUpdate(in string strPostProcessorName, in System.IO.FileInfo? fileCur, in ProgressStatuses status, in JSON.Obj jobjOtherDataFields, in JSON.Obj jobjInfoDict);
+
+	[System.ComponentModel.ImmutableObject(true)]
+	private class ProgressHookTranslator(DProgressUpdate handlerProgressUpdates)
+	{
+		public void SendNotification(dynamic poData)
+		{
+			using Py.GILState lockInfo = Py.GIL();
+
+			ProgressStatuses status = poData.GetAttr(@"status")?.ToString() is string strStatus
+				? System.Enum.Parse<ProgressStatuses>(strStatus)
+				: ProgressStatuses.error;
+
+			System.IO.FileInfo? fileCur = poData.GetAttr(@"filename")?.ToString() is string strFileName ? new(strFileName) : null;
+			System.IO.FileInfo? fileCurTemp = poData.GetAttr(@"tmpFilename")?.ToString() is string strTempFileName ? new(strTempFileName) : null;
+
+			System.TimeSpan? tsETA = poData.GetAttr(@"eta") is long lEtaInSeconds ? new System.TimeSpan(0, 0, (int)lEtaInSeconds) : null;
+			System.TimeSpan? tsElapsed = poData.GetAttr(@"elapsed") is long lElapsedInSeconds ? new System.TimeSpan(0, 0, (int)lElapsedInSeconds) : null;
+
+
+			JSON.Obj? jobjInfoDict = null;
+			if(poData.HasAttr(@"info_dict"))
+			{
+				jobjInfoDict = ConvertPythonObjToJSON(poData.GetAttr(@"info_dict"));
+
+				poData.DelAttr(@"info_dict");
+			}
+
+			handlerProgressUpdates(fileCur, status, fileCurTemp, (long)poData.GetAttr(@"downloaded_bytes", 0L), (long?)poData.GetAttr(@"total_bytes"), (long?)poData.GetAttr(@"total_bytes_estimate"), tsETA, (double?)poData.GetAttr(@"speed"), tsElapsed, (long)poData.GetAttr(@"fragment_index", 0L), (long)poData.GetAttr(@"fragment_count", 0L), ConvertPythonObjToJSON(poData), jobjInfoDict);
+		}
+	}
+
+	private class PostProcessorHookTranslator(DPostProcessorUpdate handlerPostProcessorUpdates)
+	{
+		public void SendNotification(dynamic poData)
+		{
+			using Py.GILState lockInfo = Py.GIL();
+
+			ProgressStatuses status = poData.GetAttr(@"status")?.ToString() is string strStatus
+				? System.Enum.Parse<ProgressStatuses>(strStatus)
+				: ProgressStatuses.error;
+
+			System.IO.FileInfo? fileCur = poData.GetAttr(@"filename")?.ToString() is string strFileName ? new(strFileName) : null;
+
+			JSON.Obj? jobjInfoDict = null;
+			if(poData.HasAttr(@"info_dict"))
+			{
+				jobjInfoDict = ConvertPythonObjToJSON(poData.GetAttr(@"info_dict"));
+
+				poData.DelAttr(@"info_dict");
+			}
+
+			handlerPostProcessorUpdates(poData.GetAttr(@"postprocessor"), fileCur, status, ConvertPythonObjToJSON(poData), jobjInfoDict);
+		}
+	}
+
+	public YtDlpInfo InvokeYtDlp(in Sounds.ISound? soundCompletion = null, params string[] astrParams)
 		=> InvokeYtDlp(soundCompletion, null, null, astrParams);
 
-	public static YtDlpInfo InvokeYtDlp(Sounds.ISound? soundCompletion = null, in System.Diagnostics.DataReceivedEventHandler? handlerStdOut = null, in System
+	public void InitForExe()
+	{
+		foreach(string strCurDir in System.Environment.GetEnvironmentVariable(@"path")?.Split(";") ?? [])
+		{
+			System.IO.FileInfo fileCurYtDlpPossiblePath = new(System.IO.Path.Combine
+				(
+					strCurDir,
+					System.OperatingSystem.IsWindows()
+						? @"yt-dlp.exe"
+						: @"yt-dlp"
+				));
+
+			if(fileCurYtDlpPossiblePath.Exists)
+			{
+				YtDlpExe = fileCurYtDlpPossiblePath;
+
+				System.Diagnostics.ProcessStartInfo psi = new()
+					{
+						Arguments = @"--version",
+						UseShellExecute = false,
+						RedirectStandardOutput = true,
+						CreateNoWindow = true,
+						FileName = fileCurYtDlpPossiblePath.FullName,
+					};
+
+				using(System.Diagnostics.Process? process = System.Diagnostics.Process.Start(psi))
+				{
+					if(process is null)
+						throw new Exceptions.YtDlpException(Exceptions.YtDlpException.Reasons.missingExe, @"Unable to set the version of the YtDlp executable found");
+
+					if(doMinYtDlpVer > System.DateOnly.ParseExact(process.StandardOutput.ReadToEnd().Replace(@"^(\d{4}\.\d{1,2}\.\d{1,2})(\.\d+)?", @"$1"), @"yyyy.MM.dd"))
+						throw new Exceptions.YtDlpException(Exceptions.YtDlpException.Reasons.tooOld);
+				}
+
+					break;
+			}
+		}
+
+		YtDlpExe = new(@"yt-dlp");
+	}
+
+	public void InitForPython()
+	{
+		foreach(string strCurDir in System.Environment.GetEnvironmentVariable(@"path")?.Split(";") ?? [])
+		{
+			System.IO.FileInfo fileCurPythonPossiblePath = new(System.IO.Path.Combine
+				(
+					strCurDir,
+					System.OperatingSystem.IsWindows()
+						? @"python.exe"
+						: @"python"
+				));
+
+			if(!fileCurPythonPossiblePath.Exists)
+				fileCurPythonPossiblePath = new(System.IO.Path.Combine
+					(
+						strCurDir,
+						System.OperatingSystem.IsWindows()
+							? @"python3.exe"
+							: @"python3"
+					));
+
+			if(!fileCurPythonPossiblePath.Exists)
+				throw new Exceptions.PythonException(Exceptions.PythonException.Reasons.pythonMissing);
+
+			System.Diagnostics.ProcessStartInfo psi = new()
+				{
+					FileName = fileCurPythonPossiblePath.FullName,
+					Arguments = @"-q -V",
+					RedirectStandardOutput = true,
+					UseShellExecute = false,
+				};
+
+			using(System.Diagnostics.Process? process = System.Diagnostics.Process.Start(psi))
+				{
+					if(process is null)
+						throw new Exceptions.PythonException(Exceptions.PythonException.Reasons.failedToStartPython, @"Null process variable");
+
+					System.Version verPython = System.Version.Parse(process.StandardOutput.ReadToEnd());
+
+					if(verPython < verMinPython)
+						throw new Exceptions.PythonException(Exceptions.PythonException.Reasons.pythonNotNewEnough);
+				}
+
+			psi.Arguments = @"-c ""import sysconfig; print(sysconfig.get_config_var('DLLLIBRARY') or sysconfig.get_config_var('LDLIBRARY'))""";
+
+			System.IO.FileInfo? filePythonDLL = null;
+			using (System.Diagnostics.Process? process = System.Diagnostics.Process.Start(psi))
+				{
+					if(process is null)
+						throw new Exceptions.PythonException(Exceptions.PythonException.Reasons.failedToStartPython, @"Null process variable");
+
+					string strLibName = process.StandardOutput.ReadToEnd().Trim();
+					filePythonDLL = new(System.IO.Path.Combine(fileCurPythonPossiblePath.FullName, strLibName));
+				}
+
+			PythonEngineSpec = new(fileCurPythonPossiblePath, filePythonDLL);
+		}
+	}
+
+	public YtDlpInfo InvokeYtDlp(Sounds.ISound? soundCompletion = null, in System.Diagnostics.DataReceivedEventHandler? handlerStdOut = null, in System
 		.Diagnostics.DataReceivedEventHandler? handlerStdErr = null, params string[] astrParams)
 	{
+		System.IO.FileInfo fileYtDlpExe = YtDlpExe is null
+			? throw new Exceptions.YtDlpException(Exceptions.YtDlpException.Reasons.missingExe)
+			: YtDlpExe;
+
 		soundCompletion ??= Sounds.PredefinedSounds.AllPredefinedSounds[Sounds.PredefinedSounds.SoundIDs.tada];
 
 		YtDlpInfo result = new();
 
 		using System.Diagnostics.Process procYtlp = new()
-		{
-			EnableRaisingEvents = true,
-			PriorityClass = System.Diagnostics.ProcessPriorityClass.Normal,
-			StartInfo = new(YtDlpExe.FullName, astrParams)
 			{
-				CreateNoWindow = true,
-				RedirectStandardError = true,
-				RedirectStandardOutput = true,
-				WorkingDirectory = System.Environment.CurrentDirectory,
-			},
-		};
+				EnableRaisingEvents = true,
+				PriorityClass = System.Diagnostics.ProcessPriorityClass.Normal,
+				StartInfo = new(fileYtDlpExe.FullName, astrParams)
+				{
+					CreateNoWindow = true,
+					RedirectStandardError = true,
+					RedirectStandardOutput = true,
+					WorkingDirectory = System.Environment.CurrentDirectory,
+				},
+			};
 
 		if(handlerStdOut != null)
 			procYtlp.OutputDataReceived += handlerStdOut;
@@ -295,36 +518,39 @@ public class YtDlpWrapper
 					result.StdOutCnts = procYtlp.StandardOutput.ReadToEnd();
 					result.StdErrCnts = procYtlp.StandardError.ReadToEnd();
 				}, System.Threading.Tasks.TaskCreationOptions.PreferFairness | System.Threading.Tasks.TaskCreationOptions.LongRunning
-		);
+			);
 
 		soundCompletion.Play();
 
 		return result;
 	}
 
-	public static YtDlpInfo InvokeYtDlpAsElevatedProcess(in Sounds.ISound? soundCompletion = null, params string[] astrParams)
+	public YtDlpInfo InvokeYtDlpAsElevatedProcess(in Sounds.ISound? soundCompletion = null, params string[] astrParams)
 		=>  InvokeYtDlpAsElevatedProcess(soundCompletion, null, null, astrParams);
 
-	public static YtDlpInfo InvokeYtDlpAsElevatedProcess(Sounds.ISound? soundCompletion = null, in System.Diagnostics.DataReceivedEventHandler? handlerStdOut =
-		null, in System.Diagnostics.DataReceivedEventHandler? handlerStdErr = null, params string[] astrParams)
+	public YtDlpInfo InvokeYtDlpAsElevatedProcess(Sounds.ISound? soundCompletion = null, in System.Diagnostics.DataReceivedEventHandler? handlerStdOut = null, in System.Diagnostics.DataReceivedEventHandler? handlerStdErr = null, params string[] astrParams)
 	{
+		System.IO.FileInfo fileYtDlpExe = YtDlpExe is null
+			? throw new Exceptions.YtDlpException(Exceptions.YtDlpException.Reasons.missingExe)
+			: YtDlpExe;
+
 		soundCompletion ??= Sounds.PredefinedSounds.AllPredefinedSounds[Sounds.PredefinedSounds.SoundIDs.tada];
 
 		YtDlpInfo result = new();
 
 		using System.Diagnostics.Process procYtlp = new()
-		{
-			EnableRaisingEvents = true,
-			PriorityClass = System.Diagnostics.ProcessPriorityClass.Normal,
-			StartInfo = new(YtDlpExe.FullName, astrParams)
 			{
-				CreateNoWindow = true,
-				RedirectStandardError = true,
-				RedirectStandardOutput = true,
-				WorkingDirectory = System.Environment.CurrentDirectory,
-				Verb = @"Runas",
-			},
-		};
+				EnableRaisingEvents = true,
+				PriorityClass = System.Diagnostics.ProcessPriorityClass.Normal,
+				StartInfo = new(fileYtDlpExe.FullName, astrParams)
+				{
+					CreateNoWindow = true,
+					RedirectStandardError = true,
+					RedirectStandardOutput = true,
+					WorkingDirectory = System.Environment.CurrentDirectory,
+					Verb = @"Runas",
+				},
+			};
 
 		if(handlerStdOut != null)
 			procYtlp.OutputDataReceived += handlerStdOut;
@@ -341,35 +567,38 @@ public class YtDlpWrapper
 					result.StdOutCnts = procYtlp.StandardOutput.ReadToEnd();
 					result.StdErrCnts = procYtlp.StandardError.ReadToEnd();
 				}, System.Threading.Tasks.TaskCreationOptions.PreferFairness | System.Threading.Tasks.TaskCreationOptions.LongRunning
-		);
+			);
 
 		soundCompletion.Play();
 
 		return result;
 	}
 
-	public static YtDlpInfoWithJSON InvokeYtDlpForJSON(in bool bUpdatePlayListEntries, in Sounds.ISound? soundCompletion = null, params string[] astrParams)
+	public YtDlpInfoWithJSON InvokeYtDlpForJSON(in bool bUpdatePlayListEntries, in Sounds.ISound? soundCompletion = null, params string[] astrParams)
 		=> InvokeYtDlpForJSON(bUpdatePlayListEntries, soundCompletion, null, null, astrParams);
 
-	public static YtDlpInfoWithJSON InvokeYtDlpForJSON(in bool bUpdatePlayListEntries, Sounds.ISound? soundCompletion = null, System.Diagnostics
-		.DataReceivedEventHandler? handlerStdOut = null, System.Diagnostics.DataReceivedEventHandler? handlerStdErr = null, params string[] astrParams)
+	public YtDlpInfoWithJSON InvokeYtDlpForJSON(in bool bUpdatePlayListEntries, Sounds.ISound? soundCompletion = null, System.Diagnostics.DataReceivedEventHandler? handlerStdOut = null, System.Diagnostics.DataReceivedEventHandler? handlerStdErr = null, params string[] astrParams)
 	{
+		System.IO.FileInfo fileYtDlpExe = YtDlpExe is null
+			? throw new Exceptions.YtDlpException(Exceptions.YtDlpException.Reasons.missingExe)
+			: YtDlpExe;
+
 		soundCompletion ??= Sounds.PredefinedSounds.AllPredefinedSounds[Sounds.PredefinedSounds.SoundIDs.tada];
 
 		YtDlpInfoWithJSON result = new();
 
 		using System.Diagnostics.Process procYtlp = new()
-		{
-			EnableRaisingEvents = true,
-			PriorityClass = System.Diagnostics.ProcessPriorityClass.Normal,
-			StartInfo = new(YtDlpExe.FullName, [..astrParams, bUpdatePlayListEntries ? "-J" : "-j"])
 			{
-				CreateNoWindow = true,
-				RedirectStandardError = true,
-				RedirectStandardOutput = true,
-				WorkingDirectory = System.Environment.CurrentDirectory,
-			},
-		};
+				EnableRaisingEvents = true,
+				PriorityClass = System.Diagnostics.ProcessPriorityClass.Normal,
+				StartInfo = new(fileYtDlpExe.FullName, [..astrParams, bUpdatePlayListEntries ? "-J" : "-j"])
+				{
+					CreateNoWindow = true,
+					RedirectStandardError = true,
+					RedirectStandardOutput = true,
+					WorkingDirectory = System.Environment.CurrentDirectory,
+				},
+			};
 
 		if(handlerStdOut != null)
 			procYtlp.OutputDataReceived += handlerStdOut;
@@ -386,7 +615,7 @@ public class YtDlpWrapper
 					result.StdOutCnts = procYtlp.StandardOutput.ReadToEnd();
 					result.StdErrCnts = procYtlp.StandardError.ReadToEnd();
 				}, System.Threading.Tasks.TaskCreationOptions.PreferFairness | System.Threading.Tasks.TaskCreationOptions.LongRunning
-		);
+			);
 		taskYtDlpRunner.Wait();
 
 		result.RootOfData = System.Text.Json.JsonDocument.Parse(result.StdErrCnts, new()
@@ -401,10 +630,197 @@ public class YtDlpWrapper
 		return result;
 	}
 
-	public static System.IO.FileInfo YtDlpExe
+	public void InstallYtDlpFromPip(in bool bUseLatest = false, in System.Diagnostics.DataReceivedEventHandler? handlerStdOut = null, in System.Diagnostics.DataReceivedEventHandler? handlerStdErr = null)
+	{
+		if(pythonEngineSpec is null)
+			throw new Exceptions.PythonException(Exceptions.PythonException.Reasons.pythonMissing);
+
+		string strPreParam = bUseLatest ? @"--pre" : string.Empty;
+
+		using System.Diagnostics.Process procPip = new()
+			{
+				EnableRaisingEvents = true,
+				PriorityClass = System.Diagnostics.ProcessPriorityClass.Normal,
+				StartInfo = new(pythonEngineSpec.fileExeName.FullName, $@"-m pip install -U ${strPreParam} ""yt-dlp[default]""")
+					{
+						CreateNoWindow = true,
+						RedirectStandardError = true,
+						RedirectStandardOutput = true,
+						WorkingDirectory = System.Environment.CurrentDirectory,
+					},
+			};
+
+		if(handlerStdOut != null)
+			procPip.OutputDataReceived += handlerStdOut;
+		if(handlerStdErr != null)
+			procPip.ErrorDataReceived += handlerStdErr;
+		
+		using System.Threading.Tasks.Task taskYtDlpRunner = new
+			(
+				() =>
+					{
+						procPip.Start();
+						procPip.WaitForExit();
+					}, System.Threading.Tasks.TaskCreationOptions.PreferFairness | System.Threading.Tasks.TaskCreationOptions.LongRunning
+			);
+	}
+
+	public void DownLoadWithYtDlpViaPython(System.Collections.Generic.IEnumerable<System.Uri> enumWhatToDownLoad, AllGlobalOpts? opts = null, in ILogger? logger = null, in DProgressUpdate? handlerProgressHook = null, in DPostProcessorUpdate? handlerPostProcessorHook = null)
+	{
+		if(yt is null)
+			throw new Exceptions.PythonException(Exceptions.PythonException.Reasons.ytDlpNotReady);
+
+		using Py.GILState lockInfo = Py.GIL();
+
+		PyDict pdParams = (opts ?? new()).ToPythonDict(this);
+
+		pdParams.SetItem(@"Logger", logger.ToPython());
+
+		using dynamic ydl = yt.YouTubeDL(opts);
+
+		using dynamic plWhatToDownLoad = new PyList();
+
+		foreach(System.Uri uriCur  in enumWhatToDownLoad)
+			plWhatToDownLoad.Append(uriCur);
+
+		if(handlerProgressHook is not null)
+			ydl.add_progress_hook(new ProgressHookTranslator(handlerProgressHook));
+		if(handlerPostProcessorHook is not null)
+			ydl.add_postprocessor_hook(new DPostProcessorUpdate(handlerPostProcessorHook));
+
+		ydl.download(plWhatToDownLoad);
+	}
+
+	public JSON.ObjBase ExtractDataWithYtDlpViaPython(System.Uri uriWhatToDownLoad, AllGlobalOpts? opts = null, in bool bResolveLinks = false, in ILogger? logger = null, in DProgressUpdate? handlerProgressHook = null, in DPostProcessorUpdate? handlerPostProcessorHook = null, in System.Collections.Generic.IReadOnlyDictionary<string, object>? mapFieldOverrides = null)
+	{
+		if(yt is null)
+			throw new Exceptions.PythonException(Exceptions.PythonException.Reasons.ytDlpNotReady);
+
+		using Py.GILState lockInfo = Py.GIL();
+
+		PyDict pdParams = (opts ?? new()).ToPythonDict(this);
+		if(mapFieldOverrides is System.Collections.Generic.IReadOnlyDictionary<string, object> mapSafeFieldOverrides)
+			foreach(System.Collections.Generic.KeyValuePair<string, object> kvpCur in mapSafeFieldOverrides)
+				pdParams.SetItem(kvpCur.Key, kvpCur.Value.ToPython());
+
+		pdParams.SetItem(@"Logger", logger.ToPython());
+
+		using dynamic ydl = yt.YouTubeDL(opts);
+
+		using dynamic plWhatToDownLoad = new PyList();
+
+		if(handlerProgressHook is not null)
+			ydl.add_progress_hook(new ProgressHookTranslator(handlerProgressHook));
+		if(handlerPostProcessorHook is not null)
+			ydl.add_postprocessor_hook(new DPostProcessorUpdate(handlerPostProcessorHook));
+
+		return ConvertPythonObjToJSON(ydl.extract_info(uriWhatToDownLoad.AbsoluteUri, Download: false, Process: bResolveLinks));
+	}
+
+	private static JSON.ObjBase? ConvertPythonObjToJSON(PyObject? poInput)
+	{
+		using Py.GILState lockInfo = Py.GIL();
+
+		if(poInput is null)
+			return null;
+
+		if(poInput is PySequence pseqInput)
+		{
+			JSON.Array jaOutput = [];
+
+			foreach(dynamic curChild in pseqInput)
+				jaOutput.Add(ConvertPythonObjToJSON(curChild));
+
+			return jaOutput;
+		}
+
+		if(poInput is PyInt piInput)
+			return new JSON.Val(piInput.AsManagedObject(typeof(int)));
+
+		if(poInput is PyNumber pnInput)
+			return new JSON.Val(pnInput.AsManagedObject(typeof(double)));
+
+		if(poInput is PyString pstrInput)
+			return new JSON.Val(pstrInput.AsManagedObject(typeof(string)));
+
+		JSON.Obj jobjOutput = [];
+		if(poInput is PyDict pdInput)
+			foreach(dynamic curAttr in pdInput)
+				jobjOutput[curAttr.Key] = ConvertPythonObjToJSON(curAttr.Value.AsManagedObject());
+		else
+			foreach(dynamic curAttrName in poInput.Dir())
+			{
+				if(curAttrName is not string strCurAttrName)
+					continue;
+
+				jobjOutput[curAttrName] = ConvertPythonObjToJSON(poInput.GetAttr(curAttrName).Value);
+			}
+
+		return jobjOutput;
+	}
+
+	private PythonExeName? pythonEngineSpec = null;
+
+
+	public System.IO.FileInfo? YtDlpExe
 	{
 		get;
 
 		set;
+	} = null;
+
+	public PythonExeName? PythonEngineSpec
+	{
+		get
+			=> pythonEngineSpec;
+
+		set
+		{
+			if(pythonEngineSpec is not null)
+				PythonEngine.Shutdown();
+
+			if(value is not null)
+			{
+				pythonEngineSpec = value;
+
+				Runtime.PythonDLL = value.fileDllName.FullName;
+
+				PythonEngine.Initialize();
+				PythonEngine.BeginAllowThreads();
+
+				using Py.GILState lockInfo = Py.GIL();
+
+				try
+				{
+					yt = Py.Import("yt_dlp");
+				}
+				catch(System.Exception ex)
+				{
+					throw new Exceptions.PythonException(Exceptions.PythonException.Reasons.ytDlpNotFoundByPython, @"Exception caught and rethrown.", ex);
+				}
+
+				if(yt is null)
+					throw new Exceptions.PythonException(Exceptions.PythonException.Reasons.ytDlpNotFoundByPython);
+
+				if(yt.version.__verson__ is string strYtDlpVer)
+				{
+					if(doMinYtDlpVer > System.DateOnly.ParseExact(strYtDlpVer.Replace(@"^(\d{4}\.\d{1,2}\.\d{1,2})(\.\d+)?", @"$1"), @"yyyy.MM.dd"))
+						throw new Exceptions.YtDlpException(Exceptions.YtDlpException.Reasons.tooOld);
+				}
+			}
+		}
 	}
+
+	public HowToUseYtDlp? HowToUseYt
+	{
+		get;
+
+		set;
+	} = HowToUseYtDlp.fromPython;
+
+	public bool IsExeReady
+		=> YtDlpExe is not null;
+
+	public bool IsPythonReady
+		=> PythonEngineSpec is not null;
 }

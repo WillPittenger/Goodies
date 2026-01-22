@@ -2,12 +2,15 @@
 				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-				xmlns:data="clr-namespace:WillPittenger.Goodies.PowerShell.DocBuilder.MetaData"
-				xmlns:local="clr-namespace:WillPittenger.Goodies.PowerShell.DocBuilder"
+				xmlns:data="using:WillPittenger.Goodies.PowerShell.DocBuilder.MetaData"
+				xmlns:local="using:WillPittenger.Goodies.PowerShell.DocBuilder"
+				xmlns:materialIcons="using:Material.Icons.Avalonia"
 				mc:Ignorable="d"
 				x:Class="WillPittenger.Goodies.PowerShell.DocBuilder.MainWnd"
+				x:DataType="data:SolutionDef"
 				BorderThickness="3"
 				CanResize="True"
+				DataContext="{Binding Sln, Source={x:Static local:App.Instance}}"
 				FontFamily="Times New Roman"
 				MinHeight="600"
 				MinWidth="800"
@@ -19,23 +22,39 @@
 	<StackPanel Orientation="Vertical">
 		<StackPanel Orientation="Horizontal"
 								Spacing="5">
-			<Button Content="Search for Cmdlets…"/>
-			<Button Content="Start Help for Cmdlets in project…"/>
-			<Button Content="View project details…"/>
-			<Button Content="Package help…"/>
+			<Button>
+				<StackPanel>
+					<materialIcons:MaterialIcon Kind="Magnify"/><Label Content="Search for Cmdlets…"/>
+				</StackPanel>
+			</Button>
+			<Button>
+				<StackPanel>
+					<materialIcons:MaterialIcon Kind="ContainStart"/><Label Content="Start Help for Cmdlets in project…"/>
+				</StackPanel>
+			</Button>
+			<Button>
+				<StackPanel>
+					<materialIcons:MaterialIcon Kind="EyeOutline"/><Label Content="View project details…"/>
+				</StackPanel>
+			</Button>
+			<Button Content="{materialIcons:MaterialIconExt Export}"/>
+			<Button Content="{materialIcons:MaterialIconExt Import}"/>
+			<Button>
+				<StackPanel>
+					<materialIcons:MaterialIcon Kind="Package"/><Label Content="Package help…"/>
+				</StackPanel>
+			</Button>
 		</StackPanel>
 		<Label Content="Projects found:"
 					Margin="0,20,0,0"/>
 		<DataGrid x:Name="dgProjectsFound"
-							d:DataContext="data:SolutionDef"
-							DataContext="{x:Static local:App.Sln}"
 							AutoGenerateColumns="false"
 							CanUserReorderColumns="true"
 							CanUserResizeColumns="true"
 							CanUserSortColumns="true"
 							GridLinesVisibility="All"
 							IsReadOnly="true"
-							ItemsSource="AllProjByName"
+							ItemsSource="{Binding AllModulesByName.Values}"
 							SelectionMode="Extended">
 			<DataGrid.Columns>
 				<DataGridTextColumn Binding="{Binding Name}"

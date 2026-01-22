@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: yt Dlp gvd vid
+﻿// Ignore Spelling: yt Dlp gvd vid liststr
 
 namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 
@@ -33,9 +33,17 @@ public class GetVidDesc : BaseVidCmdLet
 		=> WhatToObtain ?? [];
 
 	/// <inheritdoc/>
-	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDLpParams
+	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDlpParams
 		=> [@"--get-description"];
 
+	protected override System.Collections.Generic.IReadOnlyDictionary<string, object>? PythonParams
+		=> new System.Collections.Generic.Dictionary<string, object>()
+			{
+				[@"forcedescription"] = true,
+				[@"noprogress"] = true,
+				[@"quiet"] = true,
+				[@"simulate"] = true,
+			};
 
 	/// <summary>
 	/// Writes the content received from the standard output stream to the pipeline.  yt-dlp only uses standard output for data it returns, in this case, the descriptions of videos.  It's hoped it will be one event per item.

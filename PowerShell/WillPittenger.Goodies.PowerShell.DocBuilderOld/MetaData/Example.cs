@@ -52,14 +52,14 @@ public class Example : Obj<Example>
 		public static readonly string strTitleFmt = $@"{'-'.RepeatChar(26)} Example {{0}} {'-'.RepeatChar(26)}";
 
 
-		public static readonly ProjDef.Const.NodeNameWithPrefix nnwpExample = new(@"example", ProjDef.Const.NameSpaces.cmd);
+		public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpExample = new(@"example", ModuleDef.Const.NameSpaces.cmd);
 
 
-		public static readonly ProjDef.Const.NodeNameWithPrefix nnwpTitle = new(@"title", ProjDef.Const.NameSpaces.maml);
+		public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpTitle = new(@"title", ModuleDef.Const.NameSpaces.maml);
 
-		public static readonly ProjDef.Const.NodeNameWithPrefix nnwpCode = new(@"code", ProjDef.Const.NameSpaces.dev);
+		public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpCode = new(@"code", ModuleDef.Const.NameSpaces.dev);
 
-		public static readonly ProjDef.Const.NodeNameWithPrefix nnwpRemarks = new(@"remarks", ProjDef.Const.NameSpaces.dev);
+		public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpRemarks = new(@"remarks", ModuleDef.Const.NameSpaces.dev);
 	}
 
 
@@ -161,7 +161,7 @@ public class Example : Obj<Example>
 			System.Xml.XmlElement xeTitle = cmdletParent.CreateMamlElement(Const.nnwpTitle);
 			xeUs.AppendChild(xeTitle);
 
-			xtTitle = cmdletParent.projParent.OurMAML.CreateTextNode(Title);
+			xtTitle = cmdletParent.moduleParent.OurMAML.CreateTextNode(Title);
 			xeTitle.AppendChild(xtTitle);
 		}
 
@@ -169,7 +169,7 @@ public class Example : Obj<Example>
 			System.Xml.XmlElement xeCode = cmdletParent.CreateMamlElement(Const.nnwpCode);
 			xeUs.AppendChild(xeCode);
 
-			xtCode = cmdletParent.projParent.OurMAML.CreateTextNode(strCode);
+			xtCode = cmdletParent.moduleParent.OurMAML.CreateTextNode(strCode);
 			xeCode.AppendChild(xtCode);
 		}
 
@@ -178,10 +178,10 @@ public class Example : Obj<Example>
 			xeUs.AppendChild(xeRemarks);
 
 			{
-				System.Xml.XmlElement xeRemarksPara = cmdletParent.CreateMamlElement(ProjDef.Const.Elements.nnwpPara);
+				System.Xml.XmlElement xeRemarksPara = cmdletParent.CreateMamlElement(ModuleDef.Const.Elements.nnwpPara);
 				xeRemarks.AppendChild(xeRemarksPara);
 
-				xtRemarks = cmdletParent.projParent.OurMAML.CreateTextNode(strRemarks);
+				xtRemarks = cmdletParent.moduleParent.OurMAML.CreateTextNode(strRemarks);
 				xeRemarksPara.AppendChild(xtRemarks);
 			}
 		}

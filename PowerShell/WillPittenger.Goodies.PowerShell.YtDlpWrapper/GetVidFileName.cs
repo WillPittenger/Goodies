@@ -33,15 +33,24 @@ public class GetVidFileName : BaseVidCmdLet
 		=> WhatToObtain ?? [];
 
 	/// <inheritdoc/>
-	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDLpParams
+	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDlpParams
 		=> [@"--get-filename"];
+
+	protected override System.Collections.Generic.IReadOnlyDictionary<string, object>? PythonParams
+		=> new System.Collections.Generic.Dictionary<string, object>()
+			{
+				[@"forcefilename"] = true,
+				[@"noprogress"] = true,
+				[@"quiet"] = true,
+				[@"simulate"] = true,
+			};
+
 
 	/// <summary>
 	/// Writes the content received from the standard output stream to the pipeline.  yt-dlp only uses standard output for data it returns, in this case, the filenames of videos converted to <see cref="System.IO.FileInfo"/> instances.  It's hoped it will be one event per item.
 	/// </summary>
 	/// <param name="objSender">The sender of the event.  Ignored.</param>
 	/// <param name="e">The data needed, found in <see cref="System.Diagnostics.DataReceivedEventArgs.Data"/></param>
-
 	private void OnStdOutDataReceived(object objSender, System.Diagnostics.DataReceivedEventArgs e)
 	{
 		if(e.Data is string strData && strData.Length > 0)

@@ -1,4 +1,6 @@
-﻿// Ignore Spelling: Yt Dlp Vid gvi gifyd
+﻿// Ignore Spelling: Yt Dlp Vid gvi gifyd liststr
+
+using WillPittenger.Goodies.Tools.Ext;
 
 namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 
@@ -32,6 +34,7 @@ public class GetInfoFromYtDlp : BaseVidCmdLet
 
 		set;
 	}
+
 
 	/// <summary>
 	/// Infrastructure.  Not used by <see cref="GetInfoFromYtDlp"/> as it overrides <see cref="EndProcessing"/> further.  The base class never gets to call it.
@@ -93,20 +96,198 @@ public class GetInfoFromYtDlp : BaseVidCmdLet
 	/// <exception cref="System.Exception">yt-dlp didn't return any data</exception>
 	protected override void EndProcessing()
 	{
-		if(IsVerboseOn)
-			lliststrWhatToDownload.AddLast(@"--verbose");
+		Goodies.YtDlpWrapper.YtDlpWrapper yt = YtWrapper ?? new(Goodies.YtDlpWrapper.YtDlpWrapper.WhatToInit.exe);
 
-		System.Text.Json.JsonElement jsone = Goodies.YtDlpWrapper.YtDlpWrapper.InvokeYtDlpForJSON(LoadEntriesToo, TaskCompletionSound,
-			[..lliststrWhatToDownload, ..Opts.AllOpt]).RootOfData ?? throw new System.Exception(@"No data returned by yt-dlp");
+		if(yt.IsPythonReady)
+		{
+			int iParamNum = 0;
 
-		JSON.ObjBase jobData = JSON.ObjBase.Make(jsone);
+			foreach(string strCurURI in lliststrWhatToDownload)
+			{
+				iParamNum++;
 
-		if(jobData is JSON.Array jaData)
-			foreach(JSON.ObjBase jobjCurElement in jaData.Elements)
-				WriteObj(jobjCurElement);
-		else if(jobData is JSON.Obj joCurElement)
-			WriteObj(joCurElement);
+				System.Console.WriteLine(Rsrcs.strParamInfoProgressMsg.Fmt(@"Get-InfoFromYtDlp", iParamNum, strCurURI));
+
+				JSON.ObjBase job = yt.ExtractDataWithYtDlpViaPython(new(strCurURI), AllOpts, LoadEntriesToo, Looger, OnProgressUpdateFromYtDlp, OnPostProcessorUpdateFromYtDlp);
+				if(job is JSON.Array jaItems)
+					foreach(JSON.ObjBase jobCurChild in jaItems)
+						if(jobCurChild is JSON.Obj joCurChild)
+							WriteObject(Goodies.YtDlpWrapper.BaseObj.FromJSON(joCurChild));
+			}
+
+			TaskCompletionSound?.Play();
+		}
+		else if(yt.IsExeReady)
+		{
+			if(IsVerboseOn)
+				lliststrWhatToDownload.AddLast(@"--verbose");
+
+			System.Text.Json.JsonElement jsone = yt.InvokeYtDlpForJSON(LoadEntriesToo, null, [.. lliststrWhatToDownload, .. AllOpts.AllOpt]).RootOfData ?? throw new System.Exception(@"No data returned by yt-dlp");
+
+			JSON.ObjBase jobData = JSON.ObjBase.Make(jsone);
+
+			if(jobData is JSON.Array jaData)
+				foreach(JSON.ObjBase jobjCurElement in jaData.Elements)
+					WriteObj(jobjCurElement);
+			else if(jobData is JSON.Obj joCurElement)
+				WriteObj(joCurElement);
+			else
+				WriteWarning(@"yt-dlp returned data in an expected JSON object type.");
+		}
 		else
-			WriteWarning(@"yt-dlp returned data in an expected JSON object type.");
+			throw new System.InvalidOperationException(@"Unable to run yt-dlp");
 	}
+
+	protected override void OnProgressUpdateFromYtDlp(in System.IO.FileInfo? fileCur, in Goodies.YtDlpWrapper.YtDlpWrapper.ProgressStatuses status, in System.IO.FileInfo fileCurTemp, in long lDownLoadedBytes, in long? lTotalBytes, in long? lTotalEstimatedBytes, in System.TimeSpan? tsETA, in double? dblSpeed, in System.TimeSpan? tsElapsed, in long lFragmentIndex, in long lFragmentCnt, in JSON.Obj jobjOtherDataFields, in JSON.Obj? jobjInfoDict)
+	{
+		long? lActualSize = lTotalBytes is long
+			? lTotalBytes
+			: lTotalEstimatedBytes is long
+				? lTotalEstimatedBytes
+				: null;
+
+		if(lActualSize is long lSafeActualSize)
+			if(dblSpeed is double dblSafeSpeed)
+				System.Console.WriteLine
+				(
+					Rsrcs.strProgressMsg.Fmt
+					(
+						Rsrcs.strNA,
+						(double)lDownLoadedBytes / lSafeActualSize,
+						Tools.FileSizeUOM.SuggestUOM
+						(
+							lDownLoadedBytes,
+							!UseNonSiUnits,
+							out Tools.FileSizeUOM.Sizes sizeDownLoadedSuggested
+						).strAbbrev,
+						Tools.FileSizeUOM.Convert
+						(
+							lDownLoadedBytes,
+							Tools.FileSizeUOM.Sizes.@byte,
+							sizeDownLoadedSuggested
+						),
+						Tools.FileSizeUOM.SuggestUOM
+						(
+							lSafeActualSize,
+							!UseNonSiUnits,
+							out Tools.FileSizeUOM.Sizes sizeActualSuggested
+						).strAbbrev,
+						Tools.FileSizeUOM.Convert
+						(
+							lSafeActualSize,
+							Tools.FileSizeUOM.Sizes.@byte,
+							sizeActualSuggested
+						),
+						Tools.FileSizeUOM.SuggestUOM
+						(
+							dblSafeSpeed,
+							!UseNonSiUnits,
+							out Tools.FileSizeUOM.Sizes sizeSpeedSuggested
+						).strAbbrev,
+						Tools.FileSizeUOM.Convert
+						(
+							dblSafeSpeed,
+							Tools.FileSizeUOM.Sizes.@byte,
+							sizeSpeedSuggested
+						),
+						fileCurTemp.FullName
+					)
+				);
+			else
+				System.Console.WriteLine
+				(
+					Rsrcs.strProgressMsg.Fmt
+					(
+						Rsrcs.strNA,
+						(double)lDownLoadedBytes / lSafeActualSize,
+						Tools.FileSizeUOM.SuggestUOM
+						(
+							lDownLoadedBytes,
+							!UseNonSiUnits,
+							out Tools.FileSizeUOM.Sizes sizeDownLoadedSuggested
+						).strAbbrev,
+						Tools.FileSizeUOM.Convert
+						(
+							lDownLoadedBytes,
+							Tools.FileSizeUOM.Sizes.@byte,
+							sizeDownLoadedSuggested
+						),
+						Rsrcs.strNA,
+						string.Empty,
+						Rsrcs.strNA,
+						string.Empty,
+						fileCurTemp.FullName
+					)
+				);
+		else if(dblSpeed is double dblSafeSpeed)
+			System.Console.WriteLine
+			(
+				Rsrcs.strProgressMsg.Fmt
+				(
+					Rsrcs.strNA,
+					Rsrcs.strNA,
+					Tools.FileSizeUOM.SuggestUOM
+					(
+						lDownLoadedBytes,
+						!UseNonSiUnits,
+						out Tools.FileSizeUOM.Sizes sizeDownLoadedSuggestion
+					).strAbbrev,
+					Tools.FileSizeUOM.Convert
+					(
+						lDownLoadedBytes,
+						Tools.FileSizeUOM.Sizes.@byte,
+						sizeDownLoadedSuggestion
+					),
+					Rsrcs.strNA,
+					string.Empty,
+					Tools.FileSizeUOM.SuggestUOM
+					(
+						dblSafeSpeed,
+						!UseNonSiUnits,
+						out Tools.FileSizeUOM.Sizes sizeSpeedSuggested
+					).strAbbrev,
+					Tools.FileSizeUOM.Convert
+					(
+						dblSafeSpeed,
+						Tools.FileSizeUOM.Sizes.@byte,
+						sizeSpeedSuggested
+					),
+					fileCurTemp.FullName
+				)
+			);
+		else
+			System.Console.WriteLine
+			(
+				Rsrcs.strProgressMsg.Fmt
+				(
+					Rsrcs.strNA,
+					Rsrcs.strNA,
+					Tools.FileSizeUOM.SuggestUOM
+					(
+						lDownLoadedBytes,
+						!UseNonSiUnits,
+						out Tools.FileSizeUOM.Sizes sizeDownLoadedSuggestion
+					).strAbbrev,
+					Tools.FileSizeUOM.Convert
+					(
+						lDownLoadedBytes,
+						Tools.FileSizeUOM.Sizes.@byte,
+						sizeDownLoadedSuggestion
+					),
+					Rsrcs.strNA,
+					string.Empty,
+					Rsrcs.strNA,
+					string.Empty,
+					fileCurTemp.FullName
+				)
+			);
+	}
+
+	protected override void OnPostProcessorUpdateFromYtDlp(in string strPostProcessorName, in System.IO.FileInfo? fileCur, in Goodies.YtDlpWrapper.YtDlpWrapper.ProgressStatuses status, in JSON.Obj jobjOtherDataFields, in JSON.Obj jobjInfoDict)
+		=> System.Console.WriteLine
+			(
+				fileCur is System.IO.FileInfo fileSafeCur
+					? Rsrcs.strPostProcessorUpdateMsg.Fmt(strPostProcessorName, status.ToString(), fileSafeCur.FullName)
+					: Rsrcs.strPostProcessorUpdateMsgNoFile.Fmt(strPostProcessorName, status.ToString())
+			);
 }

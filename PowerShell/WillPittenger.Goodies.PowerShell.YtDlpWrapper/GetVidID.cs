@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: yt Dlp gvi gvid vid
+﻿// Ignore Spelling: yt Dlp gvi gvid vid liststr
 
 namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 
@@ -33,8 +33,17 @@ public class GetVidID : BaseVidCmdLet
 		=> WhatToObtain ?? [];
 
 	/// <inheritdoc/>
-	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDLpParams
+	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDlpParams
 		=> [@"--get-id"];
+
+	protected override System.Collections.Generic.IReadOnlyDictionary<string, object>? PythonParams
+		=> new System.Collections.Generic.Dictionary<string, object>()
+			{
+				[@"forceid"] = true,
+				[@"noprogress"] = true,
+				[@"quiet"] = true,
+				[@"simulate"] = true,
+			};
 
 
 	/// <summary>

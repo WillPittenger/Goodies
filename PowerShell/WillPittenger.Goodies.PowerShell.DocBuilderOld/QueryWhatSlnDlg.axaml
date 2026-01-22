@@ -1,0 +1,50 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:materialIcons="using:Material.Icons.Avalonia"
+				xmlns:local="using:WillPittenger.Goodies.PowerShell.DocBuilder"
+				mc:Ignorable="d"
+				x:Class="WillPittenger.Goodies.PowerShell.DocBuilder.QueryWhatSlnDlg"
+				x:DataType="{x:Type local:App}"
+				DataContext="{Binding Source={x:Static local:App.Instance}}"
+				BorderThickness="3"
+				CanResize="True"
+				FontFamily="Times New Roman"
+				MinHeight="600"
+				MinWidth="800"
+				Padding="5"
+				ShowActivated="true"
+				ShowInTaskbar="true"
+				SizeToContent="WidthAndHeight"
+				Title="What solution do you want to open?">
+	<StackPanel Orientation="Vertical"
+							Spacing="3">
+		<Button x:Name="btnBrowseForSln" Click="OnBrowseForSlnClicked">
+			<StackPanel Orientation="Horizontal"
+									Spacing="3">
+				<materialIcons:MaterialIcon Kind="FolderOpen"/><Label Content="Browse for solution…"/>
+			</StackPanel>
+		</Button>
+		<Separator/>
+		<ItemsControl ItemsSource="{Binding PrevSlnFilesByName.Values}">
+			<ItemsControl.DataTemplates>
+				<DataTemplate>
+					<Button Click="OnPrevFileClicked">
+						<StackPanel Orientation="Horizontal"
+												Spacing="3">
+							<materialIcons:MaterialIcon Kind="FileClockOutline"/><Label Content="{Binding FullName}"/>
+						</StackPanel>
+					</Button>
+				</DataTemplate>
+			</ItemsControl.DataTemplates>
+		</ItemsControl>
+		<Separator/>
+		<Button x:Name="btnExitApp" Click="OnExitAppClicked">
+			<StackPanel Orientation="Horizontal"
+									Spacing="3">
+				<materialIcons:MaterialIcon Kind="ExitRun"/><Label Content="Exit app"/>
+			</StackPanel>
+		</Button>
+	</StackPanel>
+</Window>

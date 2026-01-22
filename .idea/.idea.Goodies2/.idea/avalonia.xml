@@ -4,7 +4,13 @@
     <option name="projectPerEditor">
       <map>
         <entry key="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/App.axaml" value="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/WillPittenger.Goodies.PowerShell.DocBuilder.csproj" />
+        <entry key="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/CmdLetHelpEditorDlg.axaml" value="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/WillPittenger.Goodies.PowerShell.DocBuilder.csproj" />
         <entry key="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/MainWnd.axaml" value="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/WillPittenger.Goodies.PowerShell.DocBuilder.csproj" />
+        <entry key="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/ProjViewer.axaml" value="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/WillPittenger.Goodies.PowerShell.DocBuilder.csproj" />
+        <entry key="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/ProjViewerDlg.axaml" value="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/WillPittenger.Goodies.PowerShell.DocBuilder.csproj" />
+        <entry key="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/QueryWhatSlnDlg.axaml" value="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/WillPittenger.Goodies.PowerShell.DocBuilder.csproj" />
+        <entry key="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/TextEditorWithToolBarCtrl.axaml" value="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/WillPittenger.Goodies.PowerShell.DocBuilder.csproj" />
+        <entry key="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/TextEditorWithToolBarDlg.axaml" value="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/WillPittenger.Goodies.PowerShell.DocBuilder.csproj" />
       </map>
     </option>
   </component>

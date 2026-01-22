@@ -31,10 +31,10 @@ public class ParamSetDef
 	{
 		public static class Elements
 		{
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpSyntaxItem = new(@"syntaxItem", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpSyntaxItem = new(@"syntaxItem", ModuleDef.Const.NameSpaces.cmd);
 
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpName = new(@"name", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpName = new(@"name", ModuleDef.Const.NameSpaces.maml);
 		}
 	}
 
@@ -70,7 +70,7 @@ public class ParamSetDef
 		xeName = cmdletParent.CreateMamlElement(Const.Elements.nnwpName);
 		xeUs.AppendChild(xeName);
 
-		xeName.AppendChild(cmdletParent.projParent.OurMAML.CreateTextNode(cmdletParent.Name));
+		xeName.AppendChild(cmdletParent.moduleParent.OurMAML.CreateTextNode(cmdletParent.Name));
 
 
 		foreach(ParamDetailsDef paramddCur in mapAllContainedParamDetailsByParamName.Values)

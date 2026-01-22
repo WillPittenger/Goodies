@@ -50,16 +50,16 @@ public class InputOrOutput : Obj<InputOrOutput>
 	{
 		public static class Elements
 		{
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpInputType = new(@"inputType", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpInputType = new(@"inputType", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpRetVal = new(@"returnValue", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpRetVal = new(@"returnValue", ModuleDef.Const.NameSpaces.cmd);
 
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpDevType = new(@"type", ProjDef.Const.NameSpaces.dev);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpDevType = new(@"type", ModuleDef.Const.NameSpaces.dev);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpName = new(@"name", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpName = new(@"name", ModuleDef.Const.NameSpaces.maml);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpDesc = new(@"description", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpDesc = new(@"description", ModuleDef.Const.NameSpaces.maml);
 		}
 	}
 
@@ -128,6 +128,13 @@ public class InputOrOutput : Obj<InputOrOutput>
 		}
 	}
 
+	public bool IsFromAttr
+	{
+		get;
+
+		private set;
+	}
+
 	public System.Xml.XmlElement OurRoot
 		=> xeUs ?? throw new System.InvalidProgramException(@"This InputOrOutput instance isn't properly initialized.");
 
@@ -149,7 +156,7 @@ public class InputOrOutput : Obj<InputOrOutput>
 				System.Xml.XmlElement xeName = owner.CreateMamlElement(Const.Elements.nnwpName);
 				xeDevType.AppendChild(xeName);
 
-				xtTypeName = owner.projParent.OurMAML.CreateTextNode(strTypeName);
+				xtTypeName = owner.moduleParent.OurMAML.CreateTextNode(strTypeName);
 				xeName.AppendChild(xtTypeName);
 			}
 
@@ -158,10 +165,10 @@ public class InputOrOutput : Obj<InputOrOutput>
 				xeUs.AppendChild(xeDesc);
 
 				{
-					System.Xml.XmlElement xePara = owner.CreateMamlElement(ProjDef.Const.Elements.nnwpPara);
+					System.Xml.XmlElement xePara = owner.CreateMamlElement(ModuleDef.Const.Elements.nnwpPara);
 					xeDesc.AppendChild(xePara);
 
-					xtComment = owner.projParent.OurMAML.CreateTextNode(strComment);
+					xtComment = owner.moduleParent.OurMAML.CreateTextNode(strComment);
 					xePara.AppendChild(xtComment);
 				}
 			}
@@ -190,4 +197,11 @@ public class InputOrOutput : Obj<InputOrOutput>
 		TypeName = iooeWhatToSave.TypeName;
 		Comment = iooeWhatToSave.Comment;
 	}
+
+	internal DTO.InputOrOutputDTO ToDTO()
+		=> new(
+			TypeName,
+			Comment,
+			IsFromAttr
+		);
 }

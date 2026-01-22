@@ -1,46 +1,72 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>0.0.0.1</Version>
-    <Authors>Will Pittenger</Authors>
-    <Description>A tool for calling yt-dlp from .NET code.</Description>
-    <Copyright>©2025 Will Pittenger</Copyright>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <IncludeSymbols>True</IncludeSymbols>
-    <Configurations>Debug;Release;NoWindowsDebug;NoWindowsRelease</Configurations>
-  </PropertyGroup>
+	<PropertyGroup>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Version>0.0.0.1</Version>
+		<Authors>Will Pittenger</Authors>
+		<Description>A tool for calling yt-dlp from .NET code.</Description>
+		<Copyright>©2025 Will Pittenger</Copyright>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<IncludeSymbols>True</IncludeSymbols>
+		<Configurations>Debug;Release;NoWindowsDebug;NoWindowsRelease</Configurations>
+		<PlatformTarget>x64</PlatformTarget>
+		<WarningLevel>9999</WarningLevel>
+		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<WarningsAsErrors>$(WarningsAsErrors);NU1605;CS8618;CA2021;CS8524;CS8509;CS0108;CS0114;CS8604;CS8603</WarningsAsErrors>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <WarningLevel>9999</WarningLevel>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<TargetFramework>net9.0-windows</TargetFramework>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoWindowsDebug|AnyCPU'">
-    <WarningLevel>9999</WarningLevel>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoWindowsDebug|AnyCPU'">
+		<TargetFramework>net9.0</TargetFramework>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <WarningLevel>9999</WarningLevel>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<TargetFramework>net9.0-windows</TargetFramework>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoWindowsRelease|AnyCPU'">
-    <WarningLevel>9999</WarningLevel>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoWindowsRelease|AnyCPU'">
+		<TargetFramework>net9.0</TargetFramework>
+		<Optimize>True</Optimize>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WillPittenger.Goodies.Tools\WillPittenger.Goodies.Tools.csproj">
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="pythonnet" Version="3.0.5" PrivateAssets="all" />
+		<Reference Include="Python.Runtime">
+			<HintPath>..\libs\pythonnet.dll</HintPath>
+			<Private>True</Private>
+		</Reference>
+		<ProjectReference Include="..\WillPittenger.Goodies.JSON\WillPittenger.Goodies.JSON.csproj">
+			<Private>True</Private>
+			<CopyLocalSatelliteAssemblies>True</CopyLocalSatelliteAssemblies>
+		</ProjectReference>
+		<ProjectReference Include="..\WillPittenger.Goodies.Sounds\WillPittenger.Goodies.Sounds.csproj" />
+		<ProjectReference Include="..\WillPittenger.Goodies.Tools\WillPittenger.Goodies.Tools.csproj">
+			<Private>True</Private>
+		</ProjectReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Rsrcs.Designer.cs">
+	    <DependentUpon>Rsrcs.resx</DependentUpon>
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Rsrcs.resx">
+	    <LastGenOutput>Rsrcs.Designer.cs</LastGenOutput>
+	    <Generator>ResXFileCodeGenerator</Generator>
+	  </EmbeddedResource>
+	</ItemGroup>
 
 </Project>

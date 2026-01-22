@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: jsone yt dlp
+﻿// Ignore Spelling: jsone yt dlp uri
 
 using System.Linq;
 
@@ -11,15 +11,15 @@ public class Chan : BaseObj
 			: this(new System.Uri($"https://www.youtube.com/${strChanID}"), bLoadEntriesNow)
 			=> mapAllKnownChan[strChanID] = this;
 
-		public Chan(in System.Uri uriWhichChan, in bool bLoadEntriesNow = false)
-			: this(YtDlpWrapper.InvokeYtDlpForJSON(bLoadEntriesNow, null, astrParams: uriWhichChan.AbsolutePath).RootOfData
-				?? throw new System.InvalidOperationException("Failed to get data from yt-dlp"))
+		public Chan(in System.Uri uriWhichChan, in bool bLoadEntriesNow = false, YtDlpWrapper? ytWrapperToUse = null)
+			: this((ytWrapperToUse ?? new(YtDlpWrapper.WhatToInit.exe)).InvokeYtDlpForJSON(bLoadEntriesNow, null, astrParams: uriWhichChan.AbsolutePath).RootOfData ?? throw new System.InvalidOperationException("Failed to get data from yt-dlp"))
 			=> mapAllKnownChan[strID] = this;
 
 		public Chan(in System.Text.Json.JsonElement jsoneChanInfo) : this((JSON.Obj)JSON.ObjBase.Make(jsoneChanInfo))
 			=> mapAllKnownChan[strID] = this;
 
-		public Chan(in JSON.Obj joChanInfo) : base(joChanInfo)
+		public Chan(in JSON.Obj joChanInfo)
+			: base(joChanInfo)
 			=> mapAllKnownChan[strID] = this;
 
 		~Chan()

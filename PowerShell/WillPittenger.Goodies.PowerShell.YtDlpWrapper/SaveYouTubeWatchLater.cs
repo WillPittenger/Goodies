@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: yt Dlp ytwatchlater sytwl
+﻿// Ignore Spelling: yt Dlp ytwatchlater sytwl liststr
 
 namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 
@@ -26,7 +26,7 @@ public class SaveYouTubeWatchLater : BaseVidCmdLet
 		=> FileNameFmt ??= SessionState.PSVariable.Get(@"YouTubeWatchLaterOutputTemplate").Value as string;
 
 	/// <inheritdoc/>
-	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDLpParams
+	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDlpParams
 		=> IsWhatIfOn
 			? [@"--print", @"filename"]
 			: [];

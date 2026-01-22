@@ -9,11 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PowerShell", "PowerShell", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.PowerShell.Sounds", "PowerShell\WillPittenger.Goodies.PowerShell.Sounds\WillPittenger.Goodies.PowerShell.Sounds.csproj", "{6F068BE6-02A6-4875-9493-D948B00741A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.JSON", "WillPittenger.Goodies.JSON\WillPittenger.Goodies.JSON.csproj", "{DC29A48F-A2A4-4633-ABCA-BFAFFE45DFD6}"
-	ProjectSection(ProjectDependencies) = postProject
-		{EA8E3805-1838-4AFC-9513-91FCC9C9DAB5} = {EA8E3805-1838-4AFC-9513-91FCC9C9DAB5}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.Tools", "WillPittenger.Goodies.Tools\WillPittenger.Goodies.Tools.csproj", "{EA8E3805-1838-4AFC-9513-91FCC9C9DAB5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.PowerShell.JSON", "PowerShell\WillPittenger.Goodies.PowerShell.JSON\WillPittenger.Goodies.PowerShell.JSON.csproj", "{07B6FAA6-8234-41B6-972A-2C193CEEBB39}"
@@ -29,6 +24,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.YtDlpWrapper", "WillPittenger.Goodies.YtDlpWrapper\WillPittenger.Goodies.YtDlpWrapper.csproj", "{17CD95F3-4B4E-4122-8B60-940B02FF6CFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.PowerShell.DocBuilder", "PowerShell\WillPittenger.Goodies.PowerShell.DocBuilder\WillPittenger.Goodies.PowerShell.DocBuilder.csproj", "{F0993604-C4F3-43FB-8BA9-26647899A085}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.PowerShell.Data", "PowerShell\WillPittenger.Goodies.PowerShell.Data\WillPittenger.Goodies.PowerShell.Data.csproj", "{58178E40-4F6C-4B27-8F16-29D87F6A92E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.Data", "WillPittenger.Goodies.Data\WillPittenger.Goodies.Data.csproj", "{E0852C68-72A9-47EB-8041-5F11D001E1A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WillPittenger.Goodies.JSON", "WillPittenger.Goodies.JSON\WillPittenger.Goodies.JSON.csproj", "{921CDCAA-1FE6-E723-CF51-48EDBE86145D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,12 +55,6 @@ Global
 		{6F068BE6-02A6-4875-9493-D948B00741A1}.NoWindowsRelease|Any CPU.Build.0 = NoWindowsRelease|Any CPU
 		{6F068BE6-02A6-4875-9493-D948B00741A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F068BE6-02A6-4875-9493-D948B00741A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC29A48F-A2A4-4633-ABCA-BFAFFE45DFD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC29A48F-A2A4-4633-ABCA-BFAFFE45DFD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC29A48F-A2A4-4633-ABCA-BFAFFE45DFD6}.NoWindowsDebug|Any CPU.ActiveCfg = NoWindowsDebug|Any CPU
-		{DC29A48F-A2A4-4633-ABCA-BFAFFE45DFD6}.NoWindowsRelease|Any CPU.ActiveCfg = NoWindowsRelease|Any CPU
-		{DC29A48F-A2A4-4633-ABCA-BFAFFE45DFD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC29A48F-A2A4-4633-ABCA-BFAFFE45DFD6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA8E3805-1838-4AFC-9513-91FCC9C9DAB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EA8E3805-1838-4AFC-9513-91FCC9C9DAB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA8E3805-1838-4AFC-9513-91FCC9C9DAB5}.NoWindowsDebug|Any CPU.ActiveCfg = NoWindowsDebug|Any CPU
@@ -92,6 +87,30 @@ Global
 		{F0993604-C4F3-43FB-8BA9-26647899A085}.NoWindowsRelease|Any CPU.Build.0 = Release|Any CPU
 		{F0993604-C4F3-43FB-8BA9-26647899A085}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0993604-C4F3-43FB-8BA9-26647899A085}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58178E40-4F6C-4B27-8F16-29D87F6A92E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58178E40-4F6C-4B27-8F16-29D87F6A92E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58178E40-4F6C-4B27-8F16-29D87F6A92E1}.NoWindowsDebug|Any CPU.ActiveCfg = Release|Any CPU
+		{58178E40-4F6C-4B27-8F16-29D87F6A92E1}.NoWindowsDebug|Any CPU.Build.0 = Release|Any CPU
+		{58178E40-4F6C-4B27-8F16-29D87F6A92E1}.NoWindowsRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{58178E40-4F6C-4B27-8F16-29D87F6A92E1}.NoWindowsRelease|Any CPU.Build.0 = Release|Any CPU
+		{58178E40-4F6C-4B27-8F16-29D87F6A92E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58178E40-4F6C-4B27-8F16-29D87F6A92E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0852C68-72A9-47EB-8041-5F11D001E1A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0852C68-72A9-47EB-8041-5F11D001E1A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0852C68-72A9-47EB-8041-5F11D001E1A7}.NoWindowsDebug|Any CPU.ActiveCfg = Release|Any CPU
+		{E0852C68-72A9-47EB-8041-5F11D001E1A7}.NoWindowsDebug|Any CPU.Build.0 = Release|Any CPU
+		{E0852C68-72A9-47EB-8041-5F11D001E1A7}.NoWindowsRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{E0852C68-72A9-47EB-8041-5F11D001E1A7}.NoWindowsRelease|Any CPU.Build.0 = Release|Any CPU
+		{E0852C68-72A9-47EB-8041-5F11D001E1A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0852C68-72A9-47EB-8041-5F11D001E1A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{921CDCAA-1FE6-E723-CF51-48EDBE86145D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{921CDCAA-1FE6-E723-CF51-48EDBE86145D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{921CDCAA-1FE6-E723-CF51-48EDBE86145D}.NoWindowsDebug|Any CPU.ActiveCfg = NoWindowsDebug|Any CPU
+		{921CDCAA-1FE6-E723-CF51-48EDBE86145D}.NoWindowsDebug|Any CPU.Build.0 = NoWindowsDebug|Any CPU
+		{921CDCAA-1FE6-E723-CF51-48EDBE86145D}.NoWindowsRelease|Any CPU.ActiveCfg = NoWindowsRelease|Any CPU
+		{921CDCAA-1FE6-E723-CF51-48EDBE86145D}.NoWindowsRelease|Any CPU.Build.0 = NoWindowsRelease|Any CPU
+		{921CDCAA-1FE6-E723-CF51-48EDBE86145D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{921CDCAA-1FE6-E723-CF51-48EDBE86145D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +120,7 @@ Global
 		{07B6FAA6-8234-41B6-972A-2C193CEEBB39} = {4E6EEBAD-8EA5-4328-834A-6102BBDB4944}
 		{60B7BDC6-0C24-43EF-8CED-998D0AA85E92} = {4E6EEBAD-8EA5-4328-834A-6102BBDB4944}
 		{F0993604-C4F3-43FB-8BA9-26647899A085} = {4E6EEBAD-8EA5-4328-834A-6102BBDB4944}
+		{58178E40-4F6C-4B27-8F16-29D87F6A92E1} = {4E6EEBAD-8EA5-4328-834A-6102BBDB4944}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5F185BCE-BFF6-49B9-B1A7-2CB5A7C8A2B1}

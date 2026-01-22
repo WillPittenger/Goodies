@@ -1,7 +1,5 @@
 ﻿// Ignore Spelling: yt Dlp gydv
 
-using System;
-
 namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 
 /// <summary>
@@ -10,7 +8,7 @@ namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 [System.Management.Automation.Alias(@"gydv")]
 [System.Management.Automation.OutputType(typeof(string))]
 [System.Management.Automation.Cmdlet(System.Management.Automation.VerbsCommon.Get, @"YtDlpVersion")]
-public class GetYtDlpVersion : System.Management.Automation.Cmdlet
+public class GetYtDlpVersion : BaseCmdLet
 {
 	/// <summary>
 	/// This is where we call yt-dlp.  We get notified of the result via <see cref="OnStdOutDataReceived(object, System.Diagnostics.DataReceivedEventArgs)"/>.  If yt-dlp writes to the Standard Error stream, that results in a call to <see cref="OnStdErrDataReceived(object, System.Diagnostics.DataReceivedEventArgs)"/> which writes that data to the console.
@@ -19,7 +17,7 @@ public class GetYtDlpVersion : System.Management.Automation.Cmdlet
 	{
 		base.EndProcessing();
 
-		Goodies.YtDlpWrapper.YtDlpWrapper.InvokeYtDlp(null, OnStdOutDataReceived, OnStdErrDataReceived, @"--version", @"--no-cookies-from-browser", @"--no-cookies");
+		(YtWrapper ?? new(Goodies.YtDlpWrapper.YtDlpWrapper.WhatToInit.exe)).InvokeYtDlp(null, OnStdOutDataReceived, OnStdErrDataReceived, @"--version", @"--no-cookies-from-browser", @"--no-cookies");
 	}
 
 
@@ -42,6 +40,6 @@ public class GetYtDlpVersion : System.Management.Automation.Cmdlet
 	private void OnStdErrDataReceived(object objSender, System.Diagnostics.DataReceivedEventArgs e)
 	{
 		if(e.Data is string strData)
-			Console.WriteLine(strData);
+			System.Console.WriteLine(strData);
 	}
 }

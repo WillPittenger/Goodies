@@ -1,7 +1,6 @@
 ﻿// Ignore Spelling: Vid jsone Codec
 
 using System.Linq;
-using System.Reflection.Metadata;
 
 namespace WillPittenger.Goodies.YtDlpWrapper;
 
@@ -53,11 +52,8 @@ public class Vid : Playable
 
 			private static readonly System.Collections.Generic.SortedDictionary<string, FmtDef> mapAllFmtsByID = [];
 
-			private FmtDef(in double? dblAvgBitRate, in string? strAudioCodec, in double? dblAspectRatio, in string? strAudioExt, in long? lColumns, in string? strExt,
-				in long? lFileSizeApprox, in string? strName, in string strID, in string? strNote, in double? dblFramesPerSec, in System.Collections.Generic
-				.IReadOnlyList<Fragment> listFragments, in long? lHeight, in System.Collections.Generic.IReadOnlyList<HttpHeader> listHttpHeaders, in string? strProtocol,
-				in string? strResolution, in long? lRows, in double? dblTotalBitRate, in System.Uri? uri, in double? dblVidBitRate, in string? strVidCodec, in string?
-				strVidExt, in long? lWidth)
+			private FmtDef(in double? dblAvgBitRate, in string? strAudioCodec, in double? dblAspectRatio, in string? strAudioExt, in long? lColumns, in string? strExt, in long? lFileSizeApprox, in string? strName, in string strID, in string? strNote, in double? dblFramesPerSec, in System.Collections.Generic
+				.IReadOnlyList<Fragment> listFragments, in long? lHeight, in System.Collections.Generic.IReadOnlyList<HttpHeader> listHttpHeaders, in string? strProtocol, in string? strResolution, in long? lRows, in double? dblTotalBitRate, in System.Uri? uri, in double? dblVidBitRate, in string? strVidCodec, in string? strVidExt, in long? lWidth)
 			{
 				mapAllFmtsByID[strID] = this;
 
@@ -557,7 +553,7 @@ public class Vid : Playable
 				);
 
 			if(joRootWithUpdatedInfo.Values[YtDlpWrapper.KnownYtDlpFields.Vid.fieldChapterList.strName].val.objVal is JSON.Array jaChapterList)
-				Chapters = new System.Collections.Generic.List<Chapter>(jaChapterList.Elements.Cast<JSON.Obj>()
+				Chapters = [.. jaChapterList.Elements.Cast<JSON.Obj>()
 					.Where(joCurChapter
 						=> joCurChapter != null)
 					.Select(joCurChapter
@@ -567,8 +563,7 @@ public class Vid : Playable
 							(string?)joCurChapter.Values[YtDlpWrapper.KnownYtDlpFields.Vid.Chapter.fieldTitle.strName].val.objVal ?? "",
 							new(0, 0, (int)((long?)joCurChapter.Values[YtDlpWrapper.KnownYtDlpFields.Vid.Chapter.fieldEndTime.strName].val.objVal ?? 0))
 						)
-					)
-				);
+					)];
 			
 			CommentCnt = (long?)joRootWithUpdatedInfo.Values[YtDlpWrapper.KnownYtDlpFields.Vid.fieldCommentCnt.strName].val.objVal;
 

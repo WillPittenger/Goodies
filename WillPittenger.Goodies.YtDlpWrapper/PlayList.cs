@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: jsone
+﻿// Ignore Spelling: jsone uri
 
 using System.Linq;
 
@@ -23,7 +23,8 @@ public class PlayList : Playable
 				Update();
 		}
 
-		public PlayList(in System.Text.Json.JsonElement jsonePlayListInfo) : base((JSON.Obj)JSON.ObjBase.Make(jsonePlayListInfo))
+		public PlayList(in System.Text.Json.JsonElement jsonePlayListInfo)
+			: base((JSON.Obj)JSON.ObjBase.Make(jsonePlayListInfo))
 			=> mapAllKnownPlayListsByID[strID] = this;
 
 		public PlayList(in JSON.Obj joPlayListInfo) : base(joPlayListInfo)
@@ -36,7 +37,7 @@ public class PlayList : Playable
 	#region Members
 		private readonly System.Collections.Generic.SortedDictionary<string, Playable> mapEntriesByID = [];
 
-		private System.Collections.Generic.List<Playable> listEntriesByIndex = [];
+		private readonly System.Collections.Generic.List<Playable> listEntriesByIndex = [];
 
 		private static readonly System.Collections.Generic.SortedDictionary<string, PlayList> mapAllKnownPlayListsByID = [];
 	#endregion

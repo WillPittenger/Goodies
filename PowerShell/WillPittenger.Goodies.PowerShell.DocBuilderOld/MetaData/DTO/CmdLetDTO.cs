@@ -3,6 +3,7 @@
 namespace WillPittenger.Goodies.PowerShell.DocBuilder.MetaData.DTO;
 
 [System.Xml.Serialization.XmlRoot(ElementName = @"Cmdlet")]
+[System.Xml.Serialization.XmlType(@"Cmdlet")]
 internal record CmdLetDTO : AbstractDTO
 {
 	public CmdLetDTO()

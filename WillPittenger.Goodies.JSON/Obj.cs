@@ -14,6 +14,13 @@ public class Obj : ObjBase, System.Collections.Generic.IEnumerable<NamedVal>, Sy
 	.INotifyCollectionChanged
 {
 	/// <summary>
+	/// Creates a blank <see cref="Obj"/>.
+	/// </summary>
+	public Obj()
+	{
+	}
+
+	/// <summary>
 	/// Constructs a <see cref="Obj"/> instance using the specified parsed JSON.
 	/// </summary>
 	/// <param name="jsoneProperty">This is the JSON object to convert.  This is expected to be an instance of <see cref="System.Text.Json.JsonProperty"/>.
@@ -100,7 +107,7 @@ public class Obj : ObjBase, System.Collections.Generic.IEnumerable<NamedVal>, Sy
 	/// <param name="strFieldName">The name of the new field</param>
 	/// <param name="objNewVal">The value to use.  This can be <see langword="null"/>.</param>
 	/// <exception cref="System.InvalidOperationException">The field name isn't unique.</exception>
-	public void Add(in string strFieldName,  in object? objNewVal)
+	public void Add(in string strFieldName, in object? objNewVal)
 	{
 		if(values.ContainsKey(strFieldName))
 			throw new System.InvalidOperationException($"The object already has a field named “${strFieldName}”.");
@@ -123,6 +130,20 @@ public class Obj : ObjBase, System.Collections.Generic.IEnumerable<NamedVal>, Sy
 		values[nvNew.strName] = nvNew;
 
 		CollectionChanged?.Invoke(this, new(System.Collections.Specialized.NotifyCollectionChangedAction.Add, nvNew));
+	}
+
+	/// <summary>
+	/// Gets or sets a values with a specific name.
+	/// </summary>
+	/// <param name="strWhichEntry">Pass the value you want to retrieve or change.</param>
+	/// <returns>The requested property.</returns>
+	public object? this[in string strWhichEntry]
+	{
+		get
+			=> values[strWhichEntry];
+
+		set
+			=> values[strWhichEntry] = new(strWhichEntry, value);
 	}
 
 	/// <summary>

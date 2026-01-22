@@ -15,6 +15,13 @@ public class Array : ObjBase, System.Collections.Generic.IEnumerable<ObjBase>, S
 	.INotifyCollectionChanged
 {
 	/// <summary>
+	/// Constructs an empty <see cref="Array"/>.
+	/// </summary>
+	public Array()
+	{
+	}
+
+	/// <summary>
 	/// Constructs a <see cref="Array"/> instance based on a <see cref="System.Text.Json.JsonElement"/> instance.
 	/// </summary>
 	/// <param name="jsoneProperty">The property to convert.</param>

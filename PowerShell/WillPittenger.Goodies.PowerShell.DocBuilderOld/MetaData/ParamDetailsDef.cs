@@ -18,7 +18,7 @@ public class ParamDetailsDef : Obj<ParamDetailsDef>
 			? null
 			: pattr.Position;
 
-		owner.owner.RegisterParameSetDetails(this);
+		owner.owner.RegisterParamSetDetails(this);
 	}
 
 	internal ParamDetailsDef(in ParamDef owner, in DTO.ParamDetailsDTO dto)
@@ -31,7 +31,7 @@ public class ParamDetailsDef : Obj<ParamDetailsDef>
 		HelpText = dto.HelpText;
 		Pos = dto.Pos;
 
-		owner.owner.RegisterParameSetDetails(this);
+		owner.owner.RegisterParamSetDetails(this);
 	}
 
 	internal ParamDetailsDef(in ParamDetailsDef paramddCopyThis)

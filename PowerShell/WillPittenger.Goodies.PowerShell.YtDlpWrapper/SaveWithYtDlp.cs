@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: yt Dlp swyd
+﻿// Ignore Spelling: yt Dlp swyd liststr
 
 namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 
@@ -32,7 +32,7 @@ public class SaveWithYtDlp : BaseVidCmdLet
 		=> WhatToDownLoad ?? [];
 
 	/// <inheritdoc/>
-	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDLpParams
+	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDlpParams
 		=> IsWhatIfOn
 			? [@"--simulate", @"--print", @"filename"]
 			: [];

@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: yt Dlp gvth
+﻿// Ignore Spelling: yt Dlp gvth Vid
 
 namespace WillPittenger.Goodies.PowerShell.YtDlpWrapper;
 
@@ -34,8 +34,17 @@ public class GetVidThumb : BaseVidCmdLet
 		=> WhatToObtain ?? [];
 
 	/// <inheritdoc/>
-	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDLpParams
+	protected override System.Collections.Generic.IEnumerable<string> AdditionalYtDlpParams
 		=> [@"--get-thumbnail"];
+
+	protected override System.Collections.Generic.IReadOnlyDictionary<string, object>? PythonParams
+		=> new System.Collections.Generic.Dictionary<string, object>()
+			{
+				[@"forcethumbnail"] = true,
+				[@"noprogress"] = true,
+				[@"quiet"] = true,
+				[@"simulate"] = true,
+			};
 
 
 	/// <summary>
@@ -61,4 +70,5 @@ public class GetVidThumb : BaseVidCmdLet
 		else
 			WriteObject(null);
 	}
+
 }

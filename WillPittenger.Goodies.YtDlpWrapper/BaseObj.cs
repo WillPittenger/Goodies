@@ -24,7 +24,20 @@ public abstract class BaseObj
 	#endregion
 
 	#region Members
-	public readonly string strID;
+		public readonly string strID;
+
+
+		private static System.Collections.Generic.SortedDictionary<string, System.Func<JSON.Obj, BaseObj>> mapTypeNameToConstructor = new()
+			{
+				[@"chan"] = (joInput)
+					=> new Chan(joInput),
+
+				[@"playlist"] = (joInput)
+					=> new PlayList(joInput),
+
+				[@"video"] = (joInput)
+					=> new Vid(joInput),
+			};
 	#endregion
 
 	#region Properties
@@ -164,15 +177,22 @@ public abstract class BaseObj
 	#endregion
 
 	#region Methods
-		public void Update(JSON.Obj? joInfo = null, in bool bUpdatePlayListsEntriesToo = false)
+		public static BaseObj FromJSON(JSON.Obj joInput)
+			=> joInput.Values[YtDlpWrapper.KnownYtDlpFields.field_ItemType.strName].val.objVal is string strTypeName
+				? mapTypeNameToConstructor[strTypeName](joInput)
+				: throw new System.InvalidOperationException(@"Unknown JSON object in data from yt-dlp");
+
+		public void Update(JSON.Obj? joInfo = null, in bool bUpdatePlayListsEntriesToo = false, YtDlpWrapper? ytWrapperToUse = null)
 		{
-			joInfo ??= (JSON.Obj)JSON.ObjBase.Make(YtDlpWrapper.InvokeYtDlpForJSON(bUpdatePlayListsEntriesToo, null, UpdateURL.AbsoluteUri).RootOfData
-				?? throw new System.InvalidOperationException("Failed to get JSON data from yt-dlp"));
+			ytWrapperToUse ??= new(YtDlpWrapper.WhatToInit.both);
+
+			joInfo ??= (JSON.Obj)JSON.ObjBase.Make(ytWrapperToUse.InvokeYtDlpForJSON(bUpdatePlayListsEntriesToo, null, UpdateURL.AbsoluteUri).RootOfData
+				?? throw new System.InvalidOperationException(@"Failed to get JSON data from yt-dlp"));
 
 			if(joInfo.Values[ExpectedIdField.strName].val.objVal is string strFoundId && strFoundId != strID)
-				throw new System.InvalidOperationException($"The object “{strFoundId}” doesn't match the expected “{strID}”.  Unable to update “{strID}”!");
+				throw new System.InvalidOperationException(@$"The object “{strFoundId}” doesn't match the expected “{strID}”.  Unable to update “{strID}”!");
 			if(joInfo.Values[YtDlpWrapper.KnownYtDlpFields.field_ItemType.strName].val.objVal is string strItemType && strItemType != ExpectedObjType)
-				throw new System.InvalidOperationException($"Unable to update “{strID}” as the data available isn't for a {ExpectedObjType}");
+				throw new System.InvalidOperationException(@$"Unable to update “{strID}” as the data available isn't for a {ExpectedObjType}");
 
 
 			Desc = (string?)joInfo.Values[YtDlpWrapper.KnownYtDlpFields.fieldDesc.strName].val.objVal;
@@ -191,7 +211,7 @@ public abstract class BaseObj
 			ExtractorKey = (string?)joInfo.Values[YtDlpWrapper.KnownYtDlpFields.fieldExtractorKey.strName].val.objVal;
 
 			if(joInfo.Values[YtDlpWrapper.KnownYtDlpFields.Playlists.fieldModifiedDate.strName].val.objVal is string strModifiedDate)
-				ModifiedDate = System.DateOnly.ParseExact(strModifiedDate, "yyyyMMdd");
+				ModifiedDate = System.DateOnly.ParseExact(strModifiedDate, @"yyyyMMdd");
 
 			if(joInfo.Values[YtDlpWrapper.KnownYtDlpFields.fieldOriginalURL.strName].val.objVal is string strOriginalURL)
 				OriginalURL = new(strOriginalURL);

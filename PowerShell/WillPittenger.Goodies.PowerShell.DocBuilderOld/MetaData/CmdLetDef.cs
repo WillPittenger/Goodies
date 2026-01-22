@@ -9,9 +9,9 @@ using Tools.Ext;
 [System.ComponentModel.ImmutableObject(true)]
 public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.INotifyCollectionChanged
 {
-	public CmdLetDef(in ProjDef projParent, in System.Type typeForCmdLet)
+	public CmdLetDef(in ModuleDef moduleParent, in System.Type typeForCmdLet)
 	{
-		this.projParent = projParent;
+		this.moduleParent = moduleParent;
 
 
 		if(!typeForCmdLet.IsDerivedFrom(typeof(System.Management.Automation.Cmdlet)))
@@ -48,15 +48,17 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 				}
 		}
 
-		JsonDocFile = new(System.IO.Path.Combine(projParent.DocsDir.FullName, $@"{Verb}-{Noun}.json"));
+		JsonDocFile = moduleParent.DocsDir is null
+			? new("invalid.json")
+			: new(System.IO.Path.Combine(moduleParent.DocsDir.FullName, $@"{Verb}-{Noun}.json"));
 
 
 		InitMAML();
 	}
 
-	internal CmdLetDef(in ProjDef projParent, in DTO.CmdLetDTO dto)
+	internal CmdLetDef(in ModuleDef moduleParent, in DTO.CmdLetDTO dto)
 	{
-		this.projParent = projParent;
+		this.moduleParent = moduleParent;
 		typeForCmdLet = dto.TypeForCmdLet;
 
 		Verb = dto.Verb;
@@ -91,7 +93,9 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 		setAllRelatedLinks.UnionWith(dto.AllRelatedLinks);
 
 
-		JsonDocFile = new(System.IO.Path.Combine(projParent.DocsDir.FullName, $@"{Verb}-{Noun}.json"));
+		JsonDocFile = moduleParent.DocsDir is null
+			? new("invalid.json")
+			: new(System.IO.Path.Combine(moduleParent.DocsDir.FullName, $@"{Verb}-{Noun}.json"));
 
 
 		InitMAML();
@@ -102,41 +106,41 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 	{
 		public static class Elements
 		{
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpCmd = new(@"command", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpCmd = new(@"command", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpDetails = new(@"details", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpDetails = new(@"details", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpName = new(@"name", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpName = new(@"name", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpVerb = new(@"verb", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpVerb = new(@"verb", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpNoun = new(@"noun", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpNoun = new(@"noun", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpSynopsis = new(@"description", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpSynopsis = new(@"description", ModuleDef.Const.NameSpaces.maml);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpDesc = new(@"description", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpDesc = new(@"description", ModuleDef.Const.NameSpaces.maml);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpSyntax = new(@"syntax", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpSyntax = new(@"syntax", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpParams = new(@"parameters", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpParams = new(@"parameters", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpInputTypes = new(@"inputTypes", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpInputTypes = new(@"inputTypes", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpOutputTypes = new(@"returnValues", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpOutputTypes = new(@"returnValues", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpAlertSet = new(@"alertSet", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpAlertSet = new(@"alertSet", ModuleDef.Const.NameSpaces.maml);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpOneAlert = new(@"alert", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpOneAlert = new(@"alert", ModuleDef.Const.NameSpaces.maml);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpExamples = new(@"examples", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpExamples = new(@"examples", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpRelatedLinks = new(@"relatedLinks", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpRelatedLinks = new(@"relatedLinks", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpNavLink = new(@"navigationLink", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpNavLink = new(@"navigationLink", ModuleDef.Const.NameSpaces.maml);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpLinkText = new(@"linkText", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpLinkText = new(@"linkText", ModuleDef.Const.NameSpaces.maml);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpURI = new(@"uri", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpURI = new(@"uri", ModuleDef.Const.NameSpaces.maml);
 		}
 	}
 
@@ -157,7 +161,7 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 	public event DFieldChanged<string>? evtNotesChanged;
 
 
-	public readonly ProjDef projParent;
+	public readonly ModuleDef moduleParent;
 
 	private readonly System.Type typeForCmdLet;
 
@@ -178,7 +182,7 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 	private string strNotes = string.Empty;
 
 	private System.Collections.Generic.SortedSet<string> setAllRelatedLinks = [];
-	
+
 	private System.Xml.XmlElement? xeUs;
 
 	private System.Xml.XmlText? xtSynopsis;
@@ -219,6 +223,9 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 		private set;
 	}
 
+	public System.Collections.Generic.IReadOnlyDictionary<string, ParamDef> AllParameters
+		=> mapParamsForCmdLet;
+
 	public System.Collections.Generic.IReadOnlyDictionary<string, ParamSetDef> AllParamSetDetails
 		=> mapParamSetByName;
 
@@ -258,6 +265,9 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 			}
 		}
 	}
+
+	public bool IsHelpStarted
+		=> strDesc != string.Empty || strNotes != string.Empty || strSynopsis != string.Empty;
 
 	public string Desc
 	{
@@ -324,21 +334,21 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 				System.Xml.XmlElement xeName = CreateMamlElement(Const.Elements.nnwpName);
 				xeDetails.AppendChild(xeName);
 
-				xeDetails.AppendChild(projParent.OurMAML.CreateTextNode(Name));
+				xeDetails.AppendChild(moduleParent.OurMAML.CreateTextNode(Name));
 			}
 
 			{
 				System.Xml.XmlElement xeVerb = CreateMamlElement(Const.Elements.nnwpVerb);
 				xeDetails.AppendChild(xeVerb);
 
-				xeVerb.AppendChild(projParent.OurMAML.CreateTextNode(Verb));
+				xeVerb.AppendChild(moduleParent.OurMAML.CreateTextNode(Verb));
 			}
 
 			{
 				System.Xml.XmlElement xeNoun = CreateMamlElement(Const.Elements.nnwpNoun);
 				xeDetails.AppendChild(xeNoun);
 
-				xeNoun.AppendChild(projParent.OurMAML.CreateTextNode(Noun));
+				xeNoun.AppendChild(moduleParent.OurMAML.CreateTextNode(Noun));
 			}
 
 			{
@@ -346,10 +356,10 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 				xeDetails.AppendChild(xeSynopsis);
 
 				{
-					System.Xml.XmlElement xeSynopsisPara = CreateMamlElement(ProjDef.Const.Elements.nnwpPara);
+					System.Xml.XmlElement xeSynopsisPara = CreateMamlElement(ModuleDef.Const.Elements.nnwpPara);
 					xeSynopsis.AppendChild(xeSynopsisPara);
 
-					xtSynopsis = projParent.OurMAML.CreateTextNode(strSynopsis);
+					xtSynopsis = moduleParent.OurMAML.CreateTextNode(strSynopsis);
 					xeSynopsisPara.AppendChild(xtSynopsis);
 				}
 			}
@@ -360,10 +370,10 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 			xeUs.AppendChild(xeDesc);
 
 			{
-				System.Xml.XmlElement xeDescPara = CreateMamlElement(ProjDef.Const.Elements.nnwpPara);
+				System.Xml.XmlElement xeDescPara = CreateMamlElement(ModuleDef.Const.Elements.nnwpPara);
 				xeDesc.AppendChild(xeDescPara);
 
-				xtDesc = projParent.OurMAML.CreateTextNode(strDesc);
+				xtDesc = moduleParent.OurMAML.CreateTextNode(strDesc);
 				xeDescPara.AppendChild(xtDesc);
 			}
 		}
@@ -417,10 +427,10 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 			xeNote.AppendChild(xeNoteAlert);
 
 			{
-				System.Xml.XmlElement xeNoteAlertPara = CreateMamlElement(ProjDef.Const.Elements.nnwpPara);
+				System.Xml.XmlElement xeNoteAlertPara = CreateMamlElement(ModuleDef.Const.Elements.nnwpPara);
 				xeNoteAlert.AppendChild(xeNoteAlertPara);
 
-				xtNote = projParent.OurMAML.CreateTextNode(strNotes);
+				xtNote = moduleParent.OurMAML.CreateTextNode(strNotes);
 				xeNoteAlertPara.AppendChild(xtNote);
 			}
 		}
@@ -449,7 +459,7 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 				System.Xml.XmlElement xeLinkText = CreateMamlElement(Const.Elements.nnwpLinkText);
 				xeNavLink.AppendChild(xeLinkText);
 
-				xeLinkText.AppendChild(projParent.OurMAML.CreateTextNode(strCurRelatedItem));
+				xeLinkText.AppendChild(moduleParent.OurMAML.CreateTextNode(strCurRelatedItem));
 			}
 
 			{
@@ -459,7 +469,7 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 		}
 	}
 
-	internal void RegisterParameSetDetails(in ParamDetailsDef psd)
+	internal void RegisterParamSetDetails(in ParamDetailsDef psd)
 	{
 		if(psd.owner.owner != this)
 			throw new System.InvalidProgramException(@"Somehow we ended up with a parameter set details trying to be added to a Cmdlet's Parameter sets, but that cmdlet doesn't have the specified parameter.");
@@ -518,23 +528,19 @@ public partial class CmdLetDef : Obj<CmdLetDef>, System.Collections.Specialized.
 				 select paramCur.ToDTO()],
 			[..from ParamSetDef paramsCur in mapParamSetByName.Values
 				 select paramsCur.ToDTO()],
-			[..from System.Collections.Generic.KeyValuePair<string, string?> kvCur in mapAllInputTypeDescByInputTypeName
-				 select new DTO.InputOrOutputDTO(
-					 kvCur.Key,
-					 kvCur.Value
-					)],
-			[..from System.Collections.Generic.KeyValuePair<string, string?> kvCur in mapAllOutputTypeDescByOutputTypeName
-				 select new DTO.InputOrOutputDTO(
-					 kvCur.Key,
-					 kvCur.Value
-					)],
+			[..from InputOrOutput iooCur in mapAllInputTypeDescByInputTypeName.Values
+				 select iooCur.ToDTO(),
+			],
+			[..from InputOrOutput iooCur in mapAllOutputTypeDescByOutputTypeName.Values
+				 select iooCur.ToDTO(),
+			],
 			[..from Example exampleCur in listAllExamplesByName.Values
 				 select exampleCur.ToDTO()],
 			[..setAllRelatedLinks]
 		);
 
-	internal System.Xml.XmlElement CreateMamlElement(ProjDef.Const.NodeNameWithPrefix nnwpCreateWhat)
-		=> projParent.OurMAML.CreateElement(nnwpCreateWhat.Name, nnwpCreateWhat.NameSpace.uri.AbsolutePath);
+	internal System.Xml.XmlElement CreateMamlElement(ModuleDef.Const.NodeNameWithPrefix nnwpCreateWhat)
+		=> moduleParent.OurMAML.CreateElement(nnwpCreateWhat.Name, nnwpCreateWhat.NameSpace.uri.AbsolutePath);
 
 	protected void AddInputType(in InputOrOutput inputNew)
 	{

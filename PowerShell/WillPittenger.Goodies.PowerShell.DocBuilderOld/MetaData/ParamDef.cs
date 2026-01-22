@@ -101,37 +101,37 @@ public partial class ParamDef : Obj<ParamDef>
 	{
 		public static class Elements
 		{
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpParam = new(@"parameter", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpParam = new(@"parameter", ModuleDef.Const.NameSpaces.cmd);
 
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpName = new(@"name", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpName = new(@"name", ModuleDef.Const.NameSpaces.maml);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpDesc = new(@"description", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpDesc = new(@"description", ModuleDef.Const.NameSpaces.maml);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpParamVal = new(@"parameterValue", ProjDef.Const.NameSpaces.cmd);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpParamVal = new(@"parameterValue", ModuleDef.Const.NameSpaces.cmd);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpType = new(@"type", ProjDef.Const.NameSpaces.dev);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpType = new(@"type", ModuleDef.Const.NameSpaces.dev);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpDefVal = new(@"defaultValue", ProjDef.Const.NameSpaces.dev);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpDefVal = new(@"defaultValue", ModuleDef.Const.NameSpaces.dev);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpTypeName = new(@"name", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpTypeName = new(@"name", ModuleDef.Const.NameSpaces.maml);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpTypeURI = new(@"uri", ProjDef.Const.NameSpaces.maml);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpTypeURI = new(@"uri", ModuleDef.Const.NameSpaces.maml);
 		}
 
 		public static class Attr
 		{
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpRequired = new(@"required", ProjDef.Const.NameSpaces.@default);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpRequired = new(@"required", ModuleDef.Const.NameSpaces.@default);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpVariableLength = new(@"variableLength", ProjDef.Const.NameSpaces.@default);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpVariableLength = new(@"variableLength", ModuleDef.Const.NameSpaces.@default);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpGlobbing = new(@"globbing", ProjDef.Const.NameSpaces.@default);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpGlobbing = new(@"globbing", ModuleDef.Const.NameSpaces.@default);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpPipelineInput = new(@"pipelineInput", ProjDef.Const.NameSpaces.@default);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpPipelineInput = new(@"pipelineInput", ModuleDef.Const.NameSpaces.@default);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpPos = new(@"position", ProjDef.Const.NameSpaces.@default);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpPos = new(@"position", ModuleDef.Const.NameSpaces.@default);
 
-			public static readonly ProjDef.Const.NodeNameWithPrefix nnwpAliases = new(@"aliases", ProjDef.Const.NameSpaces.@default);
+			public static readonly ModuleDef.Const.NodeNameWithPrefix nnwpAliases = new(@"aliases", ModuleDef.Const.NameSpaces.@default);
 		}
 	}
 
@@ -278,10 +278,10 @@ public partial class ParamDef : Obj<ParamDef>
 			xeUs.AppendChild(xeDesc);
 
 			{
-				System.Xml.XmlElement xeDescPara = owner.CreateMamlElement(ProjDef.Const.Elements.nnwpPara);
+				System.Xml.XmlElement xeDescPara = owner.CreateMamlElement(ModuleDef.Const.Elements.nnwpPara);
 				xeDesc.AppendChild(xeDescPara);
 
-				xtDesc = owner.projParent.OurMAML.CreateTextNode(strHelpText);
+				xtDesc = owner.moduleParent.OurMAML.CreateTextNode(strHelpText);
 				xeDescPara.AppendChild(xtDesc);
 			}
 		}
@@ -304,7 +304,7 @@ public partial class ParamDef : Obj<ParamDef>
 				System.Xml.XmlElement xeTypeName = owner.CreateMamlElement(Const.Elements.nnwpTypeName);
 				xeType.AppendChild(xeTypeName);
 
-				xeTypeName.AppendChild(owner.projParent.OurMAML.CreateTextNode(Type.FullName));
+				xeTypeName.AppendChild(owner.moduleParent.OurMAML.CreateTextNode(Type.FullName));
 
 				{
 					System.Xml.XmlElement xeTypeURI = owner.CreateMamlElement(Const.Elements.nnwpTypeURI);
@@ -317,7 +317,7 @@ public partial class ParamDef : Obj<ParamDef>
 			System.Xml.XmlElement xeDefVal = owner.CreateMamlElement(Const.Elements.nnwpDefVal);
 			xeUs.AppendChild(xeDefVal);
 
-			xeDefVal.AppendChild(owner.projParent.OurMAML.CreateTextNode(DefValAsText));
+			xeDefVal.AppendChild(owner.moduleParent.OurMAML.CreateTextNode(DefValAsText));
 		}
 	}
 

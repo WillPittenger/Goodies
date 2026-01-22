@@ -17,7 +17,7 @@ public partial class App
 	private static MetaData.SolutionDef? sln = null;
 
 
-	public static readonly System.Guid guidForApp = new System.Guid(@"b862c9c3-5c28-4f12-afd6-cde56cc86f1d");
+	public static readonly System.Guid guidForApp = new(@"b862c9c3-5c28-4f12-afd6-cde56cc86f1d");
 
 
 	public static System.IO.FileInfo? Solution

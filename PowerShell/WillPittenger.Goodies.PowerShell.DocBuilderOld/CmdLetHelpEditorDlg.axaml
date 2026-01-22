@@ -1,0 +1,192 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+				xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:local="using:WillPittenger.Goodies.PowerShell.DocBuilder"
+				xmlns:data="using:WillPittenger.Goodies.PowerShell.DocBuilder.MetaData"
+				xmlns:group="using:GroupBox.Avalonia.Controls"
+				x:DataType="{x:Type data:CmdLetDef}"
+				mc:Ignorable="d"
+				BorderThickness="3"
+				CanResize="True"
+				FontFamily="Times New Roman"
+				MinHeight="600"
+				MinWidth="800"
+				Padding="5"
+				ShowActivated="true"
+				ShowInTaskbar="False"
+				SizeToContent="WidthAndHeight"
+				x:Class="WillPittenger.Goodies.PowerShell.DocBuilder.CmdLetHelpEditorDlg">
+	<Grid ColumnDefinitions="Auto,4,*"
+				RowDefinitions="Auto,4,Auto,4,Auto,4,*">
+		<Label Content="Name:"
+					HorizontalAlignment="Right"/>
+		<Label Grid.Column="2"
+					Content="{Binding Name}"/>
+		<Label Grid.Row="2"
+					Content="Verb:"
+					HorizontalAlignment="Right"/>
+		<Label Grid.Row="2"
+					Grid.Column="2"
+					Content="{Binding Verb}"/>
+		<Label Grid.Row="4"
+					Content="Noun:"
+					HorizontalAlignment="Right"/>
+		<Label Grid.Row="4"
+					Grid.Column="2"
+					Content="{Binding Noun}"/>
+		<GridSplitter Grid.Row="5"
+									Height="2"
+									ResizeBehavior="PreviousAndNext"
+									ResizeDirection="Rows"/>
+		<ScrollViewer Grid.Row="6"
+									Grid.ColumnSpan="3">
+			<Grid ColumnDefinitions="*"
+						RowDefinitions="Auto,4,Auto,4,Auto,4,Auto,4,Auto,4,Auto,4,Auto">
+				<group:GroupBox Header="Synopsis">
+					<local:TextEditorWithToolBarCtrl Val="{Binding Synopsis, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+				</group:GroupBox>
+				<group:GroupBox Grid.Row="2"
+												Header="Description">
+					<local:TextEditorWithToolBarCtrl Val="{Binding Desc, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+				</group:GroupBox>
+				<group:GroupBox Grid.Row="4"
+												Header="Notes">
+					<local:TextEditorWithToolBarCtrl Val="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+				</group:GroupBox>
+				<GridSplitter Grid.Row="5"
+											ResizeBehavior="PreviousAndNext"
+											ResizeDirection="Rows"/>
+				<group:GroupBox Grid.Row="6"
+												Header="Parameters">
+					<DataGrid x:Name="dgParams"
+										AutoGenerateColumns="False"
+										CanUserReorderColumns="True"
+										CanUserResizeColumns="True"
+										CanUserSortColumns="True"
+										GridLinesVisibility="All"
+										IsReadOnly="True"
+										ItemsSource="{Binding AllParameters.Values}"
+										SelectionMode="Extended">
+						<DataGrid.Columns>
+							<DataGridTextColumn Binding="{Binding Name}"
+																	Header="Name"
+																	Width="Auto"/>
+							<DataGridTextColumn Binding="{Binding Type.FullName}"
+																	Header="Parameter Type"
+																	Width="Auto"/>
+							<DataGridTextColumn Binding="{Binding DefValAsText}"
+																	Header="Default value"
+																	Width="Auto"/>
+							<DataGridTemplateColumn Header="Help Text"
+																			Width="*">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding HelpText}"
+															TextTrimming="CharacterEllipsis"/>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+				</group:GroupBox>
+				<GridSplitter Grid.Row="7"
+											ResizeBehavior="PreviousAndNext"
+											ResizeDirection="Rows"/>
+				<group:GroupBox Grid.Row="8"
+												Header="Inputs">
+					<DockPanel>
+						<StackPanel DockPanel.Dock="Right"
+												Orientation="Vertical"
+												Spacing="4">
+							<Button x:Name="btnInputsAdd"
+											Content="Add…"/>
+							<Button x:Name="btnInputsEdit"
+											Content="Edit…"/>
+							<Button x:Name="btnInputsDel"
+											Content="Delete"/>
+						</StackPanel>
+						<DataGrid x:Name="dgInputs"
+											AutoGenerateColumns="False"
+											CanUserReorderColumns="True"
+											CanUserResizeColumns="True"
+											CanUserSortColumns="True"
+											GridLinesVisibility="All"
+											IsReadOnly="True"
+											ItemsSource="{Binding AllInputTypeDescByTypeName.Values}"
+											SelectionMode="Extended">
+							<DataGrid.Columns>
+								<DataGridTextColumn Binding="{Binding TypeName}"
+																		Header="Type Name"
+																		Width="Auto"/>
+								<DataGridTextColumn Binding="{Binding Comment}"
+																		Header="Comment on type"
+																		Width="*"/>
+							</DataGrid.Columns>
+						</DataGrid>
+					</DockPanel>
+				</group:GroupBox>
+				<GridSplitter Grid.Row="9"
+											ResizeBehavior="PreviousAndNext"
+											ResizeDirection="Rows"/>
+				<group:GroupBox Grid.Row="10"
+												Header="Outputs">
+					<DockPanel>
+						<StackPanel DockPanel.Dock="Right"
+												Orientation="Vertical"
+												Spacing="4">
+							<Button x:Name="btnOutputsAdd"
+											Content="Add…"/>
+							<Button x:Name="btnOutputsEdit"
+											Content="Edit…"/>
+							<Button x:Name="btnOutputsDel"
+											Content="Delete"/>
+						</StackPanel>
+						<DataGrid x:Name="dgOutputs"
+											AutoGenerateColumns="False"
+											CanUserReorderColumns="True"
+											CanUserResizeColumns="True"
+											CanUserSortColumns="True"
+											GridLinesVisibility="All"
+											IsReadOnly="True"
+											ItemsSource="{Binding AllOutputTypeDescByOutputTypeName.Values}"
+											SelectionMode="Extended">
+
+							<DataGrid.Columns>
+								<DataGridTextColumn Binding="{Binding TypeName}"
+																		Header="Type Name"
+																		Width="Auto"/>
+								<DataGridTextColumn Binding="{Binding Comment}"
+																		Header="Comment on type"
+																		Width="*"/>
+							</DataGrid.Columns>
+						</DataGrid>
+					</DockPanel>
+				</group:GroupBox>
+				<GridSplitter Grid.Row="10"
+											ResizeBehavior="PreviousAndNext"
+											ResizeDirection="Rows"/>
+				<group:GroupBox Grid.Row="12"
+												Header="Related Links">
+					<DockPanel>
+						<StackPanel DockPanel.Dock="Right"
+												Orientation="Vertical"
+												Spacing="4">
+							<Button x:Name="btnRelatedLinksAdd"
+											Content="Add…"/>
+							<Button x:Name="btnRelatedLinksEdit"
+											Content="Edit…"/>
+							<Button x:Name="btnRelatedLinksDel"
+											Content="Delete"/>
+						</StackPanel>
+						<ListBox x:Name="lbRelatedLinks"
+										AutoScrollToSelectedItem="True"
+										IsTextSearchEnabled="True"
+										ItemsSource="{Binding AllRelatedLinks}"
+										SelectionMode="Multiple"/>
+					</DockPanel>
+				</group:GroupBox>
+			</Grid>
+		</ScrollViewer>
+	</Grid>
+</Window>

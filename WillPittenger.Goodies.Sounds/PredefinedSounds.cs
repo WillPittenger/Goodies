@@ -1,4 +1,6 @@
-﻿namespace WillPittenger.Goodies.Sounds;
+﻿// Ignore Spelling: Sys
+
+namespace WillPittenger.Goodies.Sounds;
 
 /// <summary>
 /// Declares <see cref="ISound"/> instances for sounds common to recent Windows versions.
