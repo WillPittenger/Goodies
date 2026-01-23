@@ -88,6 +88,9 @@ public record MetaData : BaseMetaData
 		return mapFields;
 	}
 
+	public static System.Collections.Generic.IEnumerable<BaseMetaData> GetMetaDataForFiles(in string strMask, in bool bRecurse, params System.Collections.Generic.IEnumerable<System.IO.FileSystemInfo> efsiWhatToLookUp)
+		=> GetMetaDataForFiles(strMask, bRecurse, estrFieldFilter: new System.Collections.Generic.HashSet<string>(), efsiWhatToLookUp);
+
 	public static System.Collections.Generic.IEnumerable<BaseMetaData> GetMetaDataForFiles(in bool bRecurse, in System.Collections.Generic.IReadOnlySet<string> estrFieldFilter, params System.Collections.Generic.IEnumerable<System.IO.FileSystemInfo> efsiWhatToLookUp)
 		=> GetMetaDataForFiles(strAllFilesMask, bRecurse, estrFieldFilter, efsiWhatToLookUp);
 

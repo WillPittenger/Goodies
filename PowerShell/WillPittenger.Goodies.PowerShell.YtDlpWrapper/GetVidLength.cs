@@ -82,7 +82,7 @@ public class GetVidLength : BaseVidCmdLet
 	{
 		if(objCurUnknownInput is System.IO.FileInfo fileCurInput && fileCurInput.Exists)
 		{
-			WriteObject(Goodies.Data.MetaData.GetMetaDataForFile(fileCurInput));
+			WriteObject(Goodies.Data.MetaData.GetMetaDataForFile([@"Length"], fileCurInput));
 
 			return true;
 		}

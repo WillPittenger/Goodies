@@ -50,6 +50,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\WillPittenger.Goodies.Data\WillPittenger.Goodies.Data.csproj" />
+	  <ProjectReference Include="..\..\WillPittenger.Goodies.JSON\WillPittenger.Goodies.JSON.csproj" />
+	  <ProjectReference Include="..\..\WillPittenger.Goodies.Tools\WillPittenger.Goodies.Tools.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Update="readme.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>

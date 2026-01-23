@@ -66,7 +66,7 @@ public class GetFileMetaData : System.Management.Automation.Cmdlet
 			if(wrapperCur is StringPathWrapper spwCur)
 			{
 				if(System.IO.Directory.Exists(spwCur.strWrappedPath))
-					WriteObject(Goodies.Data.MetaData.GetMetaDataForFiles(Mask, Recurse, new System.IO.DirectoryInfo(spwCur.strWrappedPath)));
+					WriteObject(Goodies.Data.MetaData.GetMetaDataForFiles(Mask, Recurse.IsPresent, [new System.IO.DirectoryInfo(spwCur.strWrappedPath)]));
 				else if(System.IO.File.Exists(spwCur.strWrappedPath))
 					WriteObject(Goodies.Data.MetaData.GetMetaDataForFiles(new System.IO.FileInfo(spwCur.strWrappedPath)));
 				else
@@ -75,7 +75,7 @@ public class GetFileMetaData : System.Management.Automation.Cmdlet
 			else if(wrapperCur is FileInfoWrapper fiwCur)
 				WriteObject(Goodies.Data.MetaData.GetMetaDataForFiles(fiwCur.fileCtnts));
 			else if(wrapperCur is DirInfoWrapper diwCur)
-				WriteObject(Goodies.Data.MetaData.GetMetaDataForFiles(Mask, Recurse, diwCur.dirCtnts));
+				WriteObject(Goodies.Data.MetaData.GetMetaDataForFiles(Mask, Recurse.IsPresent, [diwCur.dirCtnts]));
 			else
 				WriteError(new(new System.InvalidProgramException($@"Normally, you can pass any combination of strings, FileInfo objects, and DirectoryInfo objects needed to Get-FileMetaData.  It has a system where those types and only those types can be placed in Locations via wrapper classes.  But somehow you managed to put an unknown wrapper class in Locations.  That type is {wrapperCur.GetType()}.  Your build of Get-FileMetaData might be corrupt.  Please reinstall with a fresh copy."), @"Invalid or unknown wrapper type", System.Management.Automation.ErrorCategory.InvalidType, wrapperCur));
 		}
