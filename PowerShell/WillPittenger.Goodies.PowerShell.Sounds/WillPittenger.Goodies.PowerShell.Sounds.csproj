@@ -26,25 +26,14 @@ Note; This depends on WillPittenger.Goodies.Sounds.</Description>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 		<WarningsAsErrors>$(WarningsAsErrors);NU1605;CS8618;CA2021;CS8524;CS8509;CS0108;CS0114;CS8604;CS8603</WarningsAsErrors>
 		<Configurations>Debug;Release;NoWindowsDebug;NoWindowsRelease</Configurations>
-		<TargetFramework>net10.0-windows7.0</TargetFramework>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU' or '$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<WarningLevel>9999</WarningLevel>
 		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoWindowsDebug|AnyCPU'">
-	  <WarningLevel>9999</WarningLevel>
-	  <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<WarningLevel>9999</WarningLevel>
-		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoWindowsRelease|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NoWindowsDebug|AnyCPU' or '$(Configuration)|$(Platform)'=='NoWindowsRelease|AnyCPU'">
 	  <WarningLevel>9999</WarningLevel>
 	  <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
 	</PropertyGroup>

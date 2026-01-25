@@ -90,7 +90,7 @@ public class ConvertFromJSON : System.Management.Automation.Cmdlet
 				MaxDepth = MaxDepth,
 			});
 
-			Goodies.JSON.ObjBase val = Goodies.JSON.ObjBase.Make(jsonDoc.RootElement);
+			global::WillPittenger.Goodies.JSON.ObjBase val = Goodies.JSON.ObjBase.Make(jsonDoc.RootElement);
 
 			AdditionalFieldsMaker?.Invoke(val);
 

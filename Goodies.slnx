@@ -10,10 +10,6 @@
       <BuildType Solution="NoWindowsDebug|*" Project="Release" />
       <BuildType Solution="NoWindowsRelease|*" Project="Release" />
     </Project>
-    <Project Path="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilder/WillPittenger.Goodies.PowerShell.DocBuilder.csproj">
-      <BuildType Solution="NoWindowsDebug|*" Project="Release" />
-      <BuildType Solution="NoWindowsRelease|*" Project="Release" />
-    </Project>
     <Project Path="PowerShell/WillPittenger.Goodies.PowerShell.JSON/WillPittenger.Goodies.PowerShell.JSON.csproj">
       <Build Solution="NoWindowsDebug|*" Project="false" />
       <Build Solution="NoWindowsRelease|*" Project="false" />

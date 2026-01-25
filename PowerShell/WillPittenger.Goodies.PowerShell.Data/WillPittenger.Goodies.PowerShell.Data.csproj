@@ -46,15 +46,8 @@
 
 	<ItemGroup>
 		<None Update="readme.md">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
-		<None Update="readme.md">
 		  <PackagePath>\</PackagePath>
 		  <Pack>True</Pack>
-		</None>
-		<None Update="WillPittenger.Goodies.PowerShell.Data\WillPittenger.Goodies.PowerShell.Data.psd1">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Properties\Icons\Icon 64x64.png">
 			<Pack>True</Pack>

@@ -23,25 +23,13 @@ public class GetVidLength : BaseVidCmdLet
 	/// <summary>
 	/// Describes what you want downloaded.  This can be any mix of ID values, URLs, plus any objects derived from <see cref="Goodies.YtDlpWrapper.BaseObj"/>.  Other types aren't allowed.
 	/// </summary>
-	[System.Management.Automation.Parameter(HelpMessage = @"Describes what you want downloaded.  This can be any mix of ID values, URLs, plus any objects derived from WillPittenger.Goodies.YtDlpWrapper.BaseObj.  Other types aren't allowed.", Mandatory = true, Position =
-		1, ValueFromPipeline = true, ValueFromRemainingArguments = true)]
+	[System.Management.Automation.Parameter(HelpMessage = @"Describes what you want downloaded.  This can be any mix of ID values, URLs, plus any objects derived from WillPittenger.Goodies.YtDlpWrapper.BaseObj.  Other types aren't allowed.", Mandatory = true, Position = 1, ValueFromPipeline = true, ValueFromRemainingArguments = true)]
 	public System.Collections.Generic.IEnumerable<object>? WhatToObtain
 	{
 		get;
 
 		set;
 	}
-
-
-	/// <summary>
-	/// Used to access the shell.
-	/// </summary>
-	private static readonly Windows.Win32.UI.Shell.IShellDispatch2 shell = (Windows.Win32.UI.Shell.IShellDispatch2)new Windows.Win32.UI.Shell.Shell();
-
-	/// <summary>
-	/// Used to cache folder objects
-	/// </summary>
-	private static readonly System.Collections.Generic.Dictionary<System.IO.DirectoryInfo, Windows.Win32.UI.Shell.Folder> mapFolderToShellFolder = [];
 
 
 	/// <summary>
@@ -82,7 +70,7 @@ public class GetVidLength : BaseVidCmdLet
 	{
 		if(objCurUnknownInput is System.IO.FileInfo fileCurInput && fileCurInput.Exists)
 		{
-			WriteObject(Goodies.Data.MetaData.GetMetaDataForFile([@"Length"], fileCurInput));
+			WriteObject(Data.MetaData.GetMetaDataForFiles(new System.Collections.Generic.HashSet<string>([@"Length"]), fileCurInput));
 
 			return true;
 		}
