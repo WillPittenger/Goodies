@@ -13,8 +13,7 @@ Write-Host -ForegroundColor $color $line
 Write-Host
 
 # Load the module.
-$env:PSModulePath = (Resolve-Path .).Path + ";" + $env:PSModulePath
+$env:PSModulePath = (Resolve-Path .).Path + ';' + (Resolve-Path .\WillPittenger.Goodies.PowerShell.Data) + ";" + (Resolve-Path ..\..\..\) + ";" + $env:PSModulePath
 Import-Module 'WillPittenger.Goodies.PowerShell.Data' -Verbose -Force
 
 # Happy debugging :-)
-

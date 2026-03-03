@@ -1,4 +1,4 @@
-﻿// Ignore Spelling: Util Sep
+// Ignore Spelling: Util Sep
 
 using System.Linq;
 
@@ -81,12 +81,12 @@ public static class Collections
 	/// separator.  Without this extension method, you'd need to call a static method in <see cref="string"/>, namely <see cref="string.Join(string?, System
 	/// .Collections.Generic.IEnumerable{string?})"/>.
 	/// </summary>
-	/// <typeparam name="t">The type of the element</typeparam>
+	/// <typeparam name="T">The type of the element</typeparam>
 	/// <param name="objects">The collection to join</param>
 	/// <param name="strSep">The separator value to use.  The default is an empty string.</param>
 	/// <returns>The array joined into a string</returns>
-	/// <seealso cref="Join(System.Collections.IEnumerable, char)"/>
-	public static string Join<t>(this System.Collections.Generic.IEnumerable<t> objects, string strSep = "")
+	/// <seealso cref="Join{T}(System.Collections.Generic.IEnumerable{T}, char)"/>
+	public static string Join<T>(this System.Collections.Generic.IEnumerable<T> objects, string strSep = "")
 		=> string.Join(strSep, objects);
 
 	/// <summary>
@@ -94,11 +94,11 @@ public static class Collections
 	///  Without this method, you'd need to call a method in <see cref="string"/>, namely <see cref="string.Join{T}(char, System.Collections.Generic
 	/// .IEnumerable{T})"/>.
 	/// </summary>
-	/// <typeparam name="t">The type of the element</typeparam>
+	/// <typeparam name="T">The type of the element</typeparam>
 	/// <param name="objects">The enumerable collection to join</param>
 	/// <param name="chSep">The separator to use</param>
 	/// <returns>The combined string representation for the collection</returns>
 	/// <seealso cref="Join(System.Collections.IEnumerable, string)"/>
-	public static string Join<t>(this System.Collections.Generic.IEnumerable<t> objects, char chSep)
+	public static string Join<T>(this System.Collections.Generic.IEnumerable<T> objects, char chSep)
 		=> string.Join(chSep, objects.Select(curObj => curObj?.ToString() ?? ""));
 }

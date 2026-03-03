@@ -1,8 +1,7 @@
-﻿// Ignore Spelling: astr yt Dlp runas Exe uri
+// Ignore Spelling: astr yt Dlp runas Exe uri
 
 namespace WillPittenger.Goodies.YtDlpWrapper;
 
-using System.Diagnostics;
 using Python.Runtime;
 
 public class YtDlpWrapper
@@ -14,16 +13,29 @@ public class YtDlpWrapper
 
 		if(whatToInit != WhatToInit.exe)
 			InitForPython();
+
+		setInstances.Add(this);
 	}
 
 	~YtDlpWrapper()
-		=> PythonEngine.Shutdown();
+	{
+		setInstances.Remove(this);
+
+		if(setInstances.Count == 0)
+		{
+			yt = null;
+
+			PythonEngine.Shutdown();
+		}
+	}
 
 
-	internal dynamic? yt = null;
+	internal static dynamic? yt = null;
 
 	public readonly System.DateOnly doMinYtDlpVer = new(2026, 1, 1);
 	public readonly System.Version verMinPython = new(3, 10);
+
+	private static readonly System.Collections.Generic.HashSet<YtDlpWrapper> setInstances = [];
 
 
 	public enum HowToUseYtDlp
@@ -779,7 +791,7 @@ public class YtDlpWrapper
 			if(pythonEngineSpec is not null)
 				PythonEngine.Shutdown();
 
-			if(value is not null)
+			if(value is not null && (pythonEngineSpec is null || yt is null || !PythonEngine.IsInitialized))
 			{
 				pythonEngineSpec = value;
 
@@ -790,14 +802,15 @@ public class YtDlpWrapper
 
 				using Py.GILState lockInfo = Py.GIL();
 
-				try
-				{
-					yt = Py.Import("yt_dlp");
-				}
-				catch(System.Exception ex)
-				{
-					throw new Exceptions.PythonException(Exceptions.PythonException.Reasons.ytDlpNotFoundByPython, @"Exception caught and rethrown.", ex);
-				}
+				if(yt is null)
+					try
+					{
+						yt = Py.Import("yt_dlp");
+					}
+					catch(System.Exception ex)
+					{
+						throw new Exceptions.PythonException(Exceptions.PythonException.Reasons.ytDlpNotFoundByPython, @"Exception caught and rethrown.", ex);
+					}
 
 				if(yt is null)
 					throw new Exceptions.PythonException(Exceptions.PythonException.Reasons.ytDlpNotFoundByPython);

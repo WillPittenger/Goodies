@@ -19,7 +19,7 @@ namespace WillPittenger.Goodies.YtDlpWrapper {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Rsrcs {
@@ -187,6 +187,15 @@ namespace WillPittenger.Goodies.YtDlpWrapper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Give these arguments to all downloaders.
+        /// </summary>
+        internal static string strDownLoaderArgsDef {
+            get {
+                return ResourceManager.GetString("strDownLoaderArgsDef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Time to sleep in seconds between retries on a extractor resource.  This can be a RetrySleepNumSpecVal, a RetrySleepLinearSpecVal, or a RetrySleepExpSpecVal.  The default value of null allows yt-dlp to sleep as needed unless a config file specifies a extractor sleep.  Linear (RetrySleepLinearSpecVal) and Exponential (RetrySleepExpSpecVal) structures provide more options..
         /// </summary>
         internal static string strDownLoadExtractorRetrySleep {
@@ -318,15 +327,6 @@ namespace WillPittenger.Goodies.YtDlpWrapper {
         internal static string strDownLoadSections {
             get {
                 return ResourceManager.GetString("strDownLoadSections", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sets file xattribute ytdl.filesize with expected file size.
-        /// </summary>
-        internal static string strDownLoadSetExpectedFileSizeXATTR {
-            get {
-                return ResourceManager.GetString("strDownLoadSetExpectedFileSizeXATTR", resourceCulture);
             }
         }
         
@@ -984,15 +984,6 @@ namespace WillPittenger.Goodies.YtDlpWrapper {
         internal static string strPostProcessingArgs {
             get {
                 return ResourceManager.GetString("strPostProcessingArgs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Specify ffmpeg audio quality to use when converting the audio.  Insert a value between 0 (best) and 10 (worst) for VBR or a specific bitrate like 128K (default 5).
-        /// </summary>
-        internal static string strPostProcessingAudioQuality {
-            get {
-                return ResourceManager.GetString("strPostProcessingAudioQuality", resourceCulture);
             }
         }
         
@@ -1906,15 +1897,6 @@ namespace WillPittenger.Goodies.YtDlpWrapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generic video filter that stops downloading when a video is rejected.  Any https://github.com/yt-dlp/yt-dlp/blob/master/README.md#output-template field can be compared with a number or a string using the operators defined in https://github.com/yt-dlp/yt-dlp/blob/master/README.md#filtering-formats.  You can also simply specify a field to match if the field is present, use “!field” to check if the field is not present, and “&amp;” to check multiple conditions.  Use a “\” to escape “&amp;” or quotes if needed.  If mul [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string strVidSelBreakMatchFilter {
-            get {
-                return ResourceManager.GetString("strVidSelBreakMatchFilter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to If true, stops the download process when encountering a file that is in the archive supplied with DownloadArchive.  If false, the download continues.  Use the default value of null to get the value from the config.  That will prevent a parameter from being emitted.  If yt-dlp still doesn&apos;t find a value, it acts as though you specified false..
         /// </summary>
         internal static string strVidSelBreakOnExisting {
@@ -1953,9 +1935,9 @@ namespace WillPittenger.Goodies.YtDlpWrapper {
         /// <summary>
         ///   Looks up a localized string similar to Generic video filter.  Any https://github.com/yt-dlp/yt-dlp/blob/master/README.md#output-template field can be compared with a number or a string using the operators defined in https://github.com/yt-dlp/yt-dlp/blob/master/README.md#filtering-formats.  You can also simply specify a field to match if the field is present, use “!field” to check if the field is not present, and “&amp;” to check multiple conditions.  Use a “\” to escape “&amp;” or quotes if needed.  If multiple elements are present, the filter matches i [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string strVidSelMatchFilter {
+        internal static string strVidSelFilter {
             get {
-                return ResourceManager.GetString("strVidSelMatchFilter", resourceCulture);
+                return ResourceManager.GetString("strVidSelFilter", resourceCulture);
             }
         }
         

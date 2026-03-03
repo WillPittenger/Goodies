@@ -19,6 +19,10 @@
       <Build Solution="NoWindowsDebug|*" Project="false" />
       <Build Solution="NoWindowsRelease|*" Project="false" />
     </Project>
+    <Project Path="PowerShell/WillPittenger.Goodies.PowerShell.Tools/WillPittenger.Goodies.PowerShell.Tools.csproj" Id="68a5e757-e198-4301-ba71-d0fde32ba314">
+      <BuildType Solution="NoWindowsDebug|*" Project="Release" />
+      <BuildType Solution="NoWindowsRelease|*" Project="Release" />
+    </Project>
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />

@@ -13,8 +13,7 @@ Write-Host -ForegroundColor $color $line
 Write-Host
 
 # Load the module.
-$env:PSModulePath = (Resolve-Path .).Path + ";" + $env:PSModulePath
-Import-Module 'WillPittenger.Goodies.PowerShell.JSON' -Verbose -Force
+$env:PSModulePath = (Resolve-Path .).Path + ';' + (Resolve-Path .\WillPittenger.Goodies.PowerShell.YtDlpWrapper) + ";" + $env:PSModulePath
+Import-Module WillPittenger.Goodies.PowerShell.YtDlpWrapper -Verbose -Force
 
 # Happy debugging :-)
-

@@ -9,6 +9,7 @@
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<Configurations>Debug;Release;NoWindowsDebug;NoWindowsRelease</Configurations>
 		<WarningsAsErrors>$(WarningsAsErrors);NU1605;CS8618;CA2021;CS8524;CS8509;CS0108;CS0114;CS8604;CS8603</WarningsAsErrors>
+		<RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -72,7 +73,7 @@
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="pwsh -NoLogo -ExecutionPolicy RemoteSigned -command &quot;&amp; {exit (. ./Post-Build.ps1 -TargetDir $(OutDir) -ProjectName $(ProjectName))}&quot;" />
+	  <Exec Command="pwsh -NoLogo -ExecutionPolicy RemoteSigned -command &quot;&amp; {exit (. ./Post-Build.ps1 -TargetDir $(OutDir) -ProjectName $(ProjectName) -SourceDir &apos;$(ProjectDir)&apos;)}&quot;" />
 	</Target>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -159,6 +159,9 @@
   <data name="strDownLoadConcurrentFragments" xml:space="preserve">
     <value>Number of fragments of a dash/hlsnative video that should be downloaded concurrently.  The default value of null allows yt-dlp to use its default which is 1 unless a config file overrides that.</value>
   </data>
+  <data name="strDownLoaderArgsDef" xml:space="preserve">
+    <value>Give these arguments to all downloaders</value>
+  </data>
   <data name="strDownLoadExtractorRetrySleep" xml:space="preserve">
     <value>Time to sleep in seconds between retries on a extractor resource.  This can be a RetrySleepNumSpecVal, a RetrySleepLinearSpecVal, or a RetrySleepExpSpecVal.  The default value of null allows yt-dlp to sleep as needed unless a config file specifies a extractor sleep.  Linear (RetrySleepLinearSpecVal) and Exponential (RetrySleepExpSpecVal) structures provide more options.</value>
   </data>
@@ -203,9 +206,6 @@
   </data>
   <data name="strDownLoadSections" xml:space="preserve">
     <value>Download only chapters that match the regular expression.  A “*” prefix denotes time-range instead of chapter.  Negative timestamps are calculated from the end.  “*from-url” can be used to download between the “start_time” and “end_time” extracted from the URL.  Needs ffmpeg.  If you need to download multiple sections, use an array, e.g. ["*10:15-inf", "intro"].  No assistance is provided here beyond the array because of the edge case where this is needed.</value>
-  </data>
-  <data name="strDownLoadSetExpectedFileSizeXATTR" xml:space="preserve">
-    <value>Sets file xattribute ytdl.filesize with expected file size</value>
   </data>
   <data name="strDownLoadSkipUnavailableFragments" xml:space="preserve">
     <value>If true, yt-dlp will skip any fragments that aren't available.  If false, it will retry them or abort depending on the value in RetryMaxGroup.Fragment.  If you leave this at the default value of null, yt-dlp will look at the config files for a value.  If none is found, it's as though SkipUnavailableFragments is true.</value>
@@ -425,9 +425,6 @@
   </data>
   <data name="strPostProcessingArgs" xml:space="preserve">
     <value>Give these arguments to the post-processors.  For built in post-processors, place instances of PostProcessingRecordForKnownProcessorVal into the list.  Implicit typecasts exist for that type from PreDefinedProcessorEvts and SupportedProcessorExecutables, though you won't have any When or arguments.  To specify both an event and a executable, create a new PostProcessingRecordForKnownProcessorVal using the constructor.  PostProcessingRecordForKnownProcessorVal entries will be emitted as --postprocessor-args.  If you want to run a processor that yt-dlp doesn't know about, place a System.IO.FileInfo or string into the list to run it without arguments at the default time.  If you want to run it at a specific event or with arguments, create either an instance of either PostProcessorArgsForExeVal or NamedExeProcessorArgsVal and pass the needed fields to it.  Note: Don't use System.IO.FileInfo instances that lack a full path.  Instead, just use the name of the executable in a string.  All System.IO.FileInfo instances will be mapped to a string with FullName which assumes the current working directory for this program.  Any instances of PostProcessorArgsForExeVal or NamedExeProcessorArgsVal will be emitted as --use-postprocessor.</value>
-  </data>
-  <data name="strPostProcessingAudioQuality" xml:space="preserve">
-    <value>Specify ffmpeg audio quality to use when converting the audio.  Insert a value between 0 (best) and 10 (worst) for VBR or a specific bitrate like 128K (default 5)</value>
   </data>
   <data name="strPostProcessingConvertSubs" xml:space="preserve">
     <value>Convert the subtitles to another format.  All values must come from SubsGroup.SupporteFmts.  Use SubsGroup.SupportedFmts.doNotConvert to prevent conversion even if a config file specifies --convert-subs or --convert-subtitles.  If you leave ConvertSubs set to the default value of SubsGroup.SupportedFmts.@default and no config file uses either --convert-subs or --convert-subtitles, yt-dlp will act as though ConvertSubs is set to SubsGroup.SupportedFmts.doNotConvert.</value>
@@ -732,9 +729,6 @@
   <data name="strVidSelAgeLimit" xml:space="preserve">
     <value>Download only videos suitable for the given age.  The default value null to prevents this parameter from being emitted.</value>
   </data>
-  <data name="strVidSelBreakMatchFilter" xml:space="preserve">
-    <value>Generic video filter that stops downloading when a video is rejected.  Any https://github.com/yt-dlp/yt-dlp/blob/master/README.md#output-template field can be compared with a number or a string using the operators defined in https://github.com/yt-dlp/yt-dlp/blob/master/README.md#filtering-formats.  You can also simply specify a field to match if the field is present, use “!field” to check if the field is not present, and “&amp;” to check multiple conditions.  Use a “\” to escape “&amp;” or quotes if needed.  If multiple elements are present, the filter matches if at least one of the conditions is met. E.g. ["!is_live", "like_count&gt;?100 &amp; description~='(?i)\\bcats \\&amp; dogs\\b'"] matches only videos that are not live OR those that have a like count more than 100 (or the like field is not available) and also has a description that contains the phrase “cats &amp; dogs” (caseless).  Use [null] to interactively ask whether to download each video.</value>
-  </data>
   <data name="strVidSelBreakOnExisting" xml:space="preserve">
     <value>If true, stops the download process when encountering a file that is in the archive supplied with DownloadArchive.  If false, the download continues.  Use the default value of null to get the value from the config.  That will prevent a parameter from being emitted.  If yt-dlp still doesn't find a value, it acts as though you specified false.</value>
   </data>
@@ -747,8 +741,8 @@
   <data name="strVidSelDownLoadArchive" xml:space="preserve">
     <value>Download only videos not listed in the archive file.  Record the IDs of all downloaded videos in it.  The default value of null prevents this parameter from being emitted.  Use fileInvalid to disable the download archive even if it's in the config file.</value>
   </data>
-  <data name="strVidSelMatchFilter" xml:space="preserve">
-    <value>Generic video filter.  Any https://github.com/yt-dlp/yt-dlp/blob/master/README.md#output-template field can be compared with a number or a string using the operators defined in https://github.com/yt-dlp/yt-dlp/blob/master/README.md#filtering-formats.  You can also simply specify a field to match if the field is present, use “!field” to check if the field is not present, and “&amp;” to check multiple conditions.  Use a “\” to escape “&amp;” or quotes if needed.  If multiple elements are present, the filter matches if at least one of the conditions is met. E.g. ["!is_live", "like_count&gt;?100 &amp; description~='(?i)\\bcats \\&amp; dogs\\b'"] matches only videos that are not live OR those that have a like count more than 100 (or the like field is not available) and also has a description that contains the phrase “cats &amp; dogs” (caseless).  Use [null] to interactively ask whether to download each video.</value>
+  <data name="strVidSelFilter" xml:space="preserve">
+    <value>Generic video filter.  Any https://github.com/yt-dlp/yt-dlp/blob/master/README.md#output-template field can be compared with a number or a string using the operators defined in https://github.com/yt-dlp/yt-dlp/blob/master/README.md#filtering-formats.  You can also simply specify a field to match if the field is present, use “!field” to check if the field is not present, and “&amp;” to check multiple conditions.  Use a “\” to escape “&amp;” or quotes if needed.  If multiple elements are present, the filter matches if at least one of the conditions is met. E.g. ["!is_live", "like_count&gt;?100 &amp; description~='(?i)\\bcats \\&amp; dogs\\b'"] matches only videos that are not live OR those that have a like count more than 100 (or the like field is not available) and also has a description that contains the phrase “cats &amp; dogs” (caseless).  If you set this to just a string or string collection, those will be treated as match filters by creating a ConditionWrapper.  If you want the conditions to reject videos, create a ConditionWrapper manually.  If you want yt-dlp to ask on the command line if the video should be downloaded, set this to WrapperBase.interactive.  If you're using the Python option, you can set this to a function that matches TestFuncWrapper.DTester.  With that function, returning [null] causes yt-dlp to download the video.  Returning any string causes yt-dlp to reject the video and display the string.  Throw a TestFuncWrapper.StopDownloadingException to tell yt-dlp to stop downloading.</value>
   </data>
   <data name="strVidSelMaxFileSize" xml:space="preserve">
     <value>Abort download if the file size is larger than specified size, e.g. 50k or 44.6M.  A null value causes the value from any config file or the default (no maximum) to be used.  Be careful combining this with MinFileSize.  If MinFileSize is larger than MaxFileSize, no data will be downloaded!</value>
