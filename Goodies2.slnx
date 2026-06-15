@@ -1,0 +1,22 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="NoWindowsDebug" />
+    <BuildType Name="NoWindowsRelease" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Folder Name="/PowerShell/">
+    <Project Path="PowerShell/WillPittenger.Goodies.PowerShell.DocBuilderOld/WillPittenger.Goodies.PowerShell.DocBuilder.csproj">
+      <BuildType Solution="NoWindowsDebug|*" Project="Debug" />
+      <BuildType Solution="NoWindowsRelease|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="WillPittenger.Goodies.Tools/WillPittenger.Goodies.Tools.csproj">
+    <Build Solution="NoWindowsDebug|*" Project="false" />
+    <Build Solution="NoWindowsRelease|*" Project="false" />
+  </Project>
+</Solution>
